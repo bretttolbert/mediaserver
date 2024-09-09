@@ -1,0 +1,29 @@
+body {
+    background-color: black;
+    color: white
+}
+
+#trackList {
+    font-size: 24pt;
+    font-family: sans-serif;
+}
+
+/* unvisited link */
+a:link {
+    color: white;
+}
+
+/* visited link */
+a:visited {
+    color: white;
+}
+
+/* mouse over link */
+a:hover {
+    color: hotpink;
+}
+
+/* selected link */
+a:active {
+    color: blue;
+}

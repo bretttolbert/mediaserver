@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>mediaserver</title>
+    <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/mediaserver.css') }}">
+</head>
+<body>
+    <a href="/">clear</a> &nbsp;
+    <a href="/genres">genres</a> &nbsp;
+    <a href="/artists">artists</a> &nbsp;
+    <a href="/albums">albums</a> &nbsp;
+    <br>
+    <h1>tracks</h1>
+    <div id="trackList">
+    {% for file in mediafiles %}
+        {% if request.args.getlist('genre')|length < 1 or file.genre in request.args.getlist('genre') %}
+        {% if request.args.getlist('artist')|length < 1 or file.artist in request.args.getlist('artist') %}
+        {% if request.args.getlist('album')|length < 1 or file.album in request.args.getlist('album') %}
+        {% if request.args.getlist('title')|length < 1 or file.title in request.args.getlist('title') %}
+            <a href="{{ file.path }}">[{{ file.year }}] [{{ file.genre }}] {{ file.artist }} - {{ file.album }} - {{ file.title }}</a>
+            <br>
+        {% endif %}
+        {% endif %}
+        {% endif %}
+        {% endif %}
+    {% endfor %}
+    </div>
+</body>
+</html>

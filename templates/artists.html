@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>artists</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='styles/mediaserver.css') }}">
+</head>
+<body>
+    <h1>artists</h1>
+    <div id="trackList">
+    {% for artist in artists %}
+        <a href="/?artist={{ artist|quote_plus }}">{{ artist }}</a>
+        <br>
+    {% endfor %}
+    </div>
+</body>
+</html>
