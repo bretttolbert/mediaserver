@@ -70,10 +70,10 @@ def get_artists(data: Data) -> List[str]:
     return sorted(ret)
 
 
-def get_albums(data: Data) -> List[Tuple[str, str]]:
-    ret: Set[Tuple[str, str]] = set()  # type: ignore
+def get_albums(data: Data) -> List[Tuple[str, str, int]]:
+    ret: Set[Tuple[str, str, int]] = set()  # type: ignore
     for f in data.mediafiles:
-        ret.add((f.artist, f.album))
+        ret.add((f.artist, f.album, f.year))
     return sorted(ret)
 
 
