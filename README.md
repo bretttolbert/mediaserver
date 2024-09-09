@@ -9,5 +9,11 @@ A Flask web application for browsing media files, by artist, album, genre or yea
 ## Quick Start
 
 ```bash
+git clone git@github.com:bretttolbert/mediascan.git
+cd mediascan
+go run mediascan.go conf.yaml files.yaml
+cd ..
+git clone git@github.com:bretttolbert/mediaserver.git
+cd mediaserver
 flask --app mediaserver run
 ```
