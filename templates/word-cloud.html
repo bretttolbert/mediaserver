@@ -16,8 +16,21 @@
         console.log(word_urls)
 
         //var fill = d3.scaleOrdinal(d3.schemeCategory10);
-        var fill = d3.scale.category20();
+        //var fill = d3.scale.category20();
         
+        var fill = function (i) {
+            var m = i % 3;
+            if (m == 0) {
+                return '#1f77b4'
+            } else if (m == 1) {
+                return '#aec7e8'
+            } else if (m == 2) {
+                return '#ff7f0e'
+            } else {
+                return '#ffffff'
+            }
+        }
+
         /*
         var words = [{"text":"Hip-Hop", "url":"/?genre=Hip-Hop"},
                     {"text":"is", "url":"http://bing.com/"},
@@ -38,7 +51,7 @@
         .words(words)
         .padding(5)
         .rotate(function() { return ~~ (Math.random() * 2) * 90; })
-        .font("Impact")
+        .font("Helvetica")
         .fontSize(function(d) { return d.size;})
         .on("end", draw)
         .start();
@@ -55,7 +68,7 @@
             .enter()
             .append("text")
             .style("font-size", function(d) { return d.size + "px"; })
-            .style("font-family", "Impact")
+            .style("font-family", "Helvetica")
             .style("fill", function(d, i) { return fill(i); })
             .attr("text-anchor", "middle")
             .attr("transform", function(d) {
