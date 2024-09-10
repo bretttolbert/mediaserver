@@ -9,7 +9,7 @@
     <h1>genres</h1>
     <div id="trackList">
     {% for genre in genres %}
-        <a href="/?genre={{ genre }}">{{ genre }}</a>
+        <a href="/artists-cloud?genre={{ genre|quote_plus }}">{{ genre }}</a>
         <br>
     {% endfor %}
     </div>

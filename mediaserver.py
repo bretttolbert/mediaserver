@@ -1,4 +1,4 @@
-from flask import Flask, render_template, send_from_directory  # type: ignore
+from flask import Flask, render_template, request, send_from_directory  # type: ignore
 
 import yaml
 from dataclasses import dataclass
@@ -67,15 +67,24 @@ def get_genre_urls(data: Data) -> List[Dict[str, str]]:
     ret: List[Dict[str, str]] = []
     genres = get_genres(data)
     for g in genres:
-        ret.append({"text": g, "url": f"/?genre={g}"})
+        ret.append({"text": g, "url": f"/artists-cloud?genre={quote_plus(g)}"})
     return ret
 
 
-def get_artists(data: Data) -> List[str]:
+def get_artists(data: Data, filter_genres: List[str]) -> List[str]:
     ret: Set[str] = set()  # type: ignore
     for f in data.mediafiles:
-        ret.add(f.artist)
+        if len(filter_genres) < 1 or f.genre in filter_genres:
+            ret.add(f.artist)
     return sorted(ret)
+
+
+def get_artist_urls(data: Data, filter_genres: List[str]) -> List[Dict[str, str]]:
+    ret: List[Dict[str, str]] = []
+    artists = get_artists(data, filter_genres)
+    for a in artists:
+        ret.append({"text": a, "url": f"/?artist={quote_plus(a)}"})
+    return ret
 
 
 def get_albums(data: Data) -> List[Tuple[str, str, int]]:
@@ -109,16 +118,26 @@ def genres() -> None:
 @app.route("/genres-cloud")  # type: ignore
 def genres_cloud() -> None:
     return render_template(
-        "genres-cloud.html",
-        genre_urls=get_genre_urls(data),
+        "word-cloud.html",
+        word_urls=get_genre_urls(data),
+    )  # type: ignore
+
+
+@app.route("/artists-cloud")  # type: ignore
+def artists_cloud() -> None:
+    genres: List[str] = request.args.getlist("genre")  # type: ignore
+    return render_template(
+        "word-cloud.html",
+        word_urls=get_artist_urls(data, filter_genres=genres),  # type: ignore
     )  # type: ignore
 
 
 @app.route("/artists")  # type: ignore
 def artists() -> None:
+    genres: List[str] = request.args.getlist("genre")  # type: ignore
     return render_template(
         "artists.html",
-        artists=get_artists(data),
+        artists=get_artists(data, filter_genres=genres),  # type: ignore
     )  # type: ignore
 
 

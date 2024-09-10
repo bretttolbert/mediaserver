@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>genres cloud</title>
+    <title>word cloud</title>
     <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='styles/mediaserver.css') }}">
 </head>
 <body>
@@ -12,8 +12,8 @@
     <script src="{{ url_for('static',filename='d3.layout.cloud.js') }}"></script>
     <script type="module">
 
-    function genres_cloud(genre_urls) {
-        console.log(genre_urls)
+    function word_cloud(word_urls) {
+        console.log(word_urls)
 
         //var fill = d3.scaleOrdinal(d3.schemeCategory10);
         var fill = d3.scale.category20();
@@ -25,7 +25,7 @@
                     {"text":"random", "url":"http://random.org/"},
                     {"text":"text", "url":"http://text.com/"}]
         */
-        var words = genre_urls
+        var words = word_urls
 
         var width = 1920;
         var height = 1080;
@@ -68,7 +68,7 @@
             });
         }
     }
-    genres_cloud({{ genre_urls|safe }})
+    word_cloud({{ word_urls|safe }})
     </script>
 </body>
 </html>
