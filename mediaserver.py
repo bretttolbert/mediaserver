@@ -5,7 +5,7 @@ from dataclasses import dataclass
 
 from dataclass_wizard import YAMLWizard  # type: ignore
 
-from typing import List, Set, Tuple
+from typing import Dict, List, Set, Tuple
 
 from urllib.parse import quote_plus  # type: ignore
 
@@ -63,6 +63,14 @@ def get_genres(data: Data) -> List[str]:
     return sorted(ret)
 
 
+def get_genre_urls(data: Data) -> List[Dict[str, str]]:
+    ret: List[Dict[str, str]] = []
+    genres = get_genres(data)
+    for g in genres:
+        ret.append({"text": g, "url": f"/?genre={g}"})
+    return ret
+
+
 def get_artists(data: Data) -> List[str]:
     ret: Set[str] = set()  # type: ignore
     for f in data.mediafiles:
@@ -95,6 +103,14 @@ def genres() -> None:
     return render_template(
         "genres.html",
         genres=get_genres(data),
+    )  # type: ignore
+
+
+@app.route("/genres-cloud")  # type: ignore
+def genres_cloud() -> None:
+    return render_template(
+        "genres-cloud.html",
+        genre_urls=get_genre_urls(data),
     )  # type: ignore
 
 
