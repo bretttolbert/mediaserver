@@ -63,6 +63,16 @@ def get_genres(data: Data) -> List[str]:
     return sorted(ret)
 
 
+def get_genre_counts(data: Data) -> Dict[str, int]:
+    ret: Dict[str, int] = {}
+    for f in data.mediafiles:
+        if f.genre in ret:
+            ret[f.genre] += 1
+        else:
+            ret[f.genre] = 1
+    return dict(sorted(ret.items(), key=lambda item: item[1], reverse=True))
+
+
 def get_genre_urls(data: Data) -> List[Dict[str, str]]:
     ret: List[Dict[str, str]] = []
     genres = get_genres(data)
@@ -87,11 +97,21 @@ def get_artist_urls(data: Data, filter_genres: List[str]) -> List[Dict[str, str]
     return ret
 
 
-def get_albums(data: Data) -> List[Tuple[str, str, int]]:
+def get_albums(
+    data: Data,
+    filter_artists: List[str],
+    sort: str,
+) -> List[Tuple[str, str, int]]:
     ret: Set[Tuple[str, str, int]] = set()  # type: ignore
     for f in data.mediafiles:
-        ret.add((f.artist, f.album, f.year))
-    return sorted(ret)
+        if len(filter_artists) < 1 or f.artist in filter_artists:
+            ret.add((f.artist, f.album, f.year))
+    if sort == "artist":
+        return sorted(ret, key=lambda item: item[0])
+    if sort == "album":
+        return sorted(ret, key=lambda item: item[1])
+    else:  # default: sort by year (descending)
+        return sorted(ret, key=lambda item: item[2], reverse=True)
 
 
 @app.route("/")  # type: ignore
@@ -107,11 +127,19 @@ def send_report(path: str) -> None:
     return send_from_directory("/data/", path)  # type: ignore
 
 
-@app.route("/genres")  # type: ignore
-def genres() -> None:
+@app.route("/genres-alpha")  # type: ignore
+def genres_alpha() -> None:
     return render_template(
-        "genres.html",
+        "genres-alpha.html",
         genres=get_genres(data),
+    )  # type: ignore
+
+
+@app.route("/genre-counts")  # type: ignore
+def genre_counts() -> None:
+    return render_template(
+        "genre-counts.html",
+        genre_counts=get_genre_counts(data),
     )  # type: ignore
 
 
@@ -143,9 +171,11 @@ def artists() -> None:
 
 @app.route("/albums")  # type: ignore
 def albums() -> None:
+    artists: List[str] = request.args.getlist("artist")  # type: ignore
+    sort: str = request.args.get("sort")  # type: ignore
     return render_template(
         "albums.html",
-        albums=get_albums(data),
+        albums=get_albums(data, filter_artists=artists, sort=sort),  # type: ignore
     )  # type: ignore
 
 
