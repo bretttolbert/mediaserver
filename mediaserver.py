@@ -4,7 +4,7 @@ import yaml
 from dataclasses import dataclass
 
 from dataclass_wizard import YAMLWizard  # type: ignore
-
+import os.path
 from typing import Dict, List, Set, Tuple
 
 from urllib.parse import quote_plus  # type: ignore
@@ -97,15 +97,19 @@ def get_artist_urls(data: Data, filter_genres: List[str]) -> List[Dict[str, str]
     return ret
 
 
+def get_cover_path(media_file: Mediafile) -> str:
+    return media_file.path.replace(os.path.basename(media_file.path), "") + "cover.jpg"
+
+
 def get_albums(
     data: Data,
     filter_artists: List[str],
     sort: str,
-) -> List[Tuple[str, str, int]]:
-    ret: Set[Tuple[str, str, int]] = set()  # type: ignore
+) -> List[Tuple[str, str, int, str]]:
+    ret: Set[Tuple[str, str, int, str]] = set()  # type: ignore
     for f in data.mediafiles:
         if len(filter_artists) < 1 or f.artist in filter_artists:
-            ret.add((f.artist, f.album, f.year))
+            ret.add((f.artist, f.album, f.year, get_cover_path(f)))
     if sort == "artist":
         return sorted(ret, key=lambda item: item[0])
     if sort == "album":

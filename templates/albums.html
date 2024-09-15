@@ -9,6 +9,8 @@
     <h1>albums</h1>
     <div id="trackList">
     {% for album in albums %}
+        <img src="{{ album[3] }}" class="CoverImg" />
+        <br>
         <a href="/?album={{ album[1] }}">[{{ album[2] }}] {{ album[0] }} - {{ album[1] }}</a>
         <br>
     {% endfor %}
