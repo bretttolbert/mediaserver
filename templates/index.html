@@ -4,6 +4,19 @@
     <meta charset="UTF-8">
     <title>mediaserver</title>
     <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/mediaserver.css') }}">
+    <script
+    src="https://code.jquery.com/jquery-3.7.1.min.js"
+    integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo="
+    crossorigin="anonymous"></script>
+    <script>
+    $(function() {
+        console.log( "ready!" );
+        var trackUrl = $("#trackList a:first").attr("href");
+        var tokens = trackUrl.split("/");
+        var coverUrl = tokens.slice(0, -1).join("/") + "/cover.jpg";
+        $("#coverImg").attr("src", coverUrl);
+    });
+    </script>
 </head>
 <body>
     <a href="/">clear</a> &nbsp;
@@ -14,6 +27,10 @@
     <a href="/genres-cloud">genres cloud</a> &nbsp;
     <a href="/artists-cloud">artists cloud</a> &nbsp;
     <br>
+    {% if request.args.getlist('album')|length > 0 %}
+        <img src="#" id="coverImg" />
+        <br>
+    {% endif %}
     <h1>tracks</h1>
     <div id="trackList">
     {% for file in mediafiles %}
