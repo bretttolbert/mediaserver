@@ -104,10 +104,13 @@ def get_cover_path(media_file: Mediafile) -> str:
 def get_albums(
     data: Data,
     filter_artists: List[str],
+    filter_genres: List[str],
     sort: str,
 ) -> List[Tuple[str, str, int, str]]:
     ret: Set[Tuple[str, str, int, str]] = set()  # type: ignore
     for f in data.mediafiles:
+        if len(filter_genres) and f.genre not in filter_genres:
+            continue
         if len(filter_artists) < 1 or f.artist in filter_artists:
             ret.add((f.artist, f.album, f.year, get_cover_path(f)))
     if sort == "artist":
@@ -176,10 +179,11 @@ def artists() -> None:
 @app.route("/albums")  # type: ignore
 def albums() -> None:
     artists: List[str] = request.args.getlist("artist")  # type: ignore
+    genres: List[str] = request.args.getlist("genre")  # type: ignore
     sort: str = request.args.get("sort")  # type: ignore
     return render_template(
         "albums.html",
-        albums=get_albums(data, filter_artists=artists, sort=sort),  # type: ignore
+        albums=get_albums(data, filter_artists=artists, filter_genres=genres, sort=sort),  # type: ignore
     )  # type: ignore
 
 
