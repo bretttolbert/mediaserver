@@ -93,7 +93,7 @@ def get_artist_urls(data: Data, filter_genres: List[str]) -> List[Dict[str, str]
     ret: List[Dict[str, str]] = []
     artists = get_artists(data, filter_genres)
     for a in artists:
-        ret.append({"text": a, "url": f"/?artist={quote_plus(a)}"})
+        ret.append({"text": a, "url": f"/albums?artist={quote_plus(a)}"})
     return ret
 
 

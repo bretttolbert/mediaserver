@@ -15,5 +15,5 @@ go run mediascan.go conf.yaml files.yaml
 cd ..
 git clone git@github.com:bretttolbert/mediaserver.git
 cd mediaserver
-flask --app mediaserver run
+flask --app mediaserver run --host=0.0.0.0
 ```
