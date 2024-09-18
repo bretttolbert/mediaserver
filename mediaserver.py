@@ -75,13 +75,14 @@ def get_genre_counts(data: Data) -> Dict[str, int]:
     return dict(sorted(ret.items(), key=lambda item: item[1], reverse=True))
 
 
-def get_artist_counts(data: Data) -> Dict[str, int]:
+def get_artist_counts(data: Data, filter_genres: List[str]) -> Dict[str, int]:
     ret: Dict[str, int] = {}
     for f in data.mediafiles:
-        if f.artist in ret:
-            ret[f.artist] += 1
-        else:
-            ret[f.artist] = 1
+        if len(filter_genres) < 1 or f.genre in filter_genres:
+            if f.artist in ret:
+                ret[f.artist] += 1
+            else:
+                ret[f.artist] = 1
     return dict(sorted(ret.items(), key=lambda item: item[1], reverse=True))
 
 
@@ -270,9 +271,10 @@ def artists_cloud() -> None:
 
 @app.route("/artist-counts")  # type: ignore
 def artist_counts() -> None:
+    genres: List[str] = request.args.getlist("genre")  # type: ignore
     return render_template(
         "artist-counts.html",
-        artist_counts=get_artist_counts(data),
+        artist_counts=get_artist_counts(data, filter_genres=genres),  # type: ignore
     )  # type: ignore
 
 
