@@ -12,6 +12,8 @@ Features:
 - Direct download of music files via hyperlinks
 - Accessible from mobile devices (tested in Chrome on Android)
 
+[Screenshots](./screenshots/)
+
 Limitations:
 - Requires that music library be scanned with [mediascan](https://github.com/bretttolbert/mediascan) which outputs the `files.yaml` file. This must be repeated to update the music library (e.g. add new files)
 - Requires that music files be organized in the way that mediascan expects i.e. artist folders containing album folders with `cover.jpg` files
