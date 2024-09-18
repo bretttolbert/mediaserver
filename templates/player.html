@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>mediaserver</title>
+    <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
+    <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/mediaserver.css') }}">
+    <script
+    src="https://code.jquery.com/jquery-3.7.1.min.js"
+    integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo="
+    crossorigin="anonymous"></script>
+    <script src="{{ url_for('static',filename='setCoverUrl.js') }}"></script>
+    <script>
+    $(function() {
+        $("#audioElem")[0].addEventListener('ended', function() {
+            var repeat = $("#repeatChk").prop('checked');
+            if (repeat) {
+                setTimeout(function() {
+                    $("#audioElem")[0].play();
+                }, 1000);
+            }
+        });
+        $("#playBtn").click(function(){
+            var audio = $("#audioElem")[0];
+            if (audio.paused) {
+                audio.play();
+                $(this).html("Pause");
+            }else{
+                audio.pause();
+                $(this).html("Play");
+            }
+        });
+        $("#restartBtn").click(function(){
+            var audio = $("#audioElem")[0];
+            audio.currentTime = 0;
+            if (audio.paused) {
+                audio.play();
+            }
+        });
+        $('#nextBtn').click(function() {
+            location.reload();
+        });
+    });
+    </script>
+</head>
+<body>
+    {% include 'links.html' %}
+    <button id="playBtn">Play</button>
+    <input type="checkbox" id="repeatChk" checked="checked"/>
+    <label for="repeatChk">Repeat</label>
+    <button id="restartBtn">Restart</button>
+    <button id="nextBtn">Next</button>
+    <br>
+    <audio id="audioElem" class="full" controls>
+        <source src="{{ file.path }}" type="audio/mpeg" autoplay>
+      Your browser does not support the audio element.
+    </audio> 
+    <div id="trackList">
+        <a class="trackLink" href="{{ file.path }}">[{{ file.year }}] [{{ file.genre }}] {{ file.artist }} - {{ file.album }} - {{ file.title }}</a>
+        <br>
+        <a href="/tracks?artist={{ file.artist|quote_plus }}&album={{ file.album|quote_plus }}">
+            <img src="#" id="coverImg" width="1000" height="1000" />
+        </a>
+    </div>
+</body>
+</html>

@@ -7,14 +7,10 @@
 </head>
 <body>
     {% include 'links.html' %}
+    <h1>artists a-z</h1>
     <div id="trackList">
-    {% for album in albums %}
-        <a href="/tracks?album={{ album[1]|quote_plus }}">
-        <img src="{{ album[3] }}" class="CoverImg" width="1000" height="1000" />
-        </a>
-        <br>
-        <a href="/tracks?album={{ album[1]|quote_plus }}">[{{ album[2] }}] {{ album[0] }} - {{ album[1] }}</a>
-        <br>
+    {% for artist in artists %}
+        <a href="/albums?artist={{ artist|quote_plus }}">{{ artist }}</a>
         <br>
     {% endfor %}
     </div>
