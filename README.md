@@ -15,7 +15,7 @@ Features:
 [Screenshots](./screenshots/)
 
 Limitations:
-- Requires that music library be scanned with [mediascan](https://github.com/bretttolbert/mediascan) which outputs the `files.yaml` file. This must be repeated to update the music library (e.g. add new files)
+- Requires that music library be scanned with [mediascan](https://github.com/bretttolbert/mediascan) which outputs the [files.yaml](https://github.com/bretttolbert/mediascan/blob/main/files.yaml) file. This must be repeated to update the music library (e.g. add new files)
 - Requires that music files be organized in the way that mediascan expects i.e. artist folders containing album folders with `cover.jpg` files
 - Requires that music filenames not contain prohibited characters such as `+` (prevent by testing music library with [mediatest](https://github.com/bretttolbert/mediatest))
 
