@@ -2,23 +2,38 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>mediaserver</title>
+    <title>player</title>
     <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
     <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/mediaserver.css') }}">
     <script
     src="https://code.jquery.com/jquery-3.7.1.min.js"
     integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo="
     crossorigin="anonymous"></script>
-    <script src="{{ url_for('static',filename='setCoverUrl.js') }}"></script>
+    {% if request.args.get('hints') == "1" %}
+    <script src="{{ url_for('static', filename='hints.js') }}"></script>
+    {% else %}
+    <script src="{{ url_for('static', filename='hints_stub.js') }}"></script>
+    {% endif %}
     <script>
     $(function() {
         $("#audioElem")[0].addEventListener('ended', function() {
+            //The repeat feature doesn't seem very useful (who wants to listen to the same song over and over??)
+            //So make continuous shuffle the default (and only) behavior.
+            /*
             var repeat = $("#repeatChk").prop('checked');
             if (repeat) {
                 setTimeout(function() {
                     $("#audioElem")[0].play();
                 }, 1000);
             }
+            */
+            loadTrack();
+            $("#audioElem")[0].addEventListener('canplaythrough', function() {
+                var audio = $("#audioElem")[0];
+                if (audio.paused) {
+                    audio.play();
+                }
+            });
         });
         $("#playBtn").click(function(){
             var audio = $("#audioElem")[0];
@@ -37,28 +52,68 @@
                 audio.play();
             }
         });
+        function loadTrack() {
+            resetHints();
+            const params = Object.fromEntries(new URLSearchParams(location.search));
+            console.log(params);
+            $.getJSON("api/track", params, function(track) {
+                console.log(track);
+                $("#audioElem").prop("src", track.path);
+                $("#linkYear").html("[" + track.year + "]");
+                $("#linkGenre").html("[" + track.genre + "]");
+                $("#linkArtist").html(track.artist);
+                $("#linkAlbum").html(track.album);
+                $("#linkTitle").html(track.title);
+                $("#coverImg").prop("src", track.cover_path);
+                $("#linkYear").prop("href", "/albums?year=" + track.year);
+                $("#linkGenre").prop("href", "/artists?genre=" + encodeURIComponent(track.genre));
+                $("#linkArtist").prop("href", "/albums?artist=" + encodeURIComponent(track.artist));
+                $("#linkAlbum").prop("href", "/tracks?artist=" + encodeURIComponent(track.artist) + "&album=" + encodeURIComponent(track.album));
+                $("#linkTitle").prop("href", "/player?artist=" + encodeURIComponent(track.artist) + "&album=" + encodeURIComponent(track.album) + "&title=" + encodeURIComponent(track.title));
+                $("#linkCover").prop("href", "/tracks?artist=" + encodeURIComponent(track.artist) + "&album=" + encodeURIComponent(track.album));           
+		loadTrackHints(track);
+            });
+        }
         $('#nextBtn').click(function() {
-            location.reload();
+            loadTrack();
+            $("#audioElem")[0].addEventListener('canplaythrough', function() {
+                var audio = $("#audioElem")[0];
+                if (audio.paused) {
+                    audio.play();
+                }
+            });
         });
+        loadTrack();
+        //Can't autoplay initially (breaks DOM promise)
+        initHints();
     });
     </script>
 </head>
 <body>
     {% include 'links.html' %}
+    {% if request.args.get('hints') == "1" %}
+    {% include 'hints.html' %}
+    {% endif %}
     <button id="playBtn">Play</button>
-    <input type="checkbox" id="repeatChk" checked="checked"/>
+    <!--
+    <input type="checkbox" id="repeatChk"/>
     <label for="repeatChk">Repeat</label>
+    -->
     <button id="restartBtn">Restart</button>
     <button id="nextBtn">Next</button>
     <br>
     <audio id="audioElem" class="full" controls>
-        <source src="{{ file.path }}" type="audio/mpeg" autoplay>
+        <source src="#" type="audio/mpeg" autoplay>
       Your browser does not support the audio element.
     </audio> 
     <div id="trackList">
-        <a class="trackLink" href="{{ file.path }}">[{{ file.year }}] [{{ file.genre }}] {{ file.artist }} - {{ file.album }} - {{ file.title }}</a>
+        <a id="linkYear" href="#">[YEAR]</a> 
+        <a id="linkGenre" href="#">[GENRE]</a> 
+        <a id="linkArtist" href="#">ARTIST</a> - 
+        <a id="linkAlbum" href="#">ALBUM</a> - 
+        <a id="linkTitle" href="#">TITLE</a>
         <br>
-        <a href="/tracks?artist={{ file.artist|quote_plus }}&album={{ file.album|quote_plus }}">
+        <a id="linkCover" href="#">
             <img src="#" id="coverImg" width="1000" height="1000" />
         </a>
     </div>

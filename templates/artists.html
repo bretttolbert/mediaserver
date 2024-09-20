@@ -2,12 +2,11 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>genres counts</title>
+    <title>artists</title>
     <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='styles/mediaserver.css') }}">
 </head>
 <body>
     {% include 'links.html' %}
-    <h1>artist counts</h1>
     <div id="trackList">
     {% for artist in artist_counts %}
         <a href="/albums?artist={{ artist|quote_plus }}">[{{ artist_counts[artist] }}] {{ artist }}</a>

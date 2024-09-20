@@ -29,16 +29,18 @@ a:active {
 }
 
 button {
-    font-size: 30px;
+    font-size: 24pt;
+    padding-left: 20px;
+    padding-right: 20px;
 }
 
 #navLinks {
     margin-bottom: 10px;
-    font-size: 20px;
+    font-size: 20pt;
 }
 
 div.hint { 
-    font-size: 30px;
+    font-size: 24pt;
     margin: 10px;
 }
 

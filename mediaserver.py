@@ -58,6 +58,36 @@ def load_yaml_file(yaml_fname: str) -> Data:
 data = load_yaml_file(MEDIASCAN_FILES_PATH)
 
 
+def get_files(
+    data: Data,
+    filter_artists: List[str],
+    filter_albums: List[str],
+    filter_genres: List[str],
+    filter_titles: List[str],
+    filter_years: List[str],
+    min_year: int,
+    max_year: int,
+) -> List[Mediafile]:
+    ret: List[Mediafile] = []
+    for f in data.mediafiles:
+        if len(filter_artists) and f.artist not in filter_artists:
+            continue
+        if len(filter_albums) and f.album not in filter_albums:
+            continue
+        if len(filter_genres) and f.genre not in filter_genres:
+            continue
+        if len(filter_titles) and f.title not in filter_titles:
+            continue
+        if len(filter_years) and str(f.year) not in filter_years:
+            continue
+        if min_year and f.year < int(min_year):
+            continue
+        if max_year and f.year > int(max_year):
+            continue
+        ret.append(f)
+    return ret
+
+
 def get_genres(data: Data) -> List[str]:
     ret: Set[str] = set()  # type: ignore
     for f in data.mediafiles:
@@ -65,17 +95,22 @@ def get_genres(data: Data) -> List[str]:
     return sorted(ret)
 
 
-def get_genre_counts(data: Data) -> Dict[str, int]:
+def get_genre_counts(data: Data, sort: str) -> Dict[str, int]:
     ret: Dict[str, int] = {}
     for f in data.mediafiles:
         if f.genre in ret:
             ret[f.genre] += 1
         else:
             ret[f.genre] = 1
-    return dict(sorted(ret.items(), key=lambda item: item[1], reverse=True))
+    if sort == "name":
+        return dict(sorted(ret.items(), key=lambda item: item[0], reverse=False))
+    else:  # default sort: by count
+        return dict(sorted(ret.items(), key=lambda item: item[1], reverse=True))
 
 
-def get_artist_counts(data: Data, filter_genres: List[str]) -> Dict[str, int]:
+def get_artist_counts(
+    data: Data, filter_genres: List[str], sort: str
+) -> Dict[str, int]:
     ret: Dict[str, int] = {}
     for f in data.mediafiles:
         if len(filter_genres) < 1 or f.genre in filter_genres:
@@ -83,7 +118,10 @@ def get_artist_counts(data: Data, filter_genres: List[str]) -> Dict[str, int]:
                 ret[f.artist] += 1
             else:
                 ret[f.artist] = 1
-    return dict(sorted(ret.items(), key=lambda item: item[1], reverse=True))
+    if sort == "name":
+        return dict(sorted(ret.items(), key=lambda item: item[0], reverse=False))
+    else:  # default sort: by count
+        return dict(sorted(ret.items(), key=lambda item: item[1], reverse=True))
 
 
 def get_genre_urls(data: Data) -> List[Dict[str, str]]:
@@ -138,36 +176,6 @@ def get_albums(
         return sorted(ret, key=lambda item: item[2], reverse=True)
 
 
-def get_files(
-    data: Data,
-    filter_artists: List[str],
-    filter_albums: List[str],
-    filter_genres: List[str],
-    filter_titles: List[str],
-    filter_years: List[str],
-    min_year: int,
-    max_year: int,
-) -> List[Mediafile]:
-    ret: List[Mediafile] = []
-    for f in data.mediafiles:
-        if len(filter_artists) and f.artist not in filter_artists:
-            continue
-        if len(filter_albums) and f.album not in filter_albums:
-            continue
-        if len(filter_genres) and f.genre not in filter_genres:
-            continue
-        if len(filter_titles) and f.title not in filter_titles:
-            continue
-        if len(filter_years) and str(f.year) not in filter_years:
-            continue
-        if min_year and f.year < int(min_year):
-            continue
-        if max_year and f.year > int(max_year):
-            continue
-        ret.append(f)
-    return ret
-
-
 @app.route("/")  # type: ignore
 def root() -> None:
     return render_template(
@@ -199,36 +207,9 @@ def tracks() -> None:
     )  # type: ignore
 
 
-@app.route("/name-that-tune")  # type: ignore
-def name_that_tune() -> None:
-    genres: List[str] = request.args.getlist("genre")  # type: ignore
-    artists: List[str] = request.args.getlist("artist")  # type: ignore
-    albums: List[str] = request.args.getlist("album")  # type: ignore
-    titles: List[str] = request.args.getlist("title")  # type: ignore
-    years: List[str] = request.args.getlist("year")  # type: ignore
-    min_year: int = request.args.get("minYear")  # type: ignore
-    max_year: int = request.args.get("maxYear")  # type: ignore
-    files: List[Mediafile] = get_files(data, artists, albums, genres, titles, years, min_year, max_year)  # type: ignore
-    return render_template(
-        "name-that-tune.html",
-        file=random.choice(files),  # type: ignore
-    )  # type: ignore
-
-
 @app.route("/player")  # type: ignore
 def player() -> None:
-    genres: List[str] = request.args.getlist("genre")  # type: ignore
-    artists: List[str] = request.args.getlist("artist")  # type: ignore
-    albums: List[str] = request.args.getlist("album")  # type: ignore
-    titles: List[str] = request.args.getlist("title")  # type: ignore
-    years: List[str] = request.args.getlist("year")  # type: ignore
-    min_year: int = request.args.get("minYear")  # type: ignore
-    max_year: int = request.args.get("maxYear")  # type: ignore
-    files: List[Mediafile] = get_files(data, artists, albums, genres, titles, years, min_year, max_year)  # type: ignore
-    return render_template(
-        "player.html",
-        file=random.choice(files),  # type: ignore
-    )  # type: ignore
+    return render_template("player.html")  # type: ignore
 
 
 @app.route("/data/<path:path>")  # type: ignore
@@ -236,19 +217,34 @@ def send_report(path: str) -> None:
     return send_from_directory("/data/", path)  # type: ignore
 
 
-@app.route("/genres-alpha")  # type: ignore
-def genres_alpha() -> None:
+@app.route("/genres")  # type: ignore
+def genre_counts() -> None:
+    sort: str = request.args.get("sort")  # type: ignore
     return render_template(
-        "genres-alpha.html",
-        genres=get_genres(data),
+        "genres.html",
+        genre_counts=get_genre_counts(data, sort=sort),  # type: ignore
     )  # type: ignore
 
 
-@app.route("/genre-counts")  # type: ignore
-def genre_counts() -> None:
+@app.route("/artists")  # type: ignore
+def artist_counts() -> None:
+    genres: List[str] = request.args.getlist("genre")  # type: ignore
+    sort: str = request.args.get("sort")  # type: ignore
     return render_template(
-        "genre-counts.html",
-        genre_counts=get_genre_counts(data),
+        "artists.html",
+        artist_counts=get_artist_counts(data, filter_genres=genres, sort=sort),  # type: ignore
+    )  # type: ignore
+
+
+@app.route("/albums")  # type: ignore
+def albums() -> None:
+    artists: List[str] = request.args.getlist("artist")  # type: ignore
+    genres: List[str] = request.args.getlist("genre")  # type: ignore
+    years: List[str] = request.args.getlist("year")  # type: ignore
+    sort: str = request.args.get("sort")  # type: ignore
+    return render_template(
+        "albums.html",
+        albums=get_albums(data, filter_artists=artists, filter_genres=genres, filter_years=years, sort=sort),  # type: ignore
     )  # type: ignore
 
 
@@ -269,31 +265,24 @@ def artists_cloud() -> None:
     )  # type: ignore
 
 
-@app.route("/artist-counts")  # type: ignore
-def artist_counts() -> None:
+@app.route("/api/track")  # type: ignore
+def api_track():  # type: ignore
     genres: List[str] = request.args.getlist("genre")  # type: ignore
-    return render_template(
-        "artist-counts.html",
-        artist_counts=get_artist_counts(data, filter_genres=genres),  # type: ignore
-    )  # type: ignore
-
-
-@app.route("/artists-alpha")  # type: ignore
-def artists_alpha() -> None:
-    genres: List[str] = request.args.getlist("genre")  # type: ignore
-    return render_template(
-        "artists-alpha.html",
-        artists=get_artists(data, filter_genres=genres),  # type: ignore
-    )  # type: ignore
-
-
-@app.route("/albums")  # type: ignore
-def albums() -> None:
     artists: List[str] = request.args.getlist("artist")  # type: ignore
-    genres: List[str] = request.args.getlist("genre")  # type: ignore
+    albums: List[str] = request.args.getlist("album")  # type: ignore
+    titles: List[str] = request.args.getlist("title")  # type: ignore
     years: List[str] = request.args.getlist("year")  # type: ignore
-    sort: str = request.args.get("sort")  # type: ignore
-    return render_template(
-        "albums.html",
-        albums=get_albums(data, filter_artists=artists, filter_genres=genres, filter_years=years, sort=sort),  # type: ignore
-    )  # type: ignore
+    min_year: int = request.args.get("minYear")  # type: ignore
+    max_year: int = request.args.get("maxYear")  # type: ignore
+    files: List[Mediafile] = get_files(data, artists, albums, genres, titles, years, min_year, max_year)  # type: ignore
+    file = random.choice(files)
+    cover_path = get_cover_path(file)  # type: ignore
+    return {
+        "path": file.path,
+        "cover_path": cover_path,
+        "artist": file.artist,
+        "album": file.album,
+        "title": file.title,
+        "genre": file.genre,
+        "year": file.year,
+    }  # type: ignore

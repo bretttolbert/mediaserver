@@ -5,6 +5,7 @@ A Flask web application for browsing local music files
 Features:
 - Simple minimalist web interface, perfect for a party jukebox hosted on your home WiFi network
 - Large (1000x1000px) album art display
+- Continuous shuffle playback with filtering options
 - Fast (tested with a library of 15,000+ music files)
 - Versatile filtering and sorting via a common set of intuitive url parameters
 - Comprehensive browsing options--browse by artist, album, genre, year, year range, and more
@@ -20,9 +21,10 @@ Limitations:
 - Requires that music filenames not contain prohibited characters such as `+` (prevent by testing music library with [mediatest](https://github.com/bretttolbert/mediatest))
 
 Coming soon:
-- Continuous shuffle
 - Play entire albums
 - Playlists
+- Back button to go back to previous track(s) in player
+- Sort by modified time
 
 ## Dependencies
 
