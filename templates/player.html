@@ -59,9 +59,9 @@
             const scalarKeys = ["minYear", "maxYear"]; //all others are list keys
             for (const key of searchParams.keys()) {
                 if (key in scalarKeys) {
-                    const value = searchParams.getAll(key);
+                    const value = searchParams.get(key);
                     console.log("searchParams: (scalar) " + key + " = " + value);
-                    requestParams[key] = value;                    
+                    requestParams[key] = value;
                 } else {
                     const values = searchParams.getAll(key);
                     console.log("searchParams: (list) " + key + " = " + values);
