@@ -1,6 +1,6 @@
 # mediaserver
 
-A Flask web application for browsing local music files
+A Flask web application for browsing and playing music files
 
 Development Status: Pre-Alpha
 
