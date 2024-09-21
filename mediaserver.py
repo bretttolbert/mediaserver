@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, send_from_directory  # type: ignore
+from flask import abort, Flask, render_template, request, send_from_directory  # type: ignore
 
 import yaml
 from dataclasses import dataclass
@@ -267,14 +267,17 @@ def artists_cloud() -> None:
 
 @app.route("/api/track")  # type: ignore
 def api_track():  # type: ignore
-    genres: List[str] = request.args.getlist("genre")  # type: ignore
-    artists: List[str] = request.args.getlist("artist")  # type: ignore
-    albums: List[str] = request.args.getlist("album")  # type: ignore
-    titles: List[str] = request.args.getlist("title")  # type: ignore
-    years: List[str] = request.args.getlist("year")  # type: ignore
+    genres: List[str] = request.args.getlist("genre[]")  # type: ignore
+    artists: List[str] = request.args.getlist("artist[]")  # type: ignore
+    albums: List[str] = request.args.getlist("album[]")  # type: ignore
+    titles: List[str] = request.args.getlist("title[]")  # type: ignore
+    years: List[str] = request.args.getlist("year[]")  # type: ignore
     min_year: int = request.args.get("minYear")  # type: ignore
     max_year: int = request.args.get("maxYear")  # type: ignore
+    print(f"Genres: {genres}")
     files: List[Mediafile] = get_files(data, artists, albums, genres, titles, years, min_year, max_year)  # type: ignore
+    if not len(files):
+        abort(404)
     file = random.choice(files)
     cover_path = get_cover_path(file)  # type: ignore
     return {

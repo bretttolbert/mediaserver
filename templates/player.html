@@ -54,9 +54,23 @@
         });
         function loadTrack() {
             resetHints();
-            const params = Object.fromEntries(new URLSearchParams(location.search));
-            console.log(params);
-            $.getJSON("api/track", params, function(track) {
+            searchParams = new URLSearchParams(location.search);
+            var requestParams = {};
+            const scalarKeys = ["minYear", "maxYear"]; //all others are list keys
+            for (const key of searchParams.keys()) {
+                if (key in scalarKeys) {
+                    const value = searchParams.getAll(key);
+                    console.log("searchParams: (scalar) " + key + " = " + value);
+                    requestParams[key] = value;                    
+                } else {
+                    const values = searchParams.getAll(key);
+                    console.log("searchParams: (list) " + key + " = " + values);
+                    requestParams[key] = values;
+                }
+            }
+            console.log("loadTrack location.search=" + location.search);
+            console.log("requestParams=" + JSON.stringify(requestParams));
+            $.getJSON("api/track", requestParams, function(track) {
                 console.log(track);
                 $("#audioElem").prop("src", track.path);
                 $("#linkYear").html("[" + track.year + "]");
@@ -72,7 +86,8 @@
                 $("#linkTitle").prop("href", "/player?artist=" + encodeURIComponent(track.artist) + "&album=" + encodeURIComponent(track.album) + "&title=" + encodeURIComponent(track.title));
                 $("#linkCover").prop("href", "/tracks?artist=" + encodeURIComponent(track.artist) + "&album=" + encodeURIComponent(track.album));           
 		loadTrackHints(track);
-            });
+            })
+            .fail(function() { alert("error - failed to load track(s)"); });
         }
         $('#nextBtn').click(function() {
             loadTrack();
