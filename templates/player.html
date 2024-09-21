@@ -107,7 +107,7 @@
 <body>
     {% include 'links.html' %}
     {% if request.args.get('hints') == "1" %}
-    {% include 'hints.html' %}
+    <h1>random track - can you name it?</h1>
     {% endif %}
     <button id="playBtn">Play</button>
     <!--
@@ -116,6 +116,10 @@
     -->
     <button id="restartBtn">Restart</button>
     <button id="nextBtn">Next</button>
+    <br>
+    {% if request.args.get('hints') == "1" %}
+    {% include 'hints.html' %}
+    {% endif %}
     <br>
     <audio id="audioElem" class="full" controls>
         <source src="#" type="audio/mpeg" autoplay>
