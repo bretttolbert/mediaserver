@@ -44,3 +44,23 @@ git clone git@github.com:bretttolbert/mediaserver.git
 cd mediaserver
 flask --app mediaserver run --host=0.0.0.0
 ```
+
+## Player Filtered Continuous Shuffle Examples
+
+###### Filter by year range
+
+```bash
+http://localhost:5000/player?minYear=1990&maxYear=2004
+```
+
+###### Filter by year range and genre(s)
+
+```bash
+http://localhost:5000/player?minYear=1960&maxYear=2024&genre=Industrial+Metal&genre=Punk&genre=Punk+Rock&genre=Heavy+Metal&genre=Hip+Hop&genre=Urbano&genre=Thrash+Metal&genre=Nu+Metal&genre=Rock+en+español&genre=Funk+Metal&genre=Hip-Hop+français
+```
+
+###### Filter by artist, album and title
+
+```bash
+http://localhost:5000/player?artist=Rush&album=Grace%20Under%20Pressure&title=The%20Body%20Electric
+```
