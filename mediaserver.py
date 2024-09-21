@@ -274,7 +274,6 @@ def api_track():  # type: ignore
     years: List[str] = request.args.getlist("year[]")  # type: ignore
     min_year: int = request.args.get("minYear")  # type: ignore
     max_year: int = request.args.get("maxYear")  # type: ignore
-    print(f"Genres: {genres}")
     files: List[Mediafile] = get_files(data, artists, albums, genres, titles, years, min_year, max_year)  # type: ignore
     if not len(files):
         abort(404)
