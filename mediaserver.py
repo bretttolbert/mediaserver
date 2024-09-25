@@ -157,6 +157,8 @@ def get_albums(
     filter_artists: List[str],
     filter_genres: List[str],
     filter_years: List[str],
+    min_year: int,
+    max_year: int,
     sort: str,
 ) -> List[Tuple[str, str, int, str]]:
     ret: Set[Tuple[str, str, int, str]] = set()  # type: ignore
@@ -166,6 +168,10 @@ def get_albums(
         if len(filter_genres) and f.genre not in filter_genres:
             continue
         if len(filter_years) and str(f.year) not in filter_years:
+            continue
+        if min_year and f.year < int(min_year):
+            continue
+        if max_year and f.year > int(max_year):
             continue
         ret.add((f.artist, f.album, f.year, get_cover_path(f)))
     if sort == "artist":
@@ -241,10 +247,20 @@ def albums() -> None:
     artists: List[str] = request.args.getlist("artist")  # type: ignore
     genres: List[str] = request.args.getlist("genre")  # type: ignore
     years: List[str] = request.args.getlist("year")  # type: ignore
+    min_year: int = request.args.get("minYear")  # type: ignore
+    max_year: int = request.args.get("maxYear")  # type: ignore
     sort: str = request.args.get("sort")  # type: ignore
     return render_template(
         "albums.html",
-        albums=get_albums(data, filter_artists=artists, filter_genres=genres, filter_years=years, sort=sort),  # type: ignore
+        albums=get_albums(
+            data,
+            filter_artists=artists,
+            filter_genres=genres,
+            filter_years=years,
+            min_year=min_year,
+            max_year=max_year,
+            sort=sort,
+        ),  # type: ignore
     )  # type: ignore
 
 

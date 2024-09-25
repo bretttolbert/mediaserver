@@ -9,11 +9,11 @@
     {% include 'links.html' %}
     <div id="trackList">
     {% for album in albums %}
-        <a href="/tracks?album={{ album[1]|quote_plus }}">
+        <a href="/tracks?artist={{ album[0]|quote_plus }}&album={{ album[1]|quote_plus }}&year={{ album[2] }}">
         <img src="{{ album[3] }}" class="CoverImg" width="1000" height="1000" />
         </a>
         <br>
-        <a href="/tracks?album={{ album[1]|quote_plus }}">[{{ album[2] }}] {{ album[0] }} - {{ album[1] }}</a>
+        <a href="/tracks?artist={{ album[0]|quote_plus }}&album={{ album[1]|quote_plus }}&year={{ album[2] }}">[{{ album[2] }}] {{ album[0] }} - {{ album[1] }}</a>
         <br>
         <br>
     {% endfor %}
