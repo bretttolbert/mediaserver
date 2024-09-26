@@ -13,6 +13,12 @@
     <br>
     </div>
     {% endif %}
+    {% if request.args.getlist('genre')|length > 0 %}
+    <div class="subNavLink">
+    <a class="navLink" href="http://localhost:5000/player?genre={{ request.args.get('genre')|quote_plus }}">Shuffle Genre - {{ request.args.get('genre') }}</a>
+    <br>
+    </div>
+    {% endif %}
     <div id="trackList">
     {% for album in albums %}
         <a href="/tracks?artist={{ album[0]|quote_plus }}&album={{ album[1]|quote_plus }}&year={{ album[2] }}">
