@@ -35,8 +35,13 @@ button {
     padding-right: 20px;
 }
 
-#navLinks {
+.navLink {
     margin-bottom: 10px;
+    font-size: 20pt;
+}
+
+.subNavLink {
+    margin-bottom: 20px;
     font-size: 20pt;
 }
 

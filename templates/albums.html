@@ -7,6 +7,12 @@
 </head>
 <body>
     {% include 'links.html' %}
+    {% if request.args.get('artist') is defined %}
+    <div class="subNavLink">
+    <a class="navLink" href="http://localhost:5000/player?artist={{ request.args.get('artist')|quote_plus }}">Shuffle Artist - {{ request.args.get('artist') }}</a>
+    <br>
+    </div>
+    {% endif %}
     <div id="trackList">
     {% for album in albums %}
         <a href="/tracks?artist={{ album[0]|quote_plus }}&album={{ album[1]|quote_plus }}&year={{ album[2] }}">
