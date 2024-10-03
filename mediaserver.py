@@ -254,12 +254,12 @@ def albums() -> None:
         "albums.html",
         albums=get_albums(
             data,
-            filter_artists=artists,
-            filter_genres=genres,
-            filter_years=years,
-            min_year=min_year,
-            max_year=max_year,
-            sort=sort,
+            filter_artists=artists,  # type: ignore
+            filter_genres=genres,  # type: ignore
+            filter_years=years,  # type: ignore
+            min_year=min_year,  # type: ignore
+            max_year=max_year,  # type: ignore
+            sort=sort,  # type: ignore
         ),  # type: ignore
     )  # type: ignore
 

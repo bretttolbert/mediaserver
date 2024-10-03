@@ -11,6 +11,12 @@
 </head>
 <body>
     {% include 'links.html' %}
+    {% if request.args.getlist('album')|length > 0 %}
+    <div class="subNavLink">
+    <a class="navLink" href="http://localhost:5000/player?artist={{ request.args.get('artist')|quote_plus }}&album={{ request.args.get('album')|quote_plus }}">Shuffle Album - {{ request.args.get('album') }}</a>
+    <br>
+    </div>
+    {% endif %}
     {% if request.args.getlist('album')|length > 0 and cover_path|length > 0 %}
         <img src="{{ cover_path }}" id="coverImg" width="1000" height="1000" />
         <br>
