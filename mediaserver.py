@@ -29,6 +29,7 @@ class Mediafile:
     format: str
     title: str
     artist: str
+    albumartist: str
     album: str
     genre: str
     year: int
@@ -61,6 +62,7 @@ data = load_yaml_file(MEDIASCAN_FILES_PATH)
 def get_files(
     data: Data,
     filter_artists: List[str],
+    filter_albumartists: List[str],
     filter_albums: List[str],
     filter_genres: List[str],
     filter_titles: List[str],
@@ -71,6 +73,8 @@ def get_files(
     ret: List[Mediafile] = []
     for f in data.mediafiles:
         if len(filter_artists) and f.artist not in filter_artists:
+            continue
+        if len(filter_albumartists) and f.albumartist not in filter_albumartists:
             continue
         if len(filter_albums) and f.album not in filter_albums:
             continue
@@ -155,6 +159,7 @@ def get_cover_path(media_file: Mediafile) -> str:
 def get_albums(
     data: Data,
     filter_artists: List[str],
+    filter_albumartists: List[str],
     filter_genres: List[str],
     filter_years: List[str],
     min_year: int,
@@ -173,7 +178,10 @@ def get_albums(
             continue
         if max_year and f.year > int(max_year):
             continue
-        ret.add((f.artist, f.album, f.year, get_cover_path(f)))
+        artist = f.albumartist
+        if not len(artist):
+            artist = f.artist
+        ret.add((artist, f.album, f.year, get_cover_path(f)))
     if sort == "artist":
         return sorted(ret, key=lambda item: item[0])
     if sort == "album":
@@ -193,12 +201,13 @@ def root() -> None:
 def tracks() -> None:
     genres: List[str] = request.args.getlist("genre")  # type: ignore
     artists: List[str] = request.args.getlist("artist")  # type: ignore
+    albumartists: List[str] = request.args.getlist("albumartist")  # type: ignore
     albums: List[str] = request.args.getlist("album")  # type: ignore
     titles: List[str] = request.args.getlist("title")  # type: ignore
     years: List[str] = request.args.getlist("year")  # type: ignore
     min_year: int = request.args.get("minYear")  # type: ignore
     max_year: int = request.args.get("maxYear")  # type: ignore
-    files: List[Mediafile] = get_files(data, artists, albums, genres, titles, years, min_year, max_year)  # type: ignore
+    files: List[Mediafile] = get_files(data, artists, albumartists, albums, genres, titles, years, min_year, max_year)  # type: ignore
     cover_path: str = ""
     if len(files):
         cover_path = get_cover_path(files[0])
@@ -245,6 +254,7 @@ def artist_counts() -> None:
 @app.route("/albums")  # type: ignore
 def albums() -> None:
     artists: List[str] = request.args.getlist("artist")  # type: ignore
+    albumartists: List[str] = request.args.getlist("albumartist")  # type: ignore
     genres: List[str] = request.args.getlist("genre")  # type: ignore
     years: List[str] = request.args.getlist("year")  # type: ignore
     min_year: int = request.args.get("minYear")  # type: ignore
@@ -255,6 +265,7 @@ def albums() -> None:
         albums=get_albums(
             data,
             filter_artists=artists,  # type: ignore
+            filter_albumartists=albumartists,  # type: ignore
             filter_genres=genres,  # type: ignore
             filter_years=years,  # type: ignore
             min_year=min_year,  # type: ignore
@@ -285,12 +296,13 @@ def artists_cloud() -> None:
 def api_track():  # type: ignore
     genres: List[str] = request.args.getlist("genre[]")  # type: ignore
     artists: List[str] = request.args.getlist("artist[]")  # type: ignore
+    albumartists: List[str] = request.args.getlist("albumartist[]")  # type: ignore
     albums: List[str] = request.args.getlist("album[]")  # type: ignore
     titles: List[str] = request.args.getlist("title[]")  # type: ignore
     years: List[str] = request.args.getlist("year[]")  # type: ignore
     min_year: int = request.args.get("minYear")  # type: ignore
     max_year: int = request.args.get("maxYear")  # type: ignore
-    files: List[Mediafile] = get_files(data, artists, albums, genres, titles, years, min_year, max_year)  # type: ignore
+    files: List[Mediafile] = get_files(data, artists, albumartists, albums, genres, titles, years, min_year, max_year)  # type: ignore
     if not len(files):
         abort(404)
     file = random.choice(files)

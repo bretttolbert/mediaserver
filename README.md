@@ -17,6 +17,8 @@ Features:
 
 [Screenshots](./screenshots/)
 
+![Albums Slayer Screenshot](./screenshots/Albums-Slayer.png)
+
 ![Albums 600px Table Screenshot](./screenshots/Albums-600px-table.png)
 
 Limitations:
