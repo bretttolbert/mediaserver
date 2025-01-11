@@ -19,7 +19,7 @@ Features:
 
 ![Albums Slayer Screenshot](./screenshots/Albums-Slayer.png)
 
-![Albums 600px Table Screenshot](./screenshots/Albums-600px-table.png)
+![Albums Genre Hip-Hop](./screenshots/Albums-genre-hip-hop.png)
 
 ![Albums 2006 with previous and next year links](./screenshots/Albums-2006-with-previous-current-next-year-links.png)
 
