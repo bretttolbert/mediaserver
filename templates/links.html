@@ -10,7 +10,6 @@
 <a href="/genres">genre counts</a> &nbsp;
 <a href="/genres-cloud">genres cloud</a> &nbsp;
 <a href="/artists-cloud">artists cloud</a> &nbsp;
-<br>
 {% if request.args.getlist('year')|length > 0 %}
 {% set year = request.args.get('year') | int %}
 {% set year_prev = year - 1 %}
@@ -19,4 +18,5 @@
     <b><a href="{{ url_for(request.endpoint, **request.view_args) }}?year={{ year }}">{{ year }} </a></b>
     <a href="{{ url_for(request.endpoint, **request.view_args) }}?year={{ year_next }}">{{ year_next }} </a>
 {% endif %}
+<br>
 </div>

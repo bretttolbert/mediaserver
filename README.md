@@ -21,7 +21,7 @@ Features:
 
 ![Albums 600px Table Screenshot](./screenshots/Albums-600px-table.png)
 
-![Albums with previous and next year links](./screenshots/Albums-with-previous-current-next-year-links.png)
+![Albums 2006 with previous and next year links](./screenshots/Albums-2006-with-previous-current-next-year-links.png)
 
 Limitations:
 - Doesn't work with some `.m4a` files (html5 audio element can't decode)
