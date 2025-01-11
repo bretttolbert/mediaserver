@@ -21,6 +21,8 @@ Features:
 
 ![Albums 600px Table Screenshot](./screenshots/Albums-600px-table.png)
 
+![Albums with previous and next year links](./screenshots/Albums-with-previous-current-next-year-links.png)
+
 Limitations:
 - Doesn't work with some `.m4a` files (html5 audio element can't decode)
 - Requires that music library be scanned with [mediascan](https://github.com/bretttolbert/mediascan) which outputs the [files.yaml](https://github.com/bretttolbert/mediascan/blob/main/files.yaml) file. This must be repeated to update the music library (e.g. add new files)
