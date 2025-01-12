@@ -13,7 +13,11 @@
     {% include 'links.html' %}
     {% if request.args.getlist('album')|length > 0 %}
     <div class="subNavLink">
+    {% if request.args.getlist('albumartist')|length > 0 %}
+    <a class="navLink" href="http://localhost:5000/player?artist={{ request.args.get('albumartist')|quote_plus }}&album={{ request.args.get('album')|quote_plus }}">Shuffle Album - {{ request.args.get('album') }}</a>
+    {% elif request.args.getlist('artist')|length > 0 %}
     <a class="navLink" href="http://localhost:5000/player?artist={{ request.args.get('artist')|quote_plus }}&album={{ request.args.get('album')|quote_plus }}">Shuffle Album - {{ request.args.get('album') }}</a>
+    {% endif %}
     <br>
     </div>
     {% endif %}

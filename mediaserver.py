@@ -166,6 +166,7 @@ def get_albums(
     max_year: int,
     sort: str,
 ) -> List[Tuple[str, str, int, str]]:
+    """Returns a list of [Artist, Album, Year, CoverPath]"""
     ret: Set[Tuple[str, str, int, str]] = set()  # type: ignore
     for f in data.mediafiles:
         if len(filter_artists) and f.artist not in filter_artists:
