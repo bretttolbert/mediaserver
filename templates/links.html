@@ -14,9 +14,15 @@
 {% set year = request.args.get('year') | int %}
 {% set year_prev = year - 1 %}
 {% set year_next = year + 1 %}
-    <a href="{{ url_for(request.endpoint, **request.view_args) }}?year={{ year_prev }}">{{ year_prev }} </a>
-    <b><a href="{{ url_for(request.endpoint, **request.view_args) }}?year={{ year }}">{{ year }} </a></b>
-    <a href="{{ url_for(request.endpoint, **request.view_args) }}?year={{ year_next }}">{{ year_next }} </a>
+{% set ns = namespace(other_args="") %}
+{% for key, value in request.args.items() %}
+{% if key != "year" %}
+{% set ns.other_args = ns.other_args ~ "&" ~ key ~ "=" ~ value %}
+{% endif %}
+{% endfor %}
+    <a href="{{ url_for(request.endpoint, **request.view_args) }}?year={{ year_prev }}{{ ns.other_args }}">{{ year_prev }} </a>
+    <b><a href="{{ url_for(request.endpoint, **request.view_args) }}?year={{ year }}{{ ns.other_args }}">{{ year }} </a></b>
+    <a href="{{ url_for(request.endpoint, **request.view_args) }}?year={{ year_next }}{{ ns.other_args }}">{{ year_next }} </a>
 {% endif %}
 <br>
 </div>

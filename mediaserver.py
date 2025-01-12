@@ -171,6 +171,8 @@ def get_albums(
     for f in data.mediafiles:
         if len(filter_artists) and f.artist not in filter_artists:
             continue
+        if len(filter_albumartists) and f.albumartist not in filter_albumartists:
+            continue
         if len(filter_genres) and f.genre not in filter_genres:
             continue
         if len(filter_years) and str(f.year) not in filter_years:
