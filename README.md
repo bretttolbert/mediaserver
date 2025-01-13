@@ -23,6 +23,8 @@ Features:
 
 ![Albums 2006 with previous and next year links](./screenshots/Albums-2006-with-previous-current-next-year-links.png)
 
+![Albums with year and genre filters](./screenshots/Albums-with-year-and-genre-filters.png)
+
 Limitations:
 - Doesn't work with some `.m4a` files (html5 audio element can't decode)
 - Requires that music library be scanned with [mediascan](https://github.com/bretttolbert/mediascan) which outputs the [files.yaml](https://github.com/bretttolbert/mediascan/blob/main/files.yaml) file. This must be repeated to update the music library (e.g. add new files)
