@@ -4,6 +4,7 @@ import yaml
 from dataclasses import dataclass
 
 from dataclass_wizard import YAMLWizard  # type: ignore
+from datetime import datetime
 import os.path
 import random  # type: ignore
 from typing import Dict, List, Set, Tuple
@@ -13,6 +14,8 @@ from urllib.parse import quote_plus  # type: ignore
 app = Flask(__name__)  # type: ignore
 app.jinja_env.filters["quote_plus"] = lambda u: quote_plus(u)  # type: ignore
 app.jinja_env.filters["make_list"] = lambda s: list(s)  # type: ignore
+app.jinja_env.globals["PRESENT_YEAR"] = datetime.now().year  # type: ignore
+
 
 MEDIASCAN_FILES_PATH = "../mediascan/files.yaml"
 
