@@ -7,7 +7,7 @@ function resetHints() {
 }
 function hideAndLockHints() {
     $("#trackList").show();
-    $(".hint").hide();  // continuing to show hints would be redudant
+    $(".hint").hide();  // continuing to show hints would be redundant
     $(".hintChk").prop("checked", false);
     $("#showBtn").prop("disabled", true);  // once details are shown, it's permanent
     $(".hintChk").prop("disabled", true);  // once details are shown, hints are redundant
