@@ -8,11 +8,15 @@
 <body>
     {% include 'links.html' %}
     <div id="trackList">
+    <table>
+        <tr><th>Count</th><th>Genre</th></tr>
     {% for genre in genre_counts %}
-        <!--<a href="/artists?genre={{ genre|quote_plus }}">[{{ genre_counts[genre] }}] {{ genre }}</a>-->
-        <a href="/albums?genre={{ genre|quote_plus }}">[{{ genre_counts[genre] }}] {{ genre }}</a>
-        <br>
+        <tr>
+            <!--<a href="/artists?genre={{ genre|quote_plus }}">[{{ genre_counts[genre] }}] {{ genre }}</a>-->
+            <td>{{ genre_counts[genre] }}</td><td><a href="/albums?genre={{ genre|quote_plus }}">{{ genre }}</a></td>
+        </tr>
     {% endfor %}
+    </table>
     </div>
 </body>
 </html>

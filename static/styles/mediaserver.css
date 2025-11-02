@@ -8,6 +8,22 @@ body {
 #trackList {
     font-size: 24pt;
     font-family: sans-serif;
+    text-align: center;
+}
+
+table {
+  width: 100%; /* Optional: Sets the table width */
+  border-collapse: collapse; /* Collapses borders into a single line */
+}
+
+th, td {
+  border: 1px solid white; /* Sets a 1px solid black border for cells */
+  padding: 8px; /* Optional: Adds padding inside cells */
+  text-align: left; /* Optional: Aligns text to the left */
+}
+
+th {
+  background-color: black; /* Optional: Adds a background color to header cells */
 }
 
 /* unvisited link */

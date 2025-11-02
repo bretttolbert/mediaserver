@@ -8,9 +8,13 @@
 <body>
     {% include 'links.html' %}
     <div id="trackList">
+    <table>
+        <tr><th>Count</th><th>Artist</th></tr>
     {% for artist in artist_counts %}
-        <a href="/albums?artist={{ artist|quote_plus }}">[{{ artist_counts[artist] }}] {{ artist }}</a>
-        <br>
+        <tr>
+            <td>{{ artist_counts[artist] }}</td>
+            <td><a href="/albums?artist={{ artist|quote_plus }}">{{ artist }}</a></td>
+        </tr>
     {% endfor %}
     </div>
 </body>

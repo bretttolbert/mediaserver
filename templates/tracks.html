@@ -27,13 +27,16 @@
     {% endif %}
     <h1>tracks</h1>
     <div id="trackList">
+    <table>
+        <tr><th>Year</th><th>Genre</th><th>Artist</th><th>Album</th><th>Track</th></tr>
     {% for file in files %}
-        <a href="/albums?year={{ file.year }}">[{{ file.year }}]</a> 
-        <a href="/artists?genre={{ file.genre|quote_plus }}">[{{ file.genre }}]</a> 
-        <a href="/albums?artist={{ file.artist|quote_plus }}">{{ file.artist }}</a> - 
-        <a href="/tracks?artist={{ file.artist|quote_plus }}&album={{ file.album|quote_plus }}">{{ file.album }}</a> - 
-        <a href="/player?artist={{ file.artist|quote_plus }}&album={{ file.album|quote_plus }}&title={{ file.title|quote_plus }}">{{ file.title }}</a>
-        <br>
+        <tr>
+            <th><a href="/albums?year={{ file.year }}">{{ file.year }}</a></th>
+            <th><a href="/artists?genre={{ file.genre|quote_plus }}">{{ file.genre }}</a></th>
+            <th><a href="/albums?artist={{ file.artist|quote_plus }}">{{ file.artist }}</a></th>
+            <th><a href="/tracks?artist={{ file.artist|quote_plus }}&album={{ file.album|quote_plus }}">{{ file.album }}</a></th>
+            <th><a href="/player?artist={{ file.artist|quote_plus }}&album={{ file.album|quote_plus }}&title={{ file.title|quote_plus }}">{{ file.title }}</a></th>
+        </tr>
     {% endfor %}
     </div>
 </body>
