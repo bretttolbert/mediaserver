@@ -1,6 +1,8 @@
 # mediaserver
 
-A Flask web application for browsing and playing music files
+A minimalist Flask web application for browsing and playing music files
+
+Uses my other project [mediascan](https://github.com/bretttolbert/mediascan) for scanning music library files.
 
 Development Status: Pre-Alpha
 
@@ -40,14 +42,14 @@ Coming soon:
 
 ## Dependencies
 
-- [mediascan](https://github.com/bretttolbert/mediascan) A simple and fast Go (golang) command-line utility to recursively scan a directory for media files, extract metadata (including ID3v2 tags from both MP3 and M4A files), and save the output in a simple yaml format 
+- [mediascan](https://github.com/bretttolbert/mediascan) A simple and fast Go (golang) command-line utility to recursively scan a directory for media files, extract metadata (including ID3v2 tags from both MP3 and M4A files), and save the output in a simple YAML format, and a Python library with data classes for working with the YAML files output by `mediascan.go`.
 
 ## Quick Start
 
 ```bash
 git clone git@github.com:bretttolbert/mediascan.git
 cd mediascan
-go run mediascan.go conf.yaml files.yaml
+go run ./mediascan/src/mediascan.go ./conf/conf.yaml ./out/files.yaml
 cd ..
 git clone git@github.com:bretttolbert/mediaserver.git
 cd mediaserver
