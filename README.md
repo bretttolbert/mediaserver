@@ -49,7 +49,7 @@ Coming soon:
 ```bash
 git clone git@github.com:bretttolbert/mediascan.git
 cd mediascan
-go run ./mediascan/src/mediascan.go ./conf/conf.yaml ./out/files.yaml
+go run mediascan/src/mediascan.go conf/conf.yaml out/files.yaml
 cd ..
 git clone git@github.com:bretttolbert/mediaserver.git
 cd mediaserver
