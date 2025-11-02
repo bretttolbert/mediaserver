@@ -271,6 +271,7 @@ def artists_cloud() -> None:
 
 @app.route("/api/track")  # type: ignore
 def api_track():  # type: ignore
+    global files
     genres: List[str] = request.args.getlist("genre[]")  # type: ignore
     artists: List[str] = request.args.getlist("artist[]")  # type: ignore
     albumartists: List[str] = request.args.getlist("albumartist[]")  # type: ignore
@@ -279,10 +280,10 @@ def api_track():  # type: ignore
     years: List[str] = request.args.getlist("year[]")  # type: ignore
     min_year: int = request.args.get("minYear")  # type: ignore
     max_year: int = request.args.get("maxYear")  # type: ignore
-    files: List[MediaFile] = filter_files(files, artists, albumartists, albums, genres, titles, years, min_year, max_year)  # type: ignore
-    if not len(files):
+    files_list: List[MediaFile] = filter_files(files, artists, albumartists, albums, genres, titles, years, min_year, max_year)  # type: ignore
+    if not len(files_list):
         abort(404)
-    file = random.choice(files)
+    file = random.choice(files_list)
     cover_path = get_cover_path(file)  # type: ignore
     return {
         "path": file.path,

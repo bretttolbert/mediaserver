@@ -2,7 +2,7 @@
 
 A minimalist Flask web application for browsing and playing music files
 
-Uses my other project [mediascan](https://github.com/bretttolbert/mediascan) for scanning music library files.
+Uses my other project [mediascan](https://github.com/bretttolbert/mediascan) for scanning music library files. Currently this must be performed manually (both for initial music library scan and to re-scan music library)
 
 Development Status: Pre-Alpha
 
