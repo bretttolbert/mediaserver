@@ -67,12 +67,19 @@ class ArgTypeUtil:
             ArgTypes.Scalar.Enum.Sort,
         )
 
+    @classmethod
+    def is_integer(cls, arg_type: ArgType) -> bool:
+        return arg_type in (
+            ArgTypes.Scalar.Int.MinYear,
+            ArgTypes.Scalar.Int.MaxYear,
+        )
+
 
 ArgValueScalarInt = int
 ArgValueListStr = List[str]
 
 
-class ArgValueScalarEnumSort:
+class ArgValueScalarEnumSort(StrEnum):
     Name = "name"
     Count = "count"
     Year = "year"
@@ -117,7 +124,11 @@ def get_request_args(
         if ArgTypeUtil.is_scalar(arg_type):
             value = request.args.get(str(arg_type))
             if value:
-                ret[arg_type] = int(value)
+                if ArgTypeUtil.is_integer(arg_type):
+                    ret[arg_type] = int(value)
+                else:
+                    # must be enum type, and there's only one currently
+                    ret[arg_type] = ArgValues.Scalar.Enum.Sort(value)
         else:
             value = request.args.getlist(str(arg_type))
             if value:
@@ -290,7 +301,7 @@ def tracks() -> None:
             key=lambda x: x.year,
             reverse=True,
         ),
-        cover_path=cover_path,
+        cover_path=str(cover_path),
     )  # type: ignore
 
 
@@ -364,7 +375,7 @@ def api_track():  # type: ignore
     cover_path = get_cover_path(file)  # type: ignore
     return {
         "path": file.path,
-        "cover_path": cover_path,
+        "cover_path": str(cover_path),
         "artist": file.artist,
         "album": file.album,
         "title": file.title,
