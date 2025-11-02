@@ -128,7 +128,19 @@ def get_request_args(
 def filter_files(files: MediaFiles, args: ArgsDict) -> List[MediaFile]:
     ret: List[MediaFile] = []
     for f in files.files:
+        # ArgTypeScalarInt:
+        arg_type = ArgTypes.Scalar.Int.MinYear
+        if arg_type in args:
+            arg_value = cast(ArgValueScalarInt, args[arg_type])
+            if arg_value and f.year < arg_value:
+                continue
+        arg_type = ArgTypes.Scalar.Int.MaxYear
+        if arg_type in args:
+            arg_value = cast(ArgValueScalarInt, args[arg_type])
+            if arg_value and f.year > arg_value:
+                continue
         # ArgTypeListStr:
+        skip_file = False
         arg_type_list_file_value_map: Dict[ArgType, str] = {
             ArgTypes.List.Str.Artist: f.artist,
             ArgTypes.List.Str.AlbumArtist: f.albumartist,
@@ -141,18 +153,9 @@ def filter_files(files: MediaFiles, args: ArgsDict) -> List[MediaFile]:
             if arg_type in args:
                 arg_value_list = cast(ArgValueListStr, args[arg_type])
                 if len(arg_value_list) and file_value not in arg_value_list:
-                    continue
-        # ArgTypeScalarInt:
-        arg_type = ArgTypes.Scalar.Int.MinYear
-        if arg_type in args:
-            arg_value = cast(ArgValueScalarInt, args[arg_type])
-            if arg_value and f.year < arg_value:
-                continue
-        arg_type = ArgTypes.Scalar.Int.MaxYear
-        if arg_type in args:
-            arg_value = cast(ArgValueScalarInt, args[arg_type])
-            if arg_value and f.year > arg_value:
-                continue
+                    skip_file = True
+                    break
+        if not skip_file:
             ret.append(f)
     return ret
 
@@ -224,12 +227,19 @@ def get_cover_path(file: MediaFile) -> Path:
     return rel_path / "cover.jpg"
 
 
+# Tuple of [Artist, Album, Year, CoverPath]
+AlbumInfoTuple = Tuple[str, str, int, str]
+
+
 class AlbumInfo:
     def __init__(self, artist: str, album: str, year: int, cover_path: Path):
         self.artist = artist
         self.album = album
         self.year = year
         self.cover_path = cover_path
+
+    def to_tuple(self) -> AlbumInfoTuple:
+        return (self.artist, self.album, self.year, str(self.cover_path))
 
 
 def get_albums(
@@ -323,7 +333,7 @@ def artist_counts() -> None:
 def albums() -> None:
     return render_template(
         "albums.html",
-        albums=get_albums(files, get_request_args()),
+        albums=[album.to_tuple() for album in get_albums(files, get_request_args())],
     )  # type: ignore
 
 
