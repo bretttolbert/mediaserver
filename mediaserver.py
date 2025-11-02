@@ -7,7 +7,7 @@ import random  # type: ignore
 from typing import Dict, List, Set, Tuple
 from urllib.parse import quote_plus  # type: ignore
 
-from mediascan import MediaFiles, MediaFile
+from mediascan import load_files_yaml, MediaFiles, MediaFile
 
 app = Flask(__name__)  # type: ignore
 app.jinja_env.filters["quote_plus"] = lambda u: quote_plus(u)  # type: ignore
@@ -16,17 +16,6 @@ app.jinja_env.globals["PRESENT_YEAR"] = datetime.now().year  # type: ignore
 
 
 MEDIASCAN_FILES_PATH = "../mediascan/out/files.yaml"
-
-
-def load_files_yaml(yaml_fname: str) -> MediaFiles:
-    files = None
-    with open(yaml_fname, "r") as stream:
-        try:
-            files = MediaFiles.from_yaml(stream)  # type: ignore
-        except yaml.YAMLError as exc:
-            sys.exit(1)
-    return files  # type: ignore
-
 
 files = load_files_yaml(MEDIASCAN_FILES_PATH)
 
