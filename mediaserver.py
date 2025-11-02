@@ -179,7 +179,7 @@ def tracks() -> None:
         cover_path = get_cover_path(files_list[0])
     return render_template(
         "tracks.html",
-        files_list=sorted(
+        files=sorted(
             files_list,
             key=lambda x: x.year,
             reverse=True,
