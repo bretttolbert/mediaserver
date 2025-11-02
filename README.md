@@ -56,6 +56,11 @@ cd mediaserver
 flask --app mediaserver run --host=0.0.0.0
 ```
 
+### Run in debug mode (enables logging)
+```bash
+flask --app mediaserver run --host=0.0.0.0 --debug
+```
+
 ## Player Filtered Continuous Shuffle Examples
 
 ###### Filter by year range

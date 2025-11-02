@@ -58,6 +58,7 @@
             var requestParams = {};
             const scalarKeys = ["minYear", "maxYear"]; //all others are list keys
             for (const key of searchParams.keys()) {
+                console.log("searchParam key=" + key);
                 if (scalarKeys.includes(key)) {
                     const value = searchParams.get(key);
                     console.log("searchParams: (scalar) " + key + " = " + value);

@@ -103,6 +103,14 @@ ArgValue = Union[ArgValueScalarInt, ArgValueListStr, ArgValueScalarEnumSort]
 ArgsDict = Dict[ArgType, ArgValue]
 
 
+def args_dict_to_str(args: ArgsDict) -> str:
+    msg = "["
+    for k, v in args.items():
+        msg += f"{k}={v},"
+    msg += "]"
+    return msg
+
+
 REQUEST_ARG_TYPES = [
     ArgTypes.List.Str.Genre,
     ArgTypes.List.Str.Artist,
@@ -133,10 +141,19 @@ def get_request_args(
             value = request.args.getlist(str(arg_type))
             if value:
                 ret[arg_type] = value
+            else:
+                value = request.args.getlist(f"{arg_type}[]")
+                if value:
+                    app.logger.debug(
+                        'get_request_args appended "[]" to arg_type and then successfully got a value'
+                    )
+                    ret[arg_type] = value
     return ret
 
 
 def filter_files(files: MediaFiles, args: ArgsDict) -> List[MediaFile]:
+    app.logger.debug("filter_files args=%s", args_dict_to_str(args))
+
     ret: List[MediaFile] = []
     for f in files.files:
         # ArgTypeScalarInt:
@@ -144,11 +161,25 @@ def filter_files(files: MediaFiles, args: ArgsDict) -> List[MediaFile]:
         if arg_type in args:
             arg_value = cast(ArgValueScalarInt, args[arg_type])
             if arg_value and f.year < arg_value:
+                app.logger.debug(
+                    "skipping file (value=%s) based on filter arg %s=%s",
+                    arg_value,
+                    arg_type,
+                    arg_value,
+                )
+                app.logger.debug("filter_files args=%s", args_dict_to_str(args))
                 continue
         arg_type = ArgTypes.Scalar.Int.MaxYear
         if arg_type in args:
             arg_value = cast(ArgValueScalarInt, args[arg_type])
             if arg_value and f.year > arg_value:
+                app.logger.debug(
+                    "skipping file (value=%s) based on filter arg %s=%s",
+                    arg_value,
+                    arg_type,
+                    arg_value,
+                )
+                app.logger.debug("filter_files args=%s", args_dict_to_str(args))
                 continue
         # ArgTypeListStr:
         skip_file = False
@@ -163,10 +194,22 @@ def filter_files(files: MediaFiles, args: ArgsDict) -> List[MediaFile]:
         for arg_type, file_value in arg_type_list_file_value_map.items():
             if arg_type in args:
                 arg_value_list = cast(ArgValueListStr, args[arg_type])
+                app.logger.debug(
+                    "filtering based on %s[] arg = [%s]", arg_type, arg_value_list
+                )
                 if len(arg_value_list) and file_value not in arg_value_list:
+                    app.logger.debug(
+                        "skipping file (value=%s) based on %s[] arg = [%s]",
+                        file_value,
+                        arg_type,
+                        arg_value_list,
+                    )
+                    app.logger.debug("filter_files args=%s", args_dict_to_str(args))
                     skip_file = True
                     break
         if not skip_file:
+            # app.logger.debug("appending file %s", f)
+            # app.logger.debug("filter_files args=%s", args_dict_to_str(args))
             ret.append(f)
     return ret
 
@@ -290,7 +333,9 @@ def root() -> None:
 @app.route("/tracks")  # type: ignore
 def tracks() -> None:
     global files
-    files_list: List[MediaFile] = filter_files(files, get_request_args())  # type: ignore
+    args = get_request_args()
+    app.logger.debug("tracks args=%s", args_dict_to_str(args))
+    files_list: List[MediaFile] = filter_files(files, args)  # type: ignore
     cover_path: Path = Path()
     if len(files_list):
         cover_path = get_cover_path(files_list[0])
@@ -368,7 +413,9 @@ def artists_cloud() -> None:
 @app.route("/api/track")  # type: ignore
 def api_track():  # type: ignore
     global files
-    files_list: List[MediaFile] = filter_files(files, get_request_args())  # type: ignore
+    args = get_request_args()
+    app.logger.debug("api/track args=%s", args_dict_to_str(args))
+    files_list: List[MediaFile] = filter_files(files, args)  # type: ignore
     if not len(files_list):
         abort(404)
     file = random.choice(files_list)
