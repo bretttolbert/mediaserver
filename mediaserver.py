@@ -4,8 +4,9 @@ import yaml
 from datetime import datetime
 import os.path
 import random  # type: ignore
-from typing import Dict, List, Set, Tuple
+from typing import Dict, List, Set, Tuple, Union
 from urllib.parse import quote_plus  # type: ignore
+from enum import StrEnum
 
 from mediascan import load_files_yaml, MediaFiles, MediaFile
 
@@ -17,37 +18,111 @@ app.jinja_env.globals["PRESENT_YEAR"] = datetime.now().year  # type: ignore
 
 MEDIASCAN_FILES_PATH = "../mediascan/out/files.yaml"
 
-files = load_files_yaml(MEDIASCAN_FILES_PATH)
+files: MediaFiles = load_files_yaml(MEDIASCAN_FILES_PATH)
 
 
-def filter_files(
-    files: MediaFiles,
-    filter_artists: List[str],
-    filter_albumartists: List[str],
-    filter_albums: List[str],
-    filter_genres: List[str],
-    filter_titles: List[str],
-    filter_years: List[str],
-    min_year: int,
-    max_year: int,
-) -> List[MediaFile]:
+class ArgTypeScalarInt(StrEnum):
+    MinYear = "minYear"
+    MaxYear = "maxYear"
+
+
+class ArgTypeScalar:
+    Int = ArgTypeScalarInt
+
+
+class ArgTypeListStr(StrEnum):
+    Genre = "genre"
+    Artist = "artist"
+    AlbumArtist = "albumartist"
+    Album = "album"
+    Title = "title"
+    Year = "year"
+
+
+class ArgTypeList:
+    Str = ArgTypeListStr
+
+
+class ArgType:
+    List = ArgTypeList
+    Scalar = ArgTypeScalar
+
+
+class ArgTypeUtil:
+    @classmethod
+    def is_scalar(cls, arg_type: ArgType) -> bool:
+        return arg_type in (ArgType.Scalar.Int.MinYear, ArgType.Scalar.Int.MaxYear)
+
+
+ArgValueScalarInt = int
+ArgValueListStr = List[str]
+ArgValue = Union[ArgValueScalarInt, ArgValueListStr]
+ArgsDict = Dict[ArgType, ArgValue]
+
+REQUEST_ARG_TYPES = [
+    ArgType.List.Str.Genre,
+    ArgType.List.Str.Artist,
+    ArgType.List.Str.AlbumArtist,
+    ArgType.List.Str.Album,
+    ArgType.List.Str.Title,
+    ArgType.List.Str.Year,
+    ArgType.Scalar.Int.MinYear,
+    ArgType.Scalar.Int.MaxYear,
+]
+
+
+def get_request_args(
+    arg_types: List[ArgType] = REQUEST_ARG_TYPES,
+) -> ArgsDict:
+    ret: ArgsDict = {}
+    for arg_type in arg_types:
+        if ArgTypeUtil.is_scalar(arg_type):
+            ret[arg_type] = request.args.get(arg_type)
+        else:
+            ret[arg_type] = request.args.getlist(arg_type)
+    return ret
+
+
+def filter_files(files: MediaFiles, args: ArgsDict) -> List[MediaFile]:
     ret: List[MediaFile] = []
     for f in files.files:
-        if len(filter_artists) and f.artist not in filter_artists:
+        if (
+            len(args[ArgType.List.Str.Artist])
+            and f.artist not in args[ArgType.List.Str.Artist]
+        ):
             continue
-        if len(filter_albumartists) and f.albumartist not in filter_albumartists:
+        if (
+            len(args[ArgType.List.Str.AlbumArtist])
+            and f.albumartist not in args[ArgType.List.Str.AlbumArtist]
+        ):
             continue
-        if len(filter_albums) and f.album not in filter_albums:
+        if (
+            len(args[ArgType.List.Str.Album])
+            and f.album not in args[ArgType.List.Str.Album]
+        ):
             continue
-        if len(filter_genres) and f.genre not in filter_genres:
+        if (
+            len(args[ArgType.List.Str.Genre])
+            and f.genre not in args[ArgType.List.Str.Genre]
+        ):
             continue
-        if len(filter_titles) and f.title not in filter_titles:
+        if (
+            len(args[ArgType.List.Str.Title])
+            and f.title not in args[ArgType.List.Str.Title]
+        ):
             continue
-        if len(filter_years) and str(f.year) not in filter_years:
+        if (
+            len(args[ArgType.List.Str.Year])
+            and str(f.year) not in args[ArgType.List.Str.Year]
+        ):
             continue
-        if min_year and f.year < int(min_year):
+        if args[ArgType.Scalar.Int.MinYear] and f.year < int(
+            args[ArgType.Scalar.Int.MinYear]
+        ):
             continue
-        if max_year and f.year > int(max_year):
+        if args[ArgType.Scalar.Int.MaxYear] and f.year > int(
+            args[ArgType.Scalar.Int.MaxYear]
+        ):
             continue
         ret.append(f)
     return ret
@@ -165,15 +240,8 @@ def root() -> None:
 
 @app.route("/tracks")  # type: ignore
 def tracks() -> None:
-    genres: List[str] = request.args.getlist("genre")  # type: ignore
-    artists: List[str] = request.args.getlist("artist")  # type: ignore
-    albumartists: List[str] = request.args.getlist("albumartist")  # type: ignore
-    albums: List[str] = request.args.getlist("album")  # type: ignore
-    titles: List[str] = request.args.getlist("title")  # type: ignore
-    years: List[str] = request.args.getlist("year")  # type: ignore
-    min_year: int = request.args.get("minYear")  # type: ignore
-    max_year: int = request.args.get("maxYear")  # type: ignore
-    files_list: List[MediaFile] = filter_files(files, artists, albumartists, albums, genres, titles, years, min_year, max_year)  # type: ignore
+    global files
+    files_list: List[MediaFile] = filter_files(files, get_request_args())  # type: ignore
     cover_path: str = ""
     if len(files_list):
         cover_path = get_cover_path(files_list[0])
@@ -261,15 +329,7 @@ def artists_cloud() -> None:
 @app.route("/api/track")  # type: ignore
 def api_track():  # type: ignore
     global files
-    genres: List[str] = request.args.getlist("genre[]")  # type: ignore
-    artists: List[str] = request.args.getlist("artist[]")  # type: ignore
-    albumartists: List[str] = request.args.getlist("albumartist[]")  # type: ignore
-    albums: List[str] = request.args.getlist("album[]")  # type: ignore
-    titles: List[str] = request.args.getlist("title[]")  # type: ignore
-    years: List[str] = request.args.getlist("year[]")  # type: ignore
-    min_year: int = request.args.get("minYear")  # type: ignore
-    max_year: int = request.args.get("maxYear")  # type: ignore
-    files_list: List[MediaFile] = filter_files(files, artists, albumartists, albums, genres, titles, years, min_year, max_year)  # type: ignore
+    files_list: List[MediaFile] = filter_files(files, get_request_args())  # type: ignore
     if not len(files_list):
         abort(404)
     file = random.choice(files_list)
