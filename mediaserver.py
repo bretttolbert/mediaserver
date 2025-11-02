@@ -203,7 +203,7 @@ def genre_counts() -> None:
     sort: str = request.args.get("sort")  # type: ignore
     return render_template(
         "genres.html",
-        genre_counts=get_genre_counts(data, sort=sort),  # type: ignore
+        genre_counts=get_genre_counts(files, sort=sort),  # type: ignore
     )  # type: ignore
 
 
