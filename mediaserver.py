@@ -173,14 +173,14 @@ def tracks() -> None:
     years: List[str] = request.args.getlist("year")  # type: ignore
     min_year: int = request.args.get("minYear")  # type: ignore
     max_year: int = request.args.get("maxYear")  # type: ignore
-    files: List[MediaFile] = filter_files(files, artists, albumartists, albums, genres, titles, years, min_year, max_year)  # type: ignore
+    files_list: List[MediaFile] = filter_files(files, artists, albumartists, albums, genres, titles, years, min_year, max_year)  # type: ignore
     cover_path: str = ""
-    if len(files):
-        cover_path = get_cover_path(files[0])
+    if len(files_list):
+        cover_path = get_cover_path(files_list[0])
     return render_template(
         "tracks.html",
-        files=sorted(
-            files,
+        files_list=sorted(
+            files_list,
             key=lambda x: x.year,
             reverse=True,
         ),
