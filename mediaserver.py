@@ -7,6 +7,7 @@ import random  # type: ignore
 from typing import cast, Dict, List, Set, Tuple, Union
 from urllib.parse import quote_plus  # type: ignore
 from enum import StrEnum
+from pathlib import Path
 
 from mediascan import load_files_yaml, MediaFiles, MediaFile
 
@@ -30,8 +31,13 @@ class ArgTypeScalarInt(ArgType):
     MaxYear = "maxYear"
 
 
+class ArgTypeScalarEnum(ArgType):
+    Sort = "sort"
+
+
 class ArgTypeScalar:
     Int = ArgTypeScalarInt
+    Enum = ArgTypeScalarEnum
 
 
 class ArgTypeListStr(ArgType):
@@ -55,13 +61,40 @@ class ArgTypes:
 class ArgTypeUtil:
     @classmethod
     def is_scalar(cls, arg_type: ArgType) -> bool:
-        return arg_type in (ArgTypes.Scalar.Int.MinYear, ArgTypes.Scalar.Int.MaxYear)
+        return arg_type in (
+            ArgTypes.Scalar.Int.MinYear,
+            ArgTypes.Scalar.Int.MaxYear,
+            ArgTypes.Scalar.Enum.Sort,
+        )
 
 
 ArgValueScalarInt = int
 ArgValueListStr = List[str]
-ArgValue = Union[ArgValueScalarInt, ArgValueListStr]
+
+
+class ArgValueScalarEnumSort:
+    Name = "name"
+    Count = "count"
+    Year = "year"
+    Artist = "artist"
+    Album = "album"
+
+
+class ArgValuesScalarEnum:
+    Sort = ArgValueScalarEnumSort
+
+
+class ArgValuesScalar:
+    Enum = ArgValuesScalarEnum
+
+
+class ArgValues:
+    Scalar = ArgValuesScalar
+
+
+ArgValue = Union[ArgValueScalarInt, ArgValueListStr, ArgValueScalarEnumSort]
 ArgsDict = Dict[ArgType, ArgValue]
+
 
 REQUEST_ARG_TYPES = [
     ArgTypes.List.Str.Genre,
@@ -72,6 +105,7 @@ REQUEST_ARG_TYPES = [
     ArgTypes.List.Str.Year,
     ArgTypes.Scalar.Int.MinYear,
     ArgTypes.Scalar.Int.MaxYear,
+    ArgTypes.Scalar.Enum.Sort,
 ]
 
 
@@ -153,7 +187,7 @@ def get_artist_counts(
                 ret[f.artist] += 1
             else:
                 ret[f.artist] = 1
-    if sort == "name":
+    if sort == ArgValues.Scalar.Enum.Sort.Name:
         return dict(sorted(ret.items(), key=lambda item: item[0], reverse=False))
     else:  # default sort: by count
         return dict(sorted(ret.items(), key=lambda item: item[1], reverse=True))
@@ -185,45 +219,44 @@ def get_artist_urls(
     return ret
 
 
-def get_cover_path(file: MediaFile) -> str:
-    return file.path.replace(os.path.basename(file.path), "") + "cover.jpg"
+def get_cover_path(file: MediaFile) -> Path:
+    rel_path = Path(file.path.replace(os.path.basename(file.path), ""))
+    return rel_path / "cover.jpg"
+
+
+class AlbumInfo:
+    def __init__(self, artist: str, album: str, year: int, cover_path: Path):
+        self.artist = artist
+        self.album = album
+        self.year = year
+        self.cover_path = cover_path
 
 
 def get_albums(
     files: MediaFiles,
-    filter_artists: List[str],
-    filter_albumartists: List[str],
-    filter_genres: List[str],
-    filter_years: List[str],
-    min_year: int,
-    max_year: int,
-    sort: str,
-) -> List[Tuple[str, str, int, str]]:
+    args: ArgsDict,
+) -> List[AlbumInfo]:
     """Returns a list of [Artist, Album, Year, CoverPath]"""
-    ret: Set[Tuple[str, str, int, str]] = set()  # type: ignore
-    for f in files.files:
-        if len(filter_artists) and f.artist not in filter_artists:
-            continue
-        if len(filter_albumartists) and f.albumartist not in filter_albumartists:
-            continue
-        if len(filter_genres) and f.genre not in filter_genres:
-            continue
-        if len(filter_years) and str(f.year) not in filter_years:
-            continue
-        if min_year and f.year < int(min_year):
-            continue
-        if max_year and f.year > int(max_year):
-            continue
+    ret: Set[AlbumInfo] = set()  # type: ignore
+    files_filtered = filter_files(files, args)
+    for f in files_filtered:
+        # try to go with albumartist first, in order to better group files
+        # in the same album together, but fallback to artist as key if
+        # albumartist is not set
         artist = f.albumartist
         if not len(artist):
             artist = f.artist
-        ret.add((artist, f.album, f.year, get_cover_path(f)))
-    if sort == "artist":
-        return sorted(ret, key=lambda item: item[0])
-    if sort == "album":
-        return sorted(ret, key=lambda item: item[1])
+        ret.add(AlbumInfo(artist, f.album, f.year, get_cover_path(f)))
+    sort = ArgValues.Scalar.Enum.Sort.Year
+    if ArgTypes.Scalar.Enum.Sort in args:
+        sort = args[ArgTypes.Scalar.Enum.Sort]
+
+    if sort == ArgValues.Scalar.Enum.Sort.Artist:
+        return sorted(ret, key=lambda album: album.artist)
+    if sort == ArgValues.Scalar.Enum.Sort.Album:
+        return sorted(ret, key=lambda album: album.album)
     else:  # default: sort by year (descending)
-        return sorted(ret, key=lambda item: item[2], reverse=True)
+        return sorted(ret, key=lambda album: album.year, reverse=True)
 
 
 @app.route("/")  # type: ignore
@@ -237,7 +270,7 @@ def root() -> None:
 def tracks() -> None:
     global files
     files_list: List[MediaFile] = filter_files(files, get_request_args())  # type: ignore
-    cover_path: str = ""
+    cover_path: Path = Path()
     if len(files_list):
         cover_path = get_cover_path(files_list[0])
     return render_template(
@@ -288,25 +321,9 @@ def artist_counts() -> None:
 
 @app.route("/albums")  # type: ignore
 def albums() -> None:
-    artists: List[str] = request.args.getlist("artist")  # type: ignore
-    albumartists: List[str] = request.args.getlist("albumartist")  # type: ignore
-    genres: List[str] = request.args.getlist("genre")  # type: ignore
-    years: List[str] = request.args.getlist("year")  # type: ignore
-    min_year: int = request.args.get("minYear")  # type: ignore
-    max_year: int = request.args.get("maxYear")  # type: ignore
-    sort: str = request.args.get("sort")  # type: ignore
     return render_template(
         "albums.html",
-        albums=get_albums(
-            files,
-            filter_artists=artists,  # type: ignore
-            filter_albumartists=albumartists,  # type: ignore
-            filter_genres=genres,  # type: ignore
-            filter_years=years,  # type: ignore
-            min_year=min_year,  # type: ignore
-            max_year=max_year,  # type: ignore
-            sort=sort,  # type: ignore
-        ),  # type: ignore
+        albums=get_albums(files, get_request_args()),
     )  # type: ignore
 
 
