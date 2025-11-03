@@ -7,12 +7,14 @@
 </head>
 <body>
     {% include 'links.html' %}
+    <div class="ResultsInfo">
+    {{ "{:,}".format(genre_counts|length) }} results:
+    </div>
     <div id="trackList">
     <table>
-        <tr><th>Count</th><th>Genre</th></tr>
+        <tr><th><a href="/genres?sort=count">Count</a></th><th><a href="/genres?sort=name">Genre</a></th></tr>
     {% for genre in genre_counts %}
         <tr>
-            <!--<a href="/artists?genre={{ genre|quote_plus }}">[{{ genre_counts[genre] }}] {{ genre }}</a>-->
             <td>{{ genre_counts[genre] }}</td><td><a href="/albums?genre={{ genre|quote_plus }}">{{ genre }}</a></td>
         </tr>
     {% endfor %}

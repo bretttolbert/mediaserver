@@ -25,6 +25,9 @@
         <img src="/getfile/{{ cover_path }}" id="coverImg" width="1000" height="1000" />
         <br>
     {% endif %}
+    <div class="ResultsInfo">
+    {{ "{:,}".format(files|length) }} results:
+    </div>
     <div id="trackList">
     <table>
         <tr><th>Year</th><th>Genre</th><th>Artist</th><th>Album</th><th>Track</th></tr>

@@ -19,17 +19,14 @@
     <br>
     </div>
     {% endif %}
+    <div class="ResultsInfo">
+    {{ "{:,}".format(albums|length) }} results:
+    </div>
     <div id="trackList">
     {% for album in albums %}
         <a href="/tracks?albumartist={{ album[0]|quote_plus }}&album={{ album[1]|quote_plus }}&year={{ album[2] }}">
         <img src="/getfile/{{ album[3] }}" class="CoverImg" width="600" height="600" />
         </a>
-        <!--
-        <br>
-        <a href="/tracks?artist={{ album[0]|quote_plus }}&album={{ album[1]|quote_plus }}&year={{ album[2] }}">[{{ album[2] }}] {{ album[0] }} - {{ album[1] }}</a>
-        <br>
-        <br>
-        -->
     {% endfor %}
     </div>
 </body>

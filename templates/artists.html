@@ -7,9 +7,12 @@
 </head>
 <body>
     {% include 'links.html' %}
+    <div class="ResultsInfo">
+    {{ "{:,}".format(artist_counts|length) }} results:
+    </div>
     <div id="trackList">
     <table>
-        <tr><th>Count</th><th>Artist</th></tr>
+        <tr><th><a href="/artists?sort=count">Count</a></th><th><a href="/artists?sort=name"></a>Artist</a></th></tr>
     {% for artist in artist_counts %}
         <tr>
             <td>{{ artist_counts[artist] }}</td>
