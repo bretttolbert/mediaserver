@@ -19,6 +19,12 @@ app.jinja_env.globals["PRESENT_YEAR"] = datetime.now().year  # type: ignore
 
 MEDIASCAN_FILES_PATH = "../mediascan/out/files.yaml"
 
+# Important security note:
+# Do not expose more than you need to with the music lib path below,
+# Every file under this path will be exposed by the server!
+# See the /getfile/ route.
+MUSIC_LIB_PATH_PREFIX = "/data/"
+
 files: MediaFiles = load_files_yaml(MEDIASCAN_FILES_PATH)
 
 
@@ -355,9 +361,26 @@ def player() -> None:
     return render_template("player.html")  # type: ignore
 
 
-@app.route("/data/<path:path>")  # type: ignore
+@app.route("/getfile/<path:path>")  # type: ignore
 def send_report(path: str) -> None:
-    return send_from_directory("/data/", path)  # type: ignore
+    if not path.startswith("/"):
+        path = "/" + path
+    path_prefix = MUSIC_LIB_PATH_PREFIX
+    # if path_prefix.endswith("/"):
+    #    path_prefix = path_prefix[: len(path_prefix) - 1]
+    if path.startswith(path_prefix):
+        path_without_prefix = path[len(path_prefix) :]
+        app.logger.debug(
+            "/getfile/ path=%s path_without_prefix=%s", path, path_without_prefix
+        )
+        return send_from_directory(MUSIC_LIB_PATH_PREFIX, path_without_prefix)  # type: ignore
+    else:
+        app.logger.warning(
+            "path (%s) doesn't start with MUSIC_LIB_PATH_PREFIX (%s), refusing to serve it",
+            path,
+            MUSIC_LIB_PATH_PREFIX,
+        )
+        abort(404)
 
 
 @app.route("/genres")  # type: ignore

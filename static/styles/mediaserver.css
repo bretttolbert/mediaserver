@@ -3,12 +3,12 @@ body {
     color: white;
     font-family: sans-serif;
     text-align: center;
+
+    font-size: 24pt;
 }
 
 #trackList {
-    font-size: 24pt;
-    font-family: sans-serif;
-    text-align: center;
+
 }
 
 table {
@@ -54,12 +54,12 @@ button {
 
 .navLink {
     margin-bottom: 10px;
-    font-size: 20pt;
+    font-size: 24pt;
 }
 
 .subNavLink {
     margin-bottom: 20px;
-    font-size: 20pt;
+    font-size: 24pt;
 }
 
 div.hint { 
