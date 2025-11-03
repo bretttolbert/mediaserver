@@ -127,12 +127,13 @@
       Your browser does not support the audio element.
     </audio> 
     <div id="trackList">
-        <a id="linkYear" href="#">[YEAR]</a> 
-        <a id="linkGenre" href="#">[GENRE]</a> 
-        <a id="linkArtist" href="#">ARTIST</a> - 
-        <a id="linkAlbum" href="#">ALBUM</a> - 
-        <a id="linkTitle" href="#">TITLE</a>
-        <br>
+        <table>
+            <tr><th>Title</th><td><a id="linkTitle" href="#">TITLE</a></td></tr>
+            <tr><th>Artist</th><td><a id="linkArtist" href="#">ARTIST</a></td></tr>
+            <tr><th>Album</th><td><a id="linkAlbum" href="#">ALBUM</a> </td></tr>
+            <tr><th>Genre</th><td><a id="linkGenre" href="#">GENRE</a></td></tr>
+            <tr><th>Year</th><td><a id="linkYear" href="#">YEAR</a> </td></tr>
+        </table>
         <a id="linkCover" href="#">
             <img src="#" id="coverImg" width="1000" height="1000" />
         </a>
