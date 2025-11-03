@@ -17,6 +17,10 @@ th, td {
   text-align: left; /* Optional: Aligns text to the left */
 }
 
+.NoBorder {
+    border: 0px;
+}
+
 th {
   background-color: black; /* Optional: Adds a background color to header cells */
 }

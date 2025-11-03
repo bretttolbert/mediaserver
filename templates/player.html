@@ -91,7 +91,9 @@
                 $("#linkArtist").prop("href", "/albums?artist=" + encodeURIComponent(track.artist));
                 $("#linkAlbum").prop("href", "/tracks?artist=" + encodeURIComponent(track.artist) + "&album=" + encodeURIComponent(track.album));
                 //$("#linkTitle").prop("href", "/player?artist=" + encodeURIComponent(track.artist) + "&album=" + encodeURIComponent(track.album) + "&title=" + encodeURIComponent(track.title));
-                $("#linkCover").prop("href", "/tracks?artist=" + encodeURIComponent(track.artist) + "&album=" + encodeURIComponent(track.album));           
+                $("#linkCover").prop("href", "/tracks?artist=" + encodeURIComponent(track.artist) + "&album=" + encodeURIComponent(track.album));
+                $("#playLocalMediaLink").prop("href", "/player?artist=" + encodeURIComponent(track.artist) + "&album=" + encodeURIComponent(track.album) + "&title=" + encodeURIComponent(track.title));
+                $("#searchYouTubeLink").prop("href", "https://www.youtube.com/results?search_query=" + encodeURIComponent(track.artist) + "+" + encodeURIComponent(track.album) + "+" + encodeURIComponent(track.title) + "+video");
 		loadTrackHints(track);
             })
             .fail(function() { alert("error - failed to load track(s)"); });
@@ -113,30 +115,39 @@
 </head>
 <body>
     {% include 'links.html' %}
-    {% if request.args.get('hints') == "1" %}
-    <h1>random track - can you name it?</h1>
-    {% endif %}
-    <button id="playBtn">Play</button>
-    <!--
-    <input type="checkbox" id="repeatChk"/>
-    <label for="repeatChk">Repeat</label>
-    -->
-    <button id="restartBtn">Restart</button>
-    <button id="nextBtn">Next</button>
-    <br>
-    {% if request.args.get('hints') == "1" %}
-    {% include 'hints.html' %}
-    {% endif %}
-    <br>
+    <div id="playerControls">
+        {% if request.args.get('hints') == "1" %}
+        <h1>random track - can you name it?</h1>
+        {% endif %}
+        <button id="playBtn">Play</button>
+        <!--
+        <input type="checkbox" id="repeatChk"/>
+        <label for="repeatChk">Repeat</label>
+        -->
+        <button id="restartBtn">Restart</button>
+        <button id="nextBtn">Next</button>
+        <br>
+        {% if request.args.get('hints') == "1" %}
+        {% include 'hints.html' %}
+        {% endif %}
+    </div>
     <audio id="audioElem" class="full" controls>
         <source src="#" type="audio/mpeg" autoplay>
       Your browser does not support the audio element.
-    </audio> 
+    </audio>
     <div id="trackList">
         <a id="linkCover" href="#">
             <img src="#" id="coverImg" width="1000" height="1000" />
         </a>
         <table>
+            <tr><th>Playback Options</th>
+                <td>
+                    <table class="NoBorder">
+                        <tr class="NoBorder"><td><a id="playLocalMediaLink" href="#">[▶ Local Media]</a></td></tr>
+                        <tr class="NoBorder"><td><a id="searchYouTubeLink" href="#">[🔍 YouTube]</a></td></tr>
+                    </table>
+                </td>
+            </tr>
             <tr><th>Title</th><td><a id="linkTitle" href="#">TITLE</a></td></tr>
             <tr><th>Artist</th><td><a id="linkArtist" href="#">ARTIST</a></td></tr>
             <tr><th>Album</th><td><a id="linkAlbum" href="#">ALBUM</a> </td></tr>
