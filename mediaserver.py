@@ -366,8 +366,8 @@ def send_report(path: str) -> None:
     if not path.startswith("/"):
         path = "/" + path
     path_prefix = MUSIC_LIB_PATH_PREFIX
-    # if path_prefix.endswith("/"):
-    #    path_prefix = path_prefix[: len(path_prefix) - 1]
+    if not path_prefix.endswith("/"):
+        path_prefix = path_prefix + "/"
     if path.startswith(path_prefix):
         path_without_prefix = path[len(path_prefix) :]
         app.logger.debug(
