@@ -157,6 +157,10 @@ def get_request_args(
     return ret
 
 
+def str_in_list_ignore_case(s: str, l: List[str]):
+    return s.lower() in [l.lower() for l in l]
+
+
 def filter_files(files: MediaFiles, args: ArgsDict) -> List[MediaFile]:
     app.logger.debug("filter_files args=%s", args_dict_to_str(args))
 
@@ -203,7 +207,9 @@ def filter_files(files: MediaFiles, args: ArgsDict) -> List[MediaFile]:
                 app.logger.debug(
                     "filtering based on %s[] arg = [%s]", arg_type, arg_value_list
                 )
-                if len(arg_value_list) and file_value not in arg_value_list:
+                if len(arg_value_list) and not str_in_list_ignore_case(
+                    file_value, arg_value_list
+                ):
                     app.logger.debug(
                         "skipping file (value=%s) based on %s[] arg = [%s]",
                         file_value,
