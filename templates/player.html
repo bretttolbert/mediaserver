@@ -35,16 +35,22 @@
                 }
             });
         });
-        $("#playBtn").click(function(){
+        toggle_playback = function(this_elem) {
             var audio = $("#audioElem")[0];
             if (audio.paused) {
                 audio.play();
-                $(this).html("Pause");
+                $("#playBtn").html("Pause");
             }else{
                 audio.pause();
-                $(this).html("Play");
+                $("#playBtn").html("Play");
             }
+        }
+        $("#playBtn").click(function(){
+            toggle_playback();
         });
+        $("#linkTitle").click(function(){
+            toggle_playback();
+        })
         $("#restartBtn").click(function(){
             var audio = $("#audioElem")[0];
             audio.currentTime = 0;
@@ -84,7 +90,7 @@
                 $("#linkGenre").prop("href", "/artists?genre=" + encodeURIComponent(track.genre));
                 $("#linkArtist").prop("href", "/albums?artist=" + encodeURIComponent(track.artist));
                 $("#linkAlbum").prop("href", "/tracks?artist=" + encodeURIComponent(track.artist) + "&album=" + encodeURIComponent(track.album));
-                $("#linkTitle").prop("href", "/player?artist=" + encodeURIComponent(track.artist) + "&album=" + encodeURIComponent(track.album) + "&title=" + encodeURIComponent(track.title));
+                //$("#linkTitle").prop("href", "/player?artist=" + encodeURIComponent(track.artist) + "&album=" + encodeURIComponent(track.album) + "&title=" + encodeURIComponent(track.title));
                 $("#linkCover").prop("href", "/tracks?artist=" + encodeURIComponent(track.artist) + "&album=" + encodeURIComponent(track.album));           
 		loadTrackHints(track);
             })
@@ -127,6 +133,9 @@
       Your browser does not support the audio element.
     </audio> 
     <div id="trackList">
+        <a id="linkCover" href="#">
+            <img src="#" id="coverImg" width="1000" height="1000" />
+        </a>
         <table>
             <tr><th>Title</th><td><a id="linkTitle" href="#">TITLE</a></td></tr>
             <tr><th>Artist</th><td><a id="linkArtist" href="#">ARTIST</a></td></tr>
@@ -134,9 +143,6 @@
             <tr><th>Genre</th><td><a id="linkGenre" href="#">GENRE</a></td></tr>
             <tr><th>Year</th><td><a id="linkYear" href="#">YEAR</a> </td></tr>
         </table>
-        <a id="linkCover" href="#">
-            <img src="#" id="coverImg" width="1000" height="1000" />
-        </a>
     </div>
 </body>
 </html>
