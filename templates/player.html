@@ -80,8 +80,8 @@
             $.getJSON("api/track", requestParams, function(track) {
                 console.log(track);
                 $("#audioElem").prop("src", "/getfile/" + track.path);
-                $("#linkYear").html("[" + track.year + "]");
-                $("#linkGenre").html("[" + track.genre + "]");
+                $("#linkYear").html(track.year);
+                $("#linkGenre").html(track.genre);
                 $("#linkArtist").html(track.artist);
                 $("#linkAlbum").html(track.album);
                 $("#linkTitle").html(track.title);
