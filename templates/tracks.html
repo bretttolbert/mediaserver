@@ -3,36 +3,32 @@
 <head>
     <meta charset="UTF-8">
     <title>tracks</title>
-    <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/mediaserver.css') }}">
-    <script
-    src="https://code.jquery.com/jquery-3.7.1.min.js"
-    integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo="
-    crossorigin="anonymous"></script>
+    {% include '_css.html' %}
 </head>
 <body>
     {% include 'links.html' %}
     {% if request.args.getlist('album')|length > 0 %}
-    <div class="subNavLink">
-    {% if request.args.getlist('albumartist')|length > 0 %}
-    <a class="navLink" href="/player?artist={{ request.args.get('albumartist')|quote_plus }}&album={{ request.args.get('album')|quote_plus }}">Shuffle Album - {{ request.args.get('album') }}</a>
-    {% elif request.args.getlist('artist')|length > 0 %}
-    <a class="navLink" href="/player?artist={{ request.args.get('artist')|quote_plus }}&album={{ request.args.get('album')|quote_plus }}">Shuffle Album - {{ request.args.get('album') }}</a>
-    {% endif %}
-    <br>
+    <div>
+        {% if request.args.getlist('albumartist')|length > 0 %}
+        <a class="navLink" href="/player?artist={{ request.args.get('albumartist')|quote_plus }}&album={{ request.args.get('album')|quote_plus }}">Shuffle Album - {{ request.args.get('album') }}</a>
+        {% elif request.args.getlist('artist')|length > 0 %}
+        <a class="navLink" href="/player?artist={{ request.args.get('artist')|quote_plus }}&album={{ request.args.get('album')|quote_plus }}">Shuffle Album - {{ request.args.get('album') }}</a>
+        {% endif %}
+        <br>
     </div>
     {% endif %}
     <div class="ResultsInfo">
     {{ "{:,}".format(files|length) }} results:
     </div>
     <div id="trackList">
-    <table>
+    <table class="w-100">
         <tr><th>Playback Options</th><th>Title</th><th>Artist</th><th>Album</th><th>Year</th><th>Genre</th></tr>
-    {% for file in files %}
+        {% for file in files %}
         <tr>
             <td>
-                <table class="NoBorder">
-                    <tr class="NoBorder"><td><a href="/player?artist={{ file.artist|quote_plus }}&album={{ file.album|quote_plus }}&title={{ file.title|quote_plus }}">[▶ Local Media]</a></td></tr>
-                    <tr class="NoBorder"><td><a href="https://www.youtube.com/results?search_query={{ file.artist|quote_plus }}+{{ file.album|quote_plus }}+{{ file.title|quote_plus }}+video">[🔍 YouTube]</a></td></tr>
+                <table class="no-border">
+                    <tr class="no-border"><td><a href="/player?artist={{ file.artist|quote_plus }}&album={{ file.album|quote_plus }}&title={{ file.title|quote_plus }}">[▶ Local Media]</a></td></tr>
+                    <tr class="no-border"><td><a href="https://www.youtube.com/results?search_query={{ file.artist|quote_plus }}+{{ file.album|quote_plus }}+{{ file.title|quote_plus }}+video">[🔍 YouTube]</a></td></tr>
                 </table>
             </td>
             <td>{{ file.title }}</td>
@@ -41,12 +37,12 @@
             <td><a href="/albums?year={{ file.year }}">{{ file.year }}</a></td>
             <td><a href="/artists?genre={{ file.genre|quote_plus }}">{{ file.genre }}</a></td>
         </tr>
-    {% endfor %}
+        {% endfor %}
     </table>
-    {% if request.args.getlist('album')|length > 0 and cover_path|length > 0 %}
-        <br>
-        <img src="/getfile/{{ cover_path }}" id="coverImg" width="1000" height="1000" />
-    {% endif %}
+        {% if request.args.getlist('album')|length > 0 and cover_path|length > 0 %}
+            <br>
+            <img src="/getfile/{{ cover_path }}" id="coverImg" width="1000" height="1000" />
+        {% endif %}
     </div>
 </body>
 </html>

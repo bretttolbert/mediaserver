@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <title>player</title>
     <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
-    <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/mediaserver.css') }}">
+    {% include '_css.html' %}
     <script
     src="https://code.jquery.com/jquery-3.7.1.min.js"
     integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo="
@@ -39,10 +39,10 @@
             var audio = $("#audioElem")[0];
             if (audio.paused) {
                 audio.play();
-                $("#playBtn").html("Pause");
+                $("#playBtn").html('<i class="bi bi-pause-circle-fill"></i> Pause');
             }else{
                 audio.pause();
-                $("#playBtn").html("Play");
+                $("#playBtn").html('<i class="bi bi-play-circle-fill"></i> Play');
             }
         }
         $("#playBtn").click(function(){
@@ -119,13 +119,19 @@
         {% if request.args.get('hints') == "1" %}
         <h1>random track - can you name it?</h1>
         {% endif %}
-        <button id="playBtn">Play</button>
+        <button id="playBtn" class="btn btn-secondary btn-lg">
+            <i class="bi bi-play-circle-fill"></i> Play
+        </button>
         <!--
         <input type="checkbox" id="repeatChk"/>
         <label for="repeatChk">Repeat</label>
         -->
-        <button id="restartBtn">Restart</button>
-        <button id="nextBtn">Next</button>
+        <button id="restartBtn" class="btn btn-secondary btn-lg">
+            <i class="bi bi-rewind-circle-fill"></i> Restart
+        </button>
+        <button id="nextBtn" class="btn btn-secondary btn-lg">
+            <i class="bi bi-fast-forward-circle-fill"></i> Next
+        </button>
         <br>
         {% if request.args.get('hints') == "1" %}
         {% include 'hints.html' %}
@@ -142,9 +148,9 @@
         <table>
             <tr><th>Playback Options</th>
                 <td>
-                    <table class="NoBorder">
-                        <tr class="NoBorder"><td><a id="playLocalMediaLink" href="#">[▶ Local Media]</a></td></tr>
-                        <tr class="NoBorder"><td><a id="searchYouTubeLink" href="#">[🔍 YouTube]</a></td></tr>
+                    <table class="no-border">
+                        <tr class="no-border"><td><a id="playLocalMediaLink" href="#">[▶ Local Media]</a></td></tr>
+                        <tr class="no-border"><td><a id="searchYouTubeLink" href="#">[🔍 YouTube]</a></td></tr>
                     </table>
                 </td>
             </tr>

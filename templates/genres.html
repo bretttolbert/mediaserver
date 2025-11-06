@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>genres</title>
-    <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='styles/mediaserver.css') }}">
+    {% include '_css.html' %}
 </head>
 <body>
     {% include 'links.html' %}
@@ -11,7 +11,7 @@
     {{ "{:,}".format(genre_counts|length) }} results:
     </div>
     <div id="trackList">
-    <table>
+    <table class="w-100">
         <tr><th><a href="/genres?sort=count">Count</a></th><th><a href="/genres?sort=name">Genre</a></th></tr>
     {% for genre in genre_counts %}
         <tr>

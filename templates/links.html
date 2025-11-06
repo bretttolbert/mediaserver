@@ -1,26 +1,27 @@
-<div class="navLink">
-<a href="/">⌂</a> &nbsp;
-<a href="/tracks">tracks</a> &nbsp;
-<a href="/artists">artists</a> &nbsp;
-<a href="/albums?year={{ PRESENT_YEAR }}">albums</a> &nbsp;
-<a href="/genres?sort=count">genres</a> &nbsp;
-<a href="/player?minYear=1960&maxYear={{ PRESENT_YEAR }}">player</a> &nbsp;
-<a href="/player?hints=1&minYear=1960&maxYear={{ PRESENT_YEAR }}">name that tune</a> &nbsp;
-<a href="/genres-cloud">genres cloud</a> &nbsp;
-<a href="/artists-cloud">artists cloud</a> &nbsp;
-{% if request.args.getlist('year')|length > 0 %}
-{% set year = request.args.get('year') | int %}
-{% set year_prev = year - 1 %}
-{% set year_next = year + 1 %}
-{% set ns = namespace(other_args="") %}
-{% for key, value in request.args.items() %}
-{% if key != "year" %}
-{% set ns.other_args = ns.other_args ~ "&" ~ key ~ "=" ~ value %}
-{% endif %}
-{% endfor %}
-    <a href="{{ url_for(request.endpoint, **request.view_args) }}?year={{ year_prev }}{{ ns.other_args }}">{{ year_prev }} </a>
-    <b><a href="{{ url_for(request.endpoint, **request.view_args) }}?year={{ year }}{{ ns.other_args }}">{{ year }} </a></b>
-    <a href="{{ url_for(request.endpoint, **request.view_args) }}?year={{ year_next }}{{ ns.other_args }}">{{ year_next }} </a>
-{% endif %}
-<br>
-</div>
+<table class="no-border w-100">
+    <tr>
+        <td><a href="/"><i class="bi bi-house-fill"></i></a></td>
+        <td><a href="/tracks">tracks</a></td>
+        <td><a href="/artists">artists</a></td>
+        <td><a href="/albums?year={{ PRESENT_YEAR }}">albums</a></td>
+        <td><a href="/genres?sort=count">genres</a></td>
+        <td><a href="/player?minYear=1960&maxYear={{ PRESENT_YEAR }}"><i class="bi bi-dice-5-fill"></i><i class="bi bi-play-circle-fill"></i></a></td>
+        <td><a href="/player?hints=1&minYear=1960&maxYear={{ PRESENT_YEAR }}"></i><i>name that tune</i><i class="bi bi-question-circle-fill"></i></a></td>
+        <td><a href="/genres-cloud">genres <i class="bi bi-cloud-fill"></i></a></td>
+        <td><a href="/artists-cloud">artists <i class="bi bi-cloud-fill"></i></a></td>
+        {% if request.args.getlist('year')|length > 0 %}
+            {% set year = request.args.get('year') | int %}
+            {% set year_prev = year - 1 %}
+            {% set year_next = year + 1 %}
+            {% set ns = namespace(other_args="") %}
+            {% for key, value in request.args.items() %}
+                {% if key != "year" %}
+                    {% set ns.other_args = ns.other_args ~ "&" ~ key ~ "=" ~ value %}
+                {% endif %}
+            {% endfor %}
+            <td><a href="{{ url_for(request.endpoint, **request.view_args) }}?year={{ year_prev }}{{ ns.other_args }}">{{ year_prev }}</a></td>
+            <td><b><a href="{{ url_for(request.endpoint, **request.view_args) }}?year={{ year }}{{ ns.other_args }}">{{ year }} </a></b></td>
+            <td><a href="{{ url_for(request.endpoint, **request.view_args) }}?year={{ year_next }}{{ ns.other_args }}">{{ year_next }}</a></td>
+        {% endif %}
+    </tr>
+</table>

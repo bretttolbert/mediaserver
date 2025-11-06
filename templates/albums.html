@@ -3,19 +3,19 @@
 <head>
     <meta charset="UTF-8">
     <title>albums</title>
-    <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='styles/mediaserver.css') }}">
+    {% include '_css.html' %}
 </head>
 <body>
     {% include 'links.html' %}
     {% if request.args.getlist('artist')|length > 0 %}
-    <div class="subNavLink">
-    <a class="navLink" href="/player?artist={{ request.args.get('artist')|quote_plus }}">Shuffle Artist - {{ request.args.get('artist') }}</a>
+    <div>
+    <a href="/player?artist={{ request.args.get('artist')|quote_plus }}">Shuffle Artist - {{ request.args.get('artist') }}</a>
     <br>
     </div>
     {% endif %}
     {% if request.args.getlist('genre')|length > 0 %}
-    <div class="subNavLink">
-    <a class="navLink" href="/player?genre={{ request.args.get('genre')|quote_plus }}">Shuffle Genre - {{ request.args.get('genre') }}</a>
+    <div>
+    <a href="/player?genre={{ request.args.get('genre')|quote_plus }}">Shuffle Genre - {{ request.args.get('genre') }}</a>
     <br>
     </div>
     {% endif %}

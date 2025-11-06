@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>artists</title>
-    <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='styles/mediaserver.css') }}">
+    {% include '_css.html' %}
 </head>
 <body>
     {% include 'links.html' %}
@@ -11,8 +11,11 @@
     {{ "{:,}".format(artist_counts|length) }} results:
     </div>
     <div id="trackList">
-    <table>
-        <tr><th><a href="/artists?sort=count">Count</a></th><th><a href="/artists?sort=name"></a>Artist</a></th></tr>
+    <table class="w-100">
+        <tr>
+            <th><a href="/artists?sort=count">Count</a></th>
+            <th><a href="/artists?sort=name">Artist</a></th>
+        </tr>
     {% for artist in artist_counts %}
         <tr>
             <td>{{ artist_counts[artist] }}</td>
