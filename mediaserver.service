@@ -1,0 +1,15 @@
+[Unit]
+Description=MediaServer
+After=network.target
+
+[Service]
+User=brett
+Group=brett
+WorkingDirectory=/home/brett/Git/mediaserver
+ExecStart=/home/brett/PyVEnvs/Py311/bin/python3.11 -m flask --app mediaserver run --host=0.0.0.0 
+Restart=always
+RestartSec=30s
+Type=simple
+
+[Install]
+WantedBy=multi-user.target

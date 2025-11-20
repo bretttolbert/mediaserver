@@ -80,3 +80,22 @@ http://localhost:5000/player?minYear=1960&maxYear=2024&genre=Industrial+Metal&ge
 ```bash
 http://localhost:5000/player?artist=Rush&album=Grace%20Under%20Pressure&title=The%20Body%20Electric
 ```
+
+###### Automatically start and run as a SystemD service
+
+- Customize the .service file [`mediaserver.service`](mediaserver.service) as required
+    - Create a compatible Python virtual environment with the necessary dependencies
+    - Active it and install mediaserver `python -m pip install .`
+    - Update the service file to point to your virtual environment
+    - Update the username and group name from `brett` to the user and group name you want to use
+- Copy the .service file into the systemd system folder to install it as a systemd service
+    - `sudo bash`
+    - `cp mediaserver.service /etc/systemd/system/`
+    - `cd /etc/systemd/system`
+    - `chmod 644 mediaserver.service`
+    - `ln -s mediaserver.service ./multi-user.target-wants/mediaserver.service`
+- Use the systemctl daemon-reload command to force systemd to load the mediaserver.service file
+    - `systemctl daemon-reload`
+- Start the mediaservice service and use journalctl to verify that it is running
+    - `systemctl start mediaserver.service`
+    - `journalctl -u mediaserver.service`
