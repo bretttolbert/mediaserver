@@ -29,7 +29,7 @@ Features:
 
 Limitations:
 - Doesn't work with some `.m4a` files (html5 audio element can't decode)
-- Requires that music library be scanned with [mediascan](https://github.com/bretttolbert/mediascan) which outputs the [files.yaml](https://github.com/bretttolbert/mediascan/blob/main/out/files.yaml) file. This must be repeated to update the music library (e.g. add new files)
+- Requires that music library be scanned with [mediascan](https://github.com/bretttolbert/mediascan) which outputs a [files.yaml](https://github.com/bretttolbert/mediascan/blob/main/out/files.yaml) file. This must be repeated to update the music library (e.g. add new files)
 - Requires that music files be organized in the way that `mediascan` expects i.e. artist folders containing album folders with `cover.jpg` files
 - Requires that music filenames not contain prohibited characters such as `+` (prevent by testing music library with [mediatest](https://github.com/bretttolbert/mediatest))
 - Requires that your music library path begins with `/data/`, but you can change this by modifying the variable `MUSIC_LIB_PATH_PREFIX` in `mediaserver.py` (TODO: make this configurable instead of hard-coded)
@@ -42,7 +42,7 @@ Coming soon:
 
 ## Dependencies
 
-- [mediascan](https://github.com/bretttolbert/mediascan) A simple and fast Go (golang) command-line utility to recursively scan a directory for media files, extract metadata (including ID3v2 tags from both MP3 and M4A files), and save the output in a simple YAML format, and a Python library with data classes for working with the YAML files output by `mediascan.go`.
+- [mediascan](https://github.com/bretttolbert/mediascan) A simple and fast Go (golang) command-line utility to recursively scan a directory for media files, extract metadata (including ID3v2 tags from both MP3 and M4A files), and save the output in a simple YAML format (e.g. [files.yaml](https://github.com/bretttolbert/mediascan), and a Python library with data classes for working with the YAML files output by `mediascan.go`.
 
 ## Quick Start
 
