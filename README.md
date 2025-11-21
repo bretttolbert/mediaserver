@@ -99,3 +99,12 @@ http://localhost:5000/player?artist=Rush&album=Grace%20Under%20Pressure&title=Th
 - Start the mediaservice service and use journalctl to verify that it is running
     - `systemctl start mediaserver.service`
     - `journalctl -u mediaserver.service`
+
+Once you have it set up to run as a service, re-scanning your library is as easy as this:
+```bash
+cd ~/Git/mediascan
+go run mediascan/src/mediascan.go conf/conf.yaml out/files.yaml
+sudo systemctl restart mediaserver.service
+journalctl -fu mediaserver.service
+```
+- Use `-fu` to follow the log so you can watch the server startup.
