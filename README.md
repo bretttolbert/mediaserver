@@ -10,9 +10,9 @@ Development Status: Pre-Alpha
 
 - Simple minimalist web interface, perfect for a party jukebox hosted on your home WiFi network
 - Multiple playback options (configurable):
-    1. Play local files in the browser (using HTML5 `<audio>` tag)
-    2. "Play" by opening YouTube search for `(artist) (album) (title) video` (configurable)
-    3. (Default) Display both options 1 and 2
+    1. Play local media files in the browser (using HTML5 `<audio>` tag)
+    2. "Play" by opening YouTube search for _"(artist) (album) (title) video"_ (configurable)
+    3. (Default) Display both options
 - Album art displayed at a beautiful `1000x1000px` resolution
     - (bandwidth optimized by converting to `.webp` at 80% quality if hosted by yours truly)
 - Continuous shuffle playback with filtering options
