@@ -23,24 +23,28 @@ Development Status: Pre-Alpha
 - Direct download of music files via hyperlinks
 - Accessible from mobile devices (tested in Chrome on Android)
 
-[Screenshots](./screenshots/)
+## Screenshots
 
-![Albums Slayer Screenshot](./screenshots/Albums-Slayer.png)
+[Screenshots](./doc/screenshots/)
 
-![Albums Genre Hip-Hop](./screenshots/Albums-genre-hip-hop.png)
+![Albums Slayer Screenshot](./doc/screenshots/Albums-Slayer.png)
 
-![Albums 2006 with previous and next year links](./screenshots/Albums-2006-with-previous-current-next-year-links.png)
+![Albums Genre Hip-Hop](./doc/screenshots/Albums-genre-hip-hop.png)
 
-![Albums with year and genre filters](./screenshots/Albums-with-year-and-genre-filters.png)
+![Albums 2006 with previous and next year links](./doc/screenshots/Albums-2006-with-previous-current-next-year-links.png)
 
-Limitations:
+![Albums with year and genre filters](./doc/screenshots/Albums-with-year-and-genre-filters.png)
+
+## Limitations
+
 - Doesn't work with some `.m4a` files (html5 audio element can't decode)
 - Requires that music library be scanned with [mediascan](https://github.com/bretttolbert/mediascan) which outputs a [files.yaml](https://github.com/bretttolbert/mediascan/blob/main/out/files.yaml) file. This must be repeated to update the music library (e.g. add new files)
 - Requires that music files be organized in the way that `mediascan` expects i.e. artist folders containing album folders with `cover.jpg` files
 - Requires that music filenames not contain prohibited characters such as `+` (prevent by testing music library with [mediatest](https://github.com/bretttolbert/mediatest))
-- Requires that your music library path begins with `/data/`, but you can change this by modifying the variable `MUSIC_LIB_PATH_PREFIX` in `mediaserver.py` (TODO: make this configurable instead of hard-coded)
+- Requires that your music library path begins with `/data/`, but you can change this by modifying the variable `MUSIC_LIB_PATH_PREFIX` in `routes.py` (**TODO: make this configurable instead of hard-coded**)
 
-Coming soon:
+## Coming soon
+
 - Play entire albums
 - Playlists
 - Back button to go back to previous track(s) in player
@@ -59,35 +63,30 @@ go run mediascan/src/mediascan.go conf/conf.yaml out/files.yaml
 cd ..
 git clone git@github.com:bretttolbert/mediaserver.git
 cd mediaserver
-flask --app mediaserver run --host=0.0.0.0
-```
-
-### Run in debug mode (enables logging)
-```bash
-flask --app mediaserver run --host=0.0.0.0 --debug
+python run.py
 ```
 
 ## Player Filtered Continuous Shuffle Examples
 
-###### Filter by year range
+### Filter by year range
 
 ```bash
 http://localhost:5000/player?minYear=1990&maxYear=2004
 ```
 
-###### Filter by year range and genre(s)
+### Filter by year range and genre(s)
 
 ```bash
 http://localhost:5000/player?minYear=1960&maxYear=2024&genre=Industrial+Metal&genre=Punk&genre=Punk+Rock&genre=Heavy+Metal&genre=Hip+Hop&genre=Urbano&genre=Thrash+Metal&genre=Nu+Metal&genre=Rock+en+español&genre=Funk+Metal&genre=Hip-Hop+français
 ```
 
-###### Filter by artist, album and title
+### Filter by artist, album and title
 
 ```bash
 http://localhost:5000/player?artist=Rush&album=Grace%20Under%20Pressure&title=The%20Body%20Electric
 ```
 
-###### Automatically start and run as a SystemD service
+## Automatically start and run as a SystemD service
 
 - Customize the .service file [`mediaserver.service`](mediaserver.service) as required
     - Create a compatible Python virtual environment with the necessary dependencies
@@ -115,6 +114,10 @@ journalctl -fu mediaserver.service
 ```
 - Use `-fu` to follow the log so you can watch the server startup.
 
+
+## Set Flask environment variables
+
+I haven't found this necessary, but here's how to do it:
 
 ```bash
 export FLASK_APP=run.py
