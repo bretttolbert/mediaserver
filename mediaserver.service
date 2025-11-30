@@ -6,7 +6,7 @@ After=network.target
 User=brett
 Group=brett
 WorkingDirectory=/home/brett/Git/mediaserver
-ExecStart=/home/brett/PyVEnvs/Py311/bin/python3.11 -m flask --app mediaserver run --host=0.0.0.0 
+ExecStart=/home/brett/PyVEnvs/Py311/bin/python run.py 
 Restart=always
 RestartSec=30s
 Type=simple

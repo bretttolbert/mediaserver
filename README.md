@@ -6,14 +6,20 @@ Uses my other project [mediascan](https://github.com/bretttolbert/mediascan) for
 
 Development Status: Pre-Alpha
 
-Features:
+## Features
+
 - Simple minimalist web interface, perfect for a party jukebox hosted on your home WiFi network
-- Large (1000x1000px) album art display
+- Multiple playback options (configurable):
+    1. Play local files in the browser (using HTML5 `<audio>` tag)
+    2. "Play" by opening YouTube search for `(artist) (album) (title) video` (configurable)
+    3. (Default) Display both options 1 and 2
+- Album art displayed at a beautiful `1000x1000px` resolution
+    - (bandwidth optimized by converting to `.webp` at 80% quality if hosted by yours truly)
 - Continuous shuffle playback with filtering options
-- Fast (tested with a library of 15,000+ music files)
+- Fast (tested with a library of 20,000+ music files)
 - Versatile filtering and sorting via a common set of intuitive url parameters
-- Comprehensive browsing options--browse by artist, album, genre, year, year range, and more
-- Name That Tune--plays a song without displaying the info, but offering hints, challenging the user to name the artist/tune
+- Comprehensive browsing options--browse by _artist_, _album_, _genre_, _year_, _year range_, and more
+- _Name That Tune_--plays a song without displaying the info, but offering hints, challenging the user to name the artist/tune
 - Direct download of music files via hyperlinks
 - Accessible from mobile devices (tested in Chrome on Android)
 
@@ -42,7 +48,7 @@ Coming soon:
 
 ## Dependencies
 
-- [mediascan](https://github.com/bretttolbert/mediascan) A simple and fast Go (golang) command-line utility to recursively scan a directory for media files, extract metadata (including ID3v2 tags from both MP3 and M4A files), and save the output in a simple YAML format (e.g. [files.yaml](https://github.com/bretttolbert/mediascan/blob/main/out/files.yaml), and a Python library with data classes for working with the YAML files output by `mediascan.go`.
+- [mediascan](https://github.com/bretttolbert/mediascan) A simple and fast Go (golang) command-line utility to recursively scan a directory for media files, extract metadata (including ID3v2 tags from both MP3 and M4A files), and save the output in a simple YAML format e.g. [files.yaml](https://github.com/bretttolbert/mediascan/blob/main/out/files.yaml), and a Python library with data classes for working with the YAML files output by `mediascan.go`.
 
 ## Quick Start
 
@@ -108,3 +114,9 @@ sudo systemctl restart mediaserver.service
 journalctl -fu mediaserver.service
 ```
 - Use `-fu` to follow the log so you can watch the server startup.
+
+
+```bash
+export FLASK_APP=run.py
+export FLASK_ENV=development
+```
