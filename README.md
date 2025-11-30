@@ -94,16 +94,16 @@ http://localhost:5000/player?artist=Rush&album=Grace%20Under%20Pressure&title=Th
     - Update the service file to point to your virtual environment
     - Update the username and group name from `brett` to the user and group name you want to use
 - Copy the .service file into the systemd system folder to install it as a systemd service
-    - `sudo bash`
-    - `cp mediaserver.service /etc/systemd/system/`
-    - `cd /etc/systemd/system`
-    - `chmod 644 mediaserver.service`
-    - `ln -s mediaserver.service ./multi-user.target-wants/mediaserver.service`
+    1. `sudo bash`
+    2. `cp mediaserver.service /etc/systemd/system/`
+    3. `cd /etc/systemd/system`
+    4. `chmod 644 mediaserver.service`
+    5. `ln -s mediaserver.service ./multi-user.target-wants/mediaserver.service`
 - Use the systemctl daemon-reload command to force systemd to load the mediaserver.service file
-    - `systemctl daemon-reload`
+    1. `systemctl daemon-reload`
 - Start the mediaservice service and use journalctl to verify that it is running
-    - `systemctl start mediaserver.service`
-    - `journalctl -u mediaserver.service`
+    1. `systemctl start mediaserver.service`
+    2. `journalctl -u mediaserver.service`
 
 Once you have it set up to run as a service, re-scanning your library is as easy as this:
 ```bash
