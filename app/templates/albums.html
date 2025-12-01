@@ -15,7 +15,13 @@
     {% endif %}
     {% if request.args.getlist('genre')|length > 0 %}
     <div>
-    <a href="/player?genre={{ request.args.get('genre')|quote_plus }}">Shuffle Genre - {{ request.args.get('genre') }}</a>
+        {% if request.args.getlist('minYear')|length > 0 and request.args.getlist('maxYear')|length > 0 %}
+        <a href="/player?genre={{ request.args.get('genre')|quote_plus }}&minYear={{ request.args.get('minYear')|quote_plus }}&maxYear={{ request.args.get('maxYear')|quote_plus }}">
+            Shuffle Genre - {{ request.args.get('genre') }} [{{ request.args.get('maxYear') }}-{{ request.args.get('minYear') }}]
+        </a>
+        {% else %}
+        <a href="/player?genre={{ request.args.get('genre')|quote_plus }}">Shuffle Genre <b>{{ request.args.get('genre') }}</b></a>
+        {% endif %}
     <br>
     </div>
     {% endif %}
