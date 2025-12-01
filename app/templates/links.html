@@ -1,12 +1,13 @@
 <table class="no-border w-100">
     <tr>
-        <td><a href="/tracks/index">tracks</a></td>
-        <td><a href="/artists/index">artists</a></td>
         <td><a href="/albums/index">albums</a></td>
+        <td><a href="/artists/index">artists</a></td>
         <td><a href="/genres/index">genres</a></td>
         <td><a href="/player/index">player</a></td>
         <!-- todo: hide name-that-tune if not local files -->
         <td><a href="/name-that-tune/index"></i><i>name that tune</i></a></td>
+        <td><a href="/tracks/index">tracks</a></td>
+
         {% if request.args.getlist('year')|length > 0 %}
             {% set year = request.args.get('year') | int %}
             {% set year_prev = year - 1 %}

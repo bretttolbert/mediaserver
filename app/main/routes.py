@@ -40,7 +40,7 @@ files: MediaFiles = load_files_yaml(MEDIASCAN_FILES_PATH)
 @bp.route("/")
 def root() -> str:
     return render_template(
-        "index.html",
+        "albums_index.html",
     )
 
 
