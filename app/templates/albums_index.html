@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>albums</title>
+    {% include '_css.html' %}
+</head>
+<body>
+    {% include 'links.html' %}
+    <table class="w-100">
+        <tr><th>Albums by year</th></tr>
+        <tr><td><a href="/albums?year={{ PRESENT_YEAR }}">albums {{ PRESENT_YEAR }}</a></td></tr>
+        {% if PRESENT_YEAR != 2025 %}
+        <tr><td><a href="/albums?year=2025">albums - 2025</a></td></tr>
+        {% endif %}
+        <tr><td><a href="/albums?year=2025">albums - 2024</a></td></tr>
+        <tr><td><a href="/albums?year=2025">albums - 2023</a></td></tr>
+        <tr><td><a href="/albums?year=2025">albums - 2022</a></td></tr>
+        <tr><td><a href="/albums?year=2025">albums - 2021</a></td></tr>
+        <tr><td><a href="/albums?year=2025">albums - 2020</a></td></tr>
+    </ul>
+    <table class="w-100">
+        <tr><th>Albums by year range</th></tr>
+        <tr><td><a href="/albums?minYear=2020&maxYear=2029">albums - 2020-2029</a></td></tr>
+        <tr><td><a href="/albums?minYear=2010&maxYear=2019">albums - 2010-2019</a></td></tr>
+        <tr><td><a href="/albums?minYear=2000&maxYear=2009">albums - 2000-2009</a></td></tr>
+        <tr><td><a href="/albums?minYear=1990&maxYear=1999">albums - 1990-1999</a></td></tr>
+        <tr><td><a href="/albums?minYear=1980&maxYear=1989">albums - 1980-1989</a></td></tr>
+        <tr><td><a href="/albums?minYear=1970&maxYear=1979">albums - 1970-1979</a></td></tr>
+        <tr><td><a href="/albums?minYear=1960&maxYear=1969">albums - 1960-1969</a></td></tr>
+    </ul>
+    <table class="w-100">
+        <tr><th>Albums by year range and genre</th></tr>
+        <tr><td><a href="/albums?minYear=1998&maxYear=2008&genre=Post-Hardcore">albums 1998-2008 Post-Hardcore</a></td></tr>
+        <tr><td><a href="/albums?minYear=1995&maxYear=2015&genre=Indie%20Rock">albums 1995-2015 Indie Rock</a></td></tr>
+        <tr><td><a href="/albums?minYear=1995&maxYear=2005&genre=Hip-Hop">albums 1995-2005 Hip-Hop</a></td></tr>
+        <tr><td><a href="/albums?minYear=1989&maxYear=1994&genre=Hip-Hop">albums 1989-1994 Hip-Hop</a></td></tr>
+        <tr><td><a href="/albums?minYear=1985&maxYear=1995&genre=Classic%20Country">albums 1985-1995 Classic Country</a></td></tr>
+        <tr><td><a href="/albums?minYear=1980&maxYear=1989&genre=Classic%20Pop">albums 1980-1989 Classic Pop</a></td></tr>
+        <tr><td><a href="/albums?minYear=1980&maxYear=1989&genre=Classic%20Rock">albums 1980-1989 Classic Rock</a></td></tr>
+        <tr><td><a href="/albums?minYear=1970&maxYear=1980&genre=New%20Wave">albums 1970-1980 New-Wave</a></td></tr>
+        <tr><td><a href="/albums?minYear=1979&maxYear=1989&genre=Punk">albums 1979-1989 Punk</a></td></tr>
+        <tr><td><a href="/albums?minYear=1979&maxYear=1989&genre=Post-Punk">albums 1979-1989 Post-Punk</a></td></tr>
+        <tr><td><a href="/albums?minYear=1970&maxYear=1979&genre=Funk">albums 1970-1979 Funk</a></td></tr>
+        <tr><td><a href="/albums?minYear=1970&maxYear=1979&genre=Classic%20Rock">albums 1970-1979 Classic Rock</a></td></tr>
+        <tr><td><a href="/albums?minYear=1970&maxYear=1979&genre=Soft%20Rock">albums 1970-1979 Soft Rock</a></td></tr>
+    </table>
+
+</body>
+</html>

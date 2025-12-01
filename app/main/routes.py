@@ -64,9 +64,24 @@ def tracks() -> str:
     )
 
 
+@bp.route("/tracks/index")
+def tracks_index() -> str:
+    return render_template("tracks_index.html")
+
+
 @bp.route("/player")
 def player() -> str:
     return render_template("player.html")
+
+
+@bp.route("/player/index")
+def player_index() -> str:
+    return render_template("player_index.html")
+
+
+@bp.route("/name-that-tune/index")
+def name_that_tune_index() -> str:
+    return render_template("player_hints_index.html")
 
 
 @bp.route("/getfile/<path:path>")
@@ -92,7 +107,7 @@ def send_report(path: str) -> Response:
 
 
 @bp.route("/genres")
-def genre_counts() -> str:
+def genres() -> str:
     sort: str = ""
     value = request.args.get("sort")
     if value:
@@ -100,6 +115,13 @@ def genre_counts() -> str:
     return render_template(
         "genres.html",
         genre_counts=get_genre_counts(files, sort=sort),
+    )
+
+
+@bp.route("/genres/index")
+def genre_index() -> str:
+    return render_template(
+        "genres_index.html",
     )
 
 
@@ -116,6 +138,13 @@ def artist_counts() -> str:
     )
 
 
+@bp.route("/artists/index")
+def artist_index() -> str:
+    return render_template(
+        "artists_index.html",
+    )
+
+
 @bp.route("/albums")
 def albums() -> str:
     return render_template(
@@ -124,6 +153,13 @@ def albums() -> str:
             album.to_tuple()
             for album in get_albums(current_app, files, get_request_args(request))
         ],
+    )
+
+
+@bp.route("/albums/index")
+def albums_index() -> str:
+    return render_template(
+        "albums_index.html",
     )
 
 
