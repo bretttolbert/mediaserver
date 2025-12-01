@@ -19,11 +19,11 @@
             <tr><td><a href="/player?minYear=1970&maxYear=1984">shuffle - 1970-1984</a></td></tr>
             <tr><td><a href="/player?minYear=1960&maxYear=1974">shuffle - 1960-1974</a></td></tr>
 
-
-        <!-- Show the last 50 years -->
-        {% for i in range(50) %}
-            <tr><td><a href="/player?year={{ PRESENT_YEAR-i }}">shuffle {{ PRESENT_YEAR-i }}</a></td></tr>
+        <!-- Show present day down to 1950 -->
+        {% for year in range(1950,PRESENT_YEAR+1)[::-1] %}
+            <tr><td><a href="/player?year={{ year }}">shuffle {{ year }}</a></td></tr>
         {% endfor %}
+
         </table>
 </table>
 </body>

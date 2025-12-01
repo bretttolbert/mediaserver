@@ -26,10 +26,12 @@
             </tr>
         </table>
         <table class="w-100">
-        <!-- Show the last 50 years -->
-        {% for i in range(50) %}
-            <tr><td><a href="/tracks?year={{ PRESENT_YEAR-i }}">tracks {{ PRESENT_YEAR-i }}</a></td></tr>
+
+        <!-- Show present day down to 1950 -->
+        {% for year in range(1950,PRESENT_YEAR+1)[::-1] %}
+            <tr><td><a href="/tracks?year={{ year }}">tracks {{ year }}</a></td></tr>
         {% endfor %}
+
         </table>
     </table>
 </body>
