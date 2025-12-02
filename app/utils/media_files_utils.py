@@ -106,15 +106,15 @@ def get_genre_counts(files: MediaFiles, sort: str) -> Dict[str, int]:
 
 
 def get_artist_counts(
-    files: MediaFiles, filter_genres: List[str], sort: str
+    app: Flask, files: MediaFiles, args: ArgsDict, sort: str
 ) -> Dict[str, int]:
     ret: Dict[str, int] = {}
-    for f in files.files:
-        if len(filter_genres) < 1 or f.genre in filter_genres:
-            if f.artist in ret:
-                ret[f.artist] += 1
-            else:
-                ret[f.artist] = 1
+    files_filtered = filter_files(app, files, args)
+    for f in files_filtered:
+        if f.artist in ret:
+            ret[f.artist] += 1
+        else:
+            ret[f.artist] = 1
     if sort == ArgValues.Scalar.Enum.Sort.Name:
         return dict(sorted(ret.items(), key=lambda item: item[0], reverse=False))
     else:  # default sort: by count
@@ -129,19 +129,19 @@ def get_genre_urls(files: MediaFiles) -> List[Dict[str, str]]:
     return ret
 
 
-def get_artists(files: MediaFiles, filter_genres: List[str]) -> List[str]:
+def get_artists(app: Flask, files: MediaFiles, args: ArgsDict) -> List[str]:
     ret: Set[str] = set()  # type: ignore
-    for f in files.files:
-        if len(filter_genres) < 1 or f.genre in filter_genres:
-            ret.add(f.artist)
+    files_filtered = filter_files(app, files, args)
+    for f in files_filtered:
+        ret.add(f.artist)
     return sorted(ret)
 
 
 def get_artist_urls(
-    files: MediaFiles, filter_genres: List[str]
+    app: Flask, files: MediaFiles, args: ArgsDict
 ) -> List[Dict[str, str]]:
     ret: List[Dict[str, str]] = []
-    artists = get_artists(files, filter_genres)
+    artists = get_artists(app, files, args)
     for a in artists:
         ret.append({"text": a, "url": f"/albums?artist={quote_plus(a)}"})
     return ret

@@ -127,14 +127,15 @@ def genre_index() -> str:
 
 @bp.route("/artists")
 def artist_counts() -> str:
-    genres: List[str] = request.args.getlist("genre")
     sort: str = ""
     value = request.args.get("sort")
     if value:
         sort = value
     return render_template(
         "artists.html",
-        artist_counts=get_artist_counts(files, filter_genres=genres, sort=sort),
+        artist_counts=get_artist_counts(
+            current_app, files, get_request_args(request), sort=sort
+        ),
     )
 
 
@@ -173,10 +174,9 @@ def genres_cloud() -> str:
 
 @bp.route("/artists-cloud")
 def artists_cloud() -> str:
-    genres: List[str] = request.args.getlist("genre")
     return render_template(
         "word-cloud.html",
-        word_urls=get_artist_urls(files, filter_genres=genres),
+        word_urls=get_artist_urls(current_app, files, get_request_args(request)),
     )
 
 
