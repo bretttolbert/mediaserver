@@ -6,10 +6,10 @@
     {% include '_css.html' %}
 </head>
 <body>
-    {% include 'links.html' %}
+    {% include 'links_bar.html' %}
     {% if request.args.getlist('artist')|length > 0 %}
     <div>
-    <a href="/player?artist={{ request.args.get('artist')|quote_plus }}">Shuffle Artist - {{ request.args.get('artist') }}</a>
+    <a href="/player?artist={{ request.args.get('artist')|quote_plus }}">Shuffle Artist {{ request.args.get('artist') }}</a>
     <br>
     </div>
     {% endif %}
@@ -18,7 +18,7 @@
         <!-- TODO: Support multiple genre shuffle -->
         {% if request.args.getlist('minYear')|length > 0 and request.args.getlist('maxYear')|length > 0 %}
         <a href="/player?genre={{ request.args.get('genre')|quote_plus }}&minYear={{ request.args.get('minYear')|quote_plus }}&maxYear={{ request.args.get('maxYear')|quote_plus }}">
-            Shuffle Genre - {{ request.args.get('genre') }} [{{ request.args.get('maxYear') }}-{{ request.args.get('minYear') }}]
+            Shuffle Genre {{ request.args.get('genre') }} {{ request.args.get('minYear') }}-{{ request.args.get('maxYear') }}
         </a>
         {% else %}
         <a href="/player?genre={{ request.args.get('genre')|quote_plus }}">Shuffle Genre <b>{{ request.args.get('genre') }}</b></a>
@@ -26,7 +26,7 @@
     <br>
     </div>
     {% endif %}
-    <div class="ResultsInfo">
+    <div class="results-info">
     {{ "{:,}".format(albums|length) }} results:
     </div>
     <div id="trackList">
@@ -36,5 +36,6 @@
         </a>
     {% endfor %}
     </div>
+    {% include 'footer.html' %}
 </body>
 </html>

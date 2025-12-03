@@ -6,18 +6,18 @@
     {% include '_css.html' %}
 </head>
 <body>
-    {% include 'links.html' %}
+    {% include 'links_bar.html' %}
     {% if request.args.getlist('album')|length > 0 %}
     <div>
         {% if request.args.getlist('albumartist')|length > 0 %}
-        <a class="navLink" href="/player?artist={{ request.args.get('albumartist')|quote_plus }}&album={{ request.args.get('album')|quote_plus }}">Shuffle Album - {{ request.args.get('album') }}</a>
+        <a class="navLink" href="/player?artist={{ request.args.get('albumartist')|quote_plus }}&album={{ request.args.get('album')|quote_plus }}">Shuffle Album {{ request.args.get('album') }}</a>
         {% elif request.args.getlist('artist')|length > 0 %}
-        <a class="navLink" href="/player?artist={{ request.args.get('artist')|quote_plus }}&album={{ request.args.get('album')|quote_plus }}">Shuffle Album - {{ request.args.get('album') }}</a>
+        <a class="navLink" href="/player?artist={{ request.args.get('artist')|quote_plus }}&album={{ request.args.get('album')|quote_plus }}">Shuffle Album {{ request.args.get('album') }}</a>
         {% endif %}
         <br>
     </div>
     {% endif %}
-    <div class="ResultsInfo">
+    <div class="results-info">
     {{ "{:,}".format(files|length) }} results:
     </div>
     <div id="trackList">
@@ -27,8 +27,8 @@
         <tr>
             <td>
                 <table class="no-border">
-                    <tr class="no-border"><td><a href="/player?artist={{ file.artist|quote_plus }}&album={{ file.album|quote_plus }}&title={{ file.title|quote_plus }}">[▶ Local Media]</a></td></tr>
-                    <tr class="no-border"><td><a href="https://www.youtube.com/results?search_query={{ file.artist|quote_plus }}+{{ file.album|quote_plus }}+{{ file.title|quote_plus }}+video">[🔍 YouTube]</a></td></tr>
+                    <tr class="no-border"><td><a href="/player?artist={{ file.artist|quote_plus }}&album={{ file.album|quote_plus }}&title={{ file.title|quote_plus }}">▶ Local Media</a></td></tr>
+                    <tr class="no-border"><td><a href="https://www.youtube.com/results?search_query={{ file.artist|quote_plus }}+{{ file.album|quote_plus }}+{{ file.title|quote_plus }}+video">🔍 YouTube</a></td></tr>
                 </table>
             </td>
             <td>{{ file.title }}</td>
@@ -44,5 +44,6 @@
             <img src="/getfile/{{ cover_path }}" id="coverImg" width="1000" height="1000" />
         {% endif %}
     </div>
+    {% include 'footer.html' %}
 </body>
 </html>

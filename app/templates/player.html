@@ -96,7 +96,7 @@
                 $("#searchYouTubeLink").prop("href", "https://www.youtube.com/results?search_query=" + encodeURIComponent(track.artist) + "+" + encodeURIComponent(track.album) + "+" + encodeURIComponent(track.title) + "+video");
 		loadTrackHints(track);
             })
-            .fail(function() { alert("error - failed to load track(s)"); });
+            .fail(function() { alert("error: failed to load track(s)"); });
         }
         $('#nextBtn').click(function() {
             loadTrack();
@@ -114,10 +114,10 @@
     </script>
 </head>
 <body>
-    {% include 'links.html' %}
+    {% include 'links_bar.html' %}
     <div id="playerControls">
         {% if request.args.get('hints') == "1" %}
-        <h1>random track - can you name it?</h1>
+        <h1>Random track, can you name it?</h1>
         {% endif %}
         <button id="playBtn" class="btn btn-secondary btn-lg">
             <i class="bi bi-play-circle-fill"></i> Play
@@ -149,8 +149,8 @@
             <tr><th>Playback Options</th>
                 <td>
                     <table class="no-border">
-                        <tr class="no-border"><td><a id="playLocalMediaLink" href="#">[▶ Local Media]</a></td></tr>
-                        <tr class="no-border"><td><a id="searchYouTubeLink" href="#">[🔍 YouTube]</a></td></tr>
+                        <tr class="no-border"><td><a id="playLocalMediaLink" href="#">▶ Local Media</a></td></tr>
+                        <tr class="no-border"><td><a id="searchYouTubeLink" href="#">🔍 YouTube</a></td></tr>
                     </table>
                 </td>
             </tr>
@@ -161,5 +161,6 @@
             <tr><th>Year</th><td><a id="linkYear" href="#">YEAR</a> </td></tr>
         </table>
     </div>
+    {% include 'footer.html' %}
 </body>
 </html>

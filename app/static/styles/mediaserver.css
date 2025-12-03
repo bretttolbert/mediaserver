@@ -7,15 +7,16 @@ body {
 }
 
 table {
-  width: 100%; /* Optional: Sets the table width */
-  border-collapse: collapse; /* Collapses borders into a single line */
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 1em;
 }
 
 th, td {
-  width:0px;
-  border: 1px solid white; /* Sets a 1px solid black border for cells */
-  padding: 8px; /* Optional: Adds padding inside cells */
-  text-align: left; /* Optional: Aligns text to the left */
+  width: 0px;
+  border: 1px solid black;
+  padding: 4px;
+  text-align: center;
 }
 
 .no-border {
@@ -31,7 +32,12 @@ th, td {
 }
 
 th {
-  background-color: black; /* Optional: Adds a background color to header cells */
+  background-color: black;
+}
+
+/* no underline */
+a {
+  text-decoration: none;
 }
 
 /* unvisited link */
@@ -96,7 +102,16 @@ input[type=checkbox]
   display: inline;
 }
 
-.ResultsInfo {
+.results-info {
     margin-top: 10px;
     margin-bottom: 10px;
+}
+
+.links-bar {
+  margin-bottom: 1em;
+}
+
+#footer {
+  margin: 1em;
+  font-size: small;
 }

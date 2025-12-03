@@ -6,7 +6,7 @@
     {% include '_css.html' %}
 </head>
 <body>
-    {% include 'links.html' %}
+    {% include 'links_bar.html' %}
     <table class="no-border w-100">
         <table class="w-100">
             <tr><th>All Albums</th></tr>
@@ -14,13 +14,13 @@
         </table>
         <table class="w-100">
             <tr><th>Albums by year range</th></tr>
-            <tr><td><a href="/albums?minYear=2020&maxYear=2029">albums - 2020-2029</a></td></tr>
-            <tr><td><a href="/albums?minYear=2010&maxYear=2019">albums - 2010-2019</a></td></tr>
-            <tr><td><a href="/albums?minYear=2000&maxYear=2009">albums - 2000-2009</a></td></tr>
-            <tr><td><a href="/albums?minYear=1990&maxYear=1999">albums - 1990-1999</a></td></tr>
-            <tr><td><a href="/albums?minYear=1980&maxYear=1989">albums - 1980-1989</a></td></tr>
-            <tr><td><a href="/albums?minYear=1970&maxYear=1979">albums - 1970-1979</a></td></tr>
-            <tr><td><a href="/albums?minYear=1960&maxYear=1969">albums - 1960-1969</a></td></tr>
+            <tr><td><a href="/albums?minYear=2020&maxYear=2029">albums 2020-2029</a></td></tr>
+            <tr><td><a href="/albums?minYear=2010&maxYear=2019">albums 2010-2019</a></td></tr>
+            <tr><td><a href="/albums?minYear=2000&maxYear=2009">albums 2000-2009</a></td></tr>
+            <tr><td><a href="/albums?minYear=1990&maxYear=1999">albums 1990-1999</a></td></tr>
+            <tr><td><a href="/albums?minYear=1980&maxYear=1989">albums 1980-1989</a></td></tr>
+            <tr><td><a href="/albums?minYear=1970&maxYear=1979">albums 1970-1979</a></td></tr>
+            <tr><td><a href="/albums?minYear=1960&maxYear=1969">albums 1960-1969</a></td></tr>
         </table>
         <table class="w-100">
             <tr><th>Albums by genre</th></tr>
@@ -30,7 +30,7 @@
         </table>
         <table class="w-100">
             <tr><th>Albums by year range and genre</th></tr>
-            <tr><td><a href="/albums?minYear=1960&maxYear={{ PRESENT_YEAR }}&genre=Industrial+Metal&genre=Punk&genre=Punk+Rock&genre=Heavy+Metal&genre=Hip+Hop&genre=Urbano&genre=Thrash+Metal&genre=Nu+Metal&genre=Rock+en+español&genre=Funk+Metal&genre=Hip-Hop+français">albums - workout mix</a></td></tr>
+            <tr><td><a href="/albums?minYear=1960&maxYear={{ PRESENT_YEAR }}&genre=Industrial+Metal&genre=Punk&genre=Punk+Rock&genre=Heavy+Metal&genre=Hip+Hop&genre=Urbano&genre=Thrash+Metal&genre=Nu+Metal&genre=Rock+en+español&genre=Funk+Metal&genre=Hip-Hop+français">albums workout mix</a></td></tr>
             <tr><td><a href="/albums?minYear=2015&maxYear={{ PRESENT_YEAR }}&genre=Hip-Hop">albums 2015-{{ PRESENT_YEAR }} Hip-Hop</a></td></tr>
             <tr><td><a href="/albums?minYear=1998&maxYear=2008&genre=Post-Hardcore">albums 1998-2008 Post-Hardcore</a></td></tr>
             <tr><td><a href="/albums?minYear=1995&maxYear=2015&genre=Indie%20Rock">albums 1995-2015 Indie Rock</a></td></tr>
@@ -50,8 +50,8 @@
             <tr><td><a href="/albums?minYear=1970&maxYear=1989&genre=Classic%20Prog">albums 1970-1989 Classic Prog</a></td></tr>
             <tr><td><a href="/albums?minYear=1970&maxYear=1989&genre=Heavy%20Metal&genre=Glam%20Metal">albums 1970-1989 Heavy Metal, Glam Metal</a></td></tr>
             <tr><td><a href="/albums?minYear=1970&maxYear=1989&genre=New%20Wave">albums 1970-1989 New-Wave</a></td></tr>
-            <tr><td><a href="/albums?minYear=1970&maxYear=1989&genre=Electronic+genre=Electronic%20(Instrumental)">albums 1970-1989 Electronic, Electronic (Instrumental)</a></td></tr>
-            <tr><td><a href="/albums?minYear=1979&maxYear=1989&genre=Punk">albums 1979-1989 Punk</a></td></tr>
+            <tr><td><a href="/albums?minYear=1970&maxYear=1989&genre=Electronic&genre=Electronic%20(Instrumental)">albums 1970-1989 Electronic, Electronic (Instrumental)</a></td></tr>
+            <tr><td><a href="/albums?minYear=1979&maxYear=1989&genre=Punk&genre=Punk%20Rock">albums 1979-1989 Punk</a></td></tr>
             <tr><td><a href="/albums?minYear=1979&maxYear=1989&genre=Post-Punk">albums 1979-1989 Post-Punk</a></td></tr>
             <tr><td><a href="/albums?minYear=1970&maxYear=1979&genre=Funk">albums 1970-1979 Funk</a></td></tr>
             <tr><td><a href="/albums?minYear=1970&maxYear=1979&genre=R%26B/Soul">albums 1970-1979 R&B/Soul</a></td></tr>
@@ -63,9 +63,10 @@
             <tr><th>Albums by year</th></tr>
             <!-- Show present day down to 1950 -->
             {% for year in range(1950,PRESENT_YEAR+1)[::-1] %}
-                <tr><td><a href="/albums?year={{ year }}">albums - {{ year }}</a></td></tr>
+                <tr><td><a href="/albums?year={{ year }}">albums {{ year }}</a></td></tr>
             {% endfor %}
         </table>
     </table>
+    {% include 'footer.html' %}
 </body>
 </html>

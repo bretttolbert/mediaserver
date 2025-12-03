@@ -6,8 +6,8 @@
     {% include '_css.html' %}
 </head>
 <body>
-    {% include 'links.html' %}
-    <div class="ResultsInfo">
+    {% include 'links_bar.html' %}
+    <div class="results-info">
     {{ "{:,}".format(artist_counts|length) }} results:
     </div>
     <div id="trackList">
@@ -23,5 +23,6 @@
         </tr>
     {% endfor %}
     </div>
+    {% include 'footer.html' %}
 </body>
 </html>
