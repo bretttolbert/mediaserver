@@ -12,6 +12,9 @@ Development Status: Pre-Alpha
 - Multiple playback options (configurable):
     1. Play local media files in the browser (using HTML5 `<audio>` tag)
     2. "Play" by opening YouTube search for _"(artist) (album) (title) video"_ (configurable)
+        - Great for finding music videos of your favorite music
+        - Great for creating YouTube playlists of music videos meeting certain filter criteria (e.g. 80s New Wave music videos for your 80s party)
+        - IMHO mediaserver + YouTube premium (no ads) is better than YouTube Music or Spotify
     3. (Default) Display both options
 - Album art displayed at a beautiful `1000x1000px` resolution
     - (bandwidth optimized by converting to `.webp` at 80% quality if hosted by yours truly)
@@ -29,10 +32,17 @@ Development Status: Pre-Alpha
 
 ## Limitations
 
-- Doesn't work with some `.m4a` files (html5 audio element can't decode)
-- Requires that music library be scanned with [mediascan](https://github.com/bretttolbert/mediascan) which outputs a [files.yaml](https://github.com/bretttolbert/mediascan/blob/main/out/files.yaml) file. This must be repeated to update the music library (e.g. add new files)
+- Doesn't work with some `.m4a` files
+    - Error: html5 audio element can't decode
+- Requires that your music library (or libraries) be scanned with [mediascan](https://github.com/bretttolbert/mediascan)
+    - `mediascan` scans your music library (or libraries) and outputs the [files.yaml](https://github.com/bretttolbert/mediascan/blob/main/out/files.yaml) file
+    - This must be repeated to update the music library (e.g. add new files)
+    - Alternatively you can use my [files.yaml](https://github.com/bretttolbert/mediascan/blob/main/out/files.yaml) file, in _YouTube-only_ mode
+    - I cannot share my music files, of course, as they are copyrighted, but I can share my files.yaml with over 20,000+ tracks, allowing you to browse my extensive and painstakenly organized music library (with accurate tags, genre and year) and _play_ any track by opening a YouTube search for it. 
 - Requires that music files be organized in the way that `mediascan` expects i.e. artist folders containing album folders with `cover.jpg` files
-- Requires that music filenames not contain prohibited characters such as `+` (prevent by testing music library with [mediatest](https://github.com/bretttolbert/mediatest))
+    - You can verify this by testing your music library with [mediatest](https://github.com/bretttolbert/mediatest)
+- Requires that music filenames do not contain prohibited characters such as `+`
+    - You can verify this by testing your music library with [mediatest](https://github.com/bretttolbert/mediatest)
 
 ## Coming soon
 
