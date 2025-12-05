@@ -28,24 +28,13 @@ from app.utils.media_files_utils import (
     get_artist_urls,
 )
 
-_default_config = MediaServerConfigUtil().load_config()
+
+def get_config(app: Flask) -> MediaServerConfig:
+    return cast(MediaServerConfig, current_app.config["MEDIASERVER_CONFIG"])
 
 
-def get_config(app: Flask):
-    if app.config["MEDIASERVER_CONFIG"] is not None:
-        return cast(MediaServerConfig, current_app.config["MEDIASERVER_CONFIG"])
-    else:
-        return _default_config
-
-
-_files: Optional[MediaFiles] = None
-
-
-def get_files(config: MediaServerConfig):
-    global _files
-    if _files is None:
-        _files = load_files_yaml(config.files_yaml_path)
-    return _files
+def get_media_files(app: Flask) -> MediaFiles:
+    return cast(MediaFiles, current_app.config["MEDIA_FILES"])
 
 
 @bp.route("/")
@@ -61,7 +50,7 @@ def tracks() -> str:
     args = get_request_args(request)
     current_app.logger.debug("tracks args=%s", args_dict_to_str(args))
     files_list: List[MediaFile] = filter_files(
-        current_app, get_files(get_config(current_app)), args
+        current_app, get_media_files(current_app), args
     )
     cover_path: Path = Path()
     if len(files_list):
@@ -86,9 +75,6 @@ def tracks_index() -> str:
 def player() -> str:
     return render_template(
         "player.html",
-        search_query_url_format=get_config(
-            current_app
-        ).playback_methods.youtube.search_query_url_format,
     )
 
 
@@ -135,7 +121,7 @@ def genres() -> str:
         sort = value
     return render_template(
         "genres.html",
-        genre_counts=get_genre_counts(get_files(get_config(current_app)), sort=sort),
+        genre_counts=get_genre_counts(get_media_files(current_app), sort=sort),
     )
 
 
@@ -156,7 +142,7 @@ def artist_counts() -> str:
         "artists.html",
         artist_counts=get_artist_counts(
             current_app,
-            get_files(get_config(current_app)),
+            get_media_files(current_app),
             get_request_args(request),
             sort=sort,
         ),
@@ -178,7 +164,7 @@ def albums() -> str:
             album.to_tuple()
             for album in get_albums(
                 current_app,
-                get_files(get_config(current_app)),
+                get_media_files(current_app),
                 get_request_args(request),
             )
         ],
@@ -196,7 +182,7 @@ def albums_index() -> str:
 def genres_cloud() -> str:
     return render_template(
         "word-cloud.html",
-        word_urls=get_genre_urls(get_files(get_config(current_app))),
+        word_urls=get_genre_urls(get_media_files(current_app)),
     )
 
 
@@ -205,7 +191,7 @@ def artists_cloud() -> str:
     return render_template(
         "word-cloud.html",
         word_urls=get_artist_urls(
-            current_app, get_files(get_config(current_app)), get_request_args(request)
+            current_app, get_media_files(current_app), get_request_args(request)
         ),
     )
 
@@ -216,7 +202,7 @@ def api_track():
     args = get_request_args(request)
     current_app.logger.debug("api/track args=%s", args_dict_to_str(args))
     files_list: List[MediaFile] = filter_files(
-        current_app, get_files(get_config(current_app)), args
+        current_app, get_media_files(current_app), args
     )
     if not len(files_list):
         abort(404)

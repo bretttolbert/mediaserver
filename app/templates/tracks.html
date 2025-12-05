@@ -27,9 +27,20 @@
         <tr>
             <td>
                 <table class="no-border">
-                    <tr class="no-border"><td><a href="/player?artist={{ file.artist|quote_plus }}&album={{ file.album|quote_plus }}&title={{ file.title|quote_plus }}">▶ Local Media</a></td></tr>
+                    
+                    {% if PLAYBACK_METHOD_LOCAL_ENABLED %}
+                    <tr class="no-border"><td>
+                        <a href="/player?artist={{ file.artist|quote_plus }}&album={{ file.album|quote_plus }}&title={{ file.title|quote_plus }}">▶ Local Media</a>
+                    </td></tr>
+                    {% endif %}
+
+                    {% if PLAYBACK_METHOD_YOUTUBE_ENABLED %}
                     {% set args = { 'artist': file.artist, 'album': file.album, 'title': file.title } %}
-                    <tr class="no-border"><td><a href="{{ args | format_search_query_url }}">🔍 YouTube</a></td></tr>
+                    <tr class="no-border"><td>
+                        <a href="{{ args | format_search_query_url }}">🔍 YouTube</a>
+                    </td></tr>
+                    {% endif %}
+
                 </table>
             </td>
             <td>{{ file.title }}</td>

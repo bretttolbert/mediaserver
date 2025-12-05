@@ -15,11 +15,14 @@
     <script src="{{ url_for('static', filename='hints_stub.js') }}"></script>
     {% endif %}
     <script>
+    var PLAYBACK_METHOD_LOCAL_ENABLED = "{{ PLAYBACK_METHOD_LOCAL_ENABLED }}"
+    var PLAYBACK_METHOD_YOUTUBE_ENABLED = "{{ PLAYBACK_METHOD_YOUTUBE_ENABLED }}"
+    var SEARCH_QUERY_URL_FORMAT = "{{ SEARCH_QUERY_URL_FORMAT }}";
+
     $(function() {
-        // analagous to python function format_search_query_url
+        // analogous to python function format_search_query_url
         var formatSearchQueryURL = function(artist, album, title) {
-            var searchQueryURLFormat = "{{ search_query_url_format }}";
-            var ret = searchQueryURLFormat;
+            var ret = SEARCH_QUERY_URL_FORMAT;
             ret = ret.replace("{artist}", encodeURIComponent(artist));
             ret = ret.replace("{album}", encodeURIComponent(album));
             ret = ret.replace("{title}", encodeURIComponent(title));
@@ -102,8 +105,12 @@
                 $("#linkAlbum").prop("href", "/tracks?artist=" + encodeURIComponent(track.artist) + "&album=" + encodeURIComponent(track.album));
                 //$("#linkTitle").prop("href", "/player?artist=" + encodeURIComponent(track.artist) + "&album=" + encodeURIComponent(track.album) + "&title=" + encodeURIComponent(track.title));
                 $("#linkCover").prop("href", "/tracks?artist=" + encodeURIComponent(track.artist) + "&album=" + encodeURIComponent(track.album));
-                $("#playLocalMediaLink").prop("href", "/player?artist=" + encodeURIComponent(track.artist) + "&album=" + encodeURIComponent(track.album) + "&title=" + encodeURIComponent(track.title));
-                $("#searchYouTubeLink").prop("href", formatSearchQueryURL(track.artist, track.album, track.title));
+                if (PLAYBACK_METHOD_LOCAL_ENABLED) {
+                    $("#playLocalMediaLink").prop("href", "/player?artist=" + encodeURIComponent(track.artist) + "&album=" + encodeURIComponent(track.album) + "&title=" + encodeURIComponent(track.title));
+                }
+                if (PLAYBACK_METHOD_YOUTUBE_ENABLED) {
+                    $("#searchYouTubeLink").prop("href", formatSearchQueryURL(track.artist, track.album, track.title));
+                }
 		loadTrackHints(track);
             })
             .fail(function() { alert("error: failed to load track(s)"); });
@@ -159,8 +166,12 @@
             <tr><th>Playback Options</th>
                 <td>
                     <table class="no-border">
+                        {% if PLAYBACK_METHOD_LOCAL_ENABLED %}
                         <tr class="no-border"><td><a id="playLocalMediaLink" href="#">▶ Local Media</a></td></tr>
+                        {% endif %}
+                        {% if PLAYBACK_METHOD_YOUTUBE_ENABLED %}
                         <tr class="no-border"><td><a id="searchYouTubeLink" href="#">🔍 YouTube</a></td></tr>
+                        {% endif %}
                     </table>
                 </td>
             </tr>
