@@ -29,7 +29,7 @@ from app.utils.config.mediaserver_config_util import MediaServerConfigUtil
 
 config = MediaServerConfigUtil().load_config()
 
-files: MediaFiles = load_files_yaml(config.MEDIASCAN_FILES_PATH)
+files: MediaFiles = load_files_yaml(config.files_yaml_path)
 
 
 @bp.route("/")
@@ -66,7 +66,10 @@ def tracks_index() -> str:
 
 @bp.route("/player")
 def player() -> str:
-    return render_template("player.html")
+    return render_template(
+        "player.html",
+        search_query_url_format=config.playback_methods.youtube.search_query_url_format,
+    )
 
 
 @bp.route("/player/index")
@@ -83,7 +86,7 @@ def name_that_tune_index() -> str:
 def send_report(path: str) -> Response:
     if not path.startswith("/"):
         path = "/" + path
-    path_prefix = config.MUSIC_LIB_PATH_PREFIX
+    path_prefix = config.playback_methods.local.media_path
     if not path_prefix.endswith("/"):
         path_prefix = path_prefix + "/"
     if path.startswith(path_prefix):
@@ -91,12 +94,14 @@ def send_report(path: str) -> Response:
         current_app.logger.debug(
             "/getfile/ path=%s path_without_prefix=%s", path, path_without_prefix
         )
-        return send_from_directory(config.MUSIC_LIB_PATH_PREFIX, path_without_prefix)
+        return send_from_directory(
+            config.playback_methods.local.media_path, path_without_prefix
+        )
     else:
         current_app.logger.warning(
-            "path (%s) doesn't start with MUSIC_LIB_PATH_PREFIX (%s), refusing to serve it",
+            "path (%s) doesn't start with media_path (%s), refusing to serve it",
             path,
-            config.MUSIC_LIB_PATH_PREFIX,
+            config.playback_methods.local.media_path,
         )
         abort(404)
 

@@ -57,7 +57,7 @@ Development Status: Pre-Alpha
 
 ## Quick Start
 
-- Configure `MUSIC_LIB_PATH_PREFIX`, etc. in the [`mediaserver_config.yaml`](./mediaserver_config.yaml)
+- Configure `media_path_prefix`, etc. in the [`mediaserver_config.yaml`](./mediaserver_config.yaml)
 
 ```bash
 git clone git@github.com:bretttolbert/mediascan.git

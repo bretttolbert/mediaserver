@@ -16,6 +16,16 @@
     {% endif %}
     <script>
     $(function() {
+        // analagous to python function format_search_query_url
+        var formatSearchQueryURL = function(artist, album, title) {
+            var searchQueryURLFormat = "{{ search_query_url_format }}";
+            var ret = searchQueryURLFormat;
+            ret = ret.replace("{artist}", encodeURIComponent(artist));
+            ret = ret.replace("{album}", encodeURIComponent(album));
+            ret = ret.replace("{title}", encodeURIComponent(title));
+            return ret;
+        }
+
         $("#audioElem")[0].addEventListener('ended', function() {
             //The repeat feature doesn't seem very useful (who wants to listen to the same song over and over??)
             //So make continuous shuffle the default (and only) behavior.
@@ -93,7 +103,7 @@
                 //$("#linkTitle").prop("href", "/player?artist=" + encodeURIComponent(track.artist) + "&album=" + encodeURIComponent(track.album) + "&title=" + encodeURIComponent(track.title));
                 $("#linkCover").prop("href", "/tracks?artist=" + encodeURIComponent(track.artist) + "&album=" + encodeURIComponent(track.album));
                 $("#playLocalMediaLink").prop("href", "/player?artist=" + encodeURIComponent(track.artist) + "&album=" + encodeURIComponent(track.album) + "&title=" + encodeURIComponent(track.title));
-                $("#searchYouTubeLink").prop("href", "https://www.youtube.com/results?search_query=" + encodeURIComponent(track.artist) + "+" + encodeURIComponent(track.album) + "+" + encodeURIComponent(track.title) + "+video");
+                $("#searchYouTubeLink").prop("href", formatSearchQueryURL(track.artist, track.album, track.title));
 		loadTrackHints(track);
             })
             .fail(function() { alert("error: failed to load track(s)"); });

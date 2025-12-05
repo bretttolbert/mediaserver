@@ -11,4 +11,4 @@ config = MediaServerConfigUtil().load_config(config_filepath)
 app = create_app(config)
 
 if __name__ == "__main__":
-    app.run(debug=config.DEBUG, host=config.HOST)
+    app.run(debug=config.debug, host=config.host, port=config.port)

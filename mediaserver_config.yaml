@@ -1,5 +1,12 @@
 version: 1
-MEDIASCAN_FILES_PATH: ../mediascan/out/files.yaml
-MUSIC_LIB_PATH_PREFIX: /data/
-HOST: 0.0.0.0
-DEBUG: false
+filesYamlPath: ../mediascan/out/files.yaml
+host: 0.0.0.0
+port: 5000
+debug: false
+playbackMethods:
+  local:
+    enabled: true
+    mediaPath: /data/
+  youtube:
+    enabled: true
+    searchQueryURLFormat: "https://www.youtube.com/results?search_query={artist}+{album}+{title}+video"
