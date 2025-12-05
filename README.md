@@ -25,29 +25,7 @@ Development Status: Pre-Alpha
 
 ## Screenshots
 
-[Screenshots](./doc/screenshots/)
-
-![Albums (Mobile)](./doc/screenshots/Mobile_Screenshot_20251202-albums.png)
-
-![Artists (Mobile)](./doc/screenshots/Mobile_Screenshot_20251202-artists.png)
-
-![Genres (Mobile)](./doc/screenshots/Mobile_Screenshot_20251202-genres.png)
-
-![Name That Tune (index) (Mobile)](./doc/screenshots/Mobile_Screenshot_20251202-name_that_tune.png)
-
-![Name That Tune (player) (Mobile)](./doc/screenshots/Mobile_Screenshot_20251202-name_that_tune_player.png)
-
-![Player (Mobile)](./doc/screenshots/Mobile_Screenshot_20251202-player2.png)
-
-![Player Shuffle Genre Grunge (Mobile)](./doc/screenshots/Mobile_Screenshot_20251202-shuffle-grunge.png)
-
-![Albums Slayer Screenshot](./doc/screenshots/Albums-Slayer.png)
-
-![Albums Genre Hip-Hop](./doc/screenshots/Albums-genre-hip-hop.png)
-
-![Albums 2006 with previous and next year links](./doc/screenshots/Albums-2006-with-previous-current-next-year-links.png)
-
-![Albums with year and genre filters](./doc/screenshots/Albums-with-year-and-genre-filters.png)
+[Screenshots](./doc/screenshots/README.md)
 
 ## Limitations
 
