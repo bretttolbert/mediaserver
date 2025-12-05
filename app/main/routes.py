@@ -4,19 +4,16 @@ from flask import (
     render_template,
     request,
     send_from_directory,
-    Flask,
     Response,
 )
 import random
-from typing import cast, List, Optional
+from typing import List
 from pathlib import Path
 
-from mediascan import load_files_yaml, MediaFiles, MediaFile
+from mediascan import MediaFile
 
 from app.main import bp
 from app.types.arg_types import args_dict_to_str
-from app.types.config.mediaserver_config import MediaServerConfig
-from app.utils.config.mediaserver_config_util import MediaServerConfigUtil
 from app.utils.request_args_utils import get_request_args
 from app.utils.media_files_utils import (
     filter_files,
@@ -28,13 +25,7 @@ from app.utils.media_files_utils import (
     get_artist_urls,
 )
 
-
-def get_config(app: Flask) -> MediaServerConfig:
-    return cast(MediaServerConfig, current_app.config["MEDIASERVER_CONFIG"])
-
-
-def get_media_files(app: Flask) -> MediaFiles:
-    return cast(MediaFiles, current_app.config["MEDIA_FILES"])
+from app.utils.app_utils import get_config, get_media_files
 
 
 @bp.route("/")
@@ -47,6 +38,7 @@ def root() -> str:
 @bp.route("/tracks")
 def tracks() -> str:
     global files
+    config = get_config(current_app)
     args = get_request_args(request)
     current_app.logger.debug("tracks args=%s", args_dict_to_str(args))
     files_list: List[MediaFile] = filter_files(
@@ -54,7 +46,7 @@ def tracks() -> str:
     )
     cover_path: Path = Path()
     if len(files_list):
-        cover_path = get_cover_path(files_list[0])
+        cover_path = get_cover_path(files_list[0], config)
     return render_template(
         "tracks.html",
         files=sorted(
@@ -199,6 +191,7 @@ def artists_cloud() -> str:
 @bp.route("/api/track")
 def api_track():
     global files
+    config = get_config(current_app)
     args = get_request_args(request)
     current_app.logger.debug("api/track args=%s", args_dict_to_str(args))
     files_list: List[MediaFile] = filter_files(
@@ -207,7 +200,7 @@ def api_track():
     if not len(files_list):
         abort(404)
     file = random.choice(files_list)
-    cover_path = get_cover_path(file)
+    cover_path = get_cover_path(file, config)
     return {
         "path": file.path,
         "cover_path": str(cover_path),

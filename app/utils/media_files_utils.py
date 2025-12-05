@@ -7,6 +7,7 @@ from flask import Flask
 
 from mediascan import MediaFiles, MediaFile
 
+from app.types.config.mediaserver_config import MediaServerConfig
 from app.types.arg_types import (
     args_dict_to_str,
     ArgsDict,
@@ -147,9 +148,9 @@ def get_artist_urls(
     return ret
 
 
-def get_cover_path(file: MediaFile) -> Path:
-    rel_path = Path(file.path.replace(os.path.basename(file.path), ""))
-    return rel_path / "cover.jpg"
+def get_cover_path(file: MediaFile, config: MediaServerConfig) -> Path:
+    dir_path = Path(file.path.replace(os.path.basename(file.path), ""))
+    return dir_path / "cover.jpg"
 
 
 def get_albums(
@@ -159,6 +160,7 @@ def get_albums(
 ) -> List[AlbumInfo]:
     """Returns a list of one AlbumInfo per unique album"""
     ret: Set[AlbumInfo] = set()  # type: ignore
+    config = app.config["MEDIASERVER_CONFIG"]
     files_filtered = filter_files(app, files, args)
     for f in files_filtered:
         # try to go with albumartist first, in order to better group files
@@ -167,7 +169,7 @@ def get_albums(
         artist = f.albumartist
         if not len(artist):
             artist = f.artist
-        ret.add(AlbumInfo(artist, f.album, f.year, get_cover_path(f)))
+        ret.add(AlbumInfo(artist, f.album, f.year, get_cover_path(f, config)))
     sort = ArgValues.Scalar.Enum.Sort.Year
     if ArgTypes.Scalar.Enum.Sort in args:
         sort = args[ArgTypes.Scalar.Enum.Sort]

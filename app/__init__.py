@@ -1,7 +1,7 @@
 from typing import Dict
 from flask import Flask
 
-from mediascan import load_files_yaml, MediaFiles, MediaFile
+from mediascan import load_files_yaml
 
 from app.types.config.mediaserver_config import MediaServerConfig
 

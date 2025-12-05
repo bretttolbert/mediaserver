@@ -8,6 +8,7 @@ from app.types.config.playback_methods_config import PlaybackMethodsConfig
 class MediaServerConfig(YAMLWizard):
     version: int = field(default=1)
     files_yaml_path: str = field(default="../mediascan/out/files.yaml")
+    covers_path: str = field(default="/data/")
     debug: bool = field(default=False)
     host: str = field(default="0.0.0.0")
     port: int = field(default=5000)
