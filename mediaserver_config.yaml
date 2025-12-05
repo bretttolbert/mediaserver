@@ -9,4 +9,4 @@ playbackMethods:
     mediaPath: /data/
   youtube:
     enabled: true
-    searchQueryURLFormat: "https://www.youtube.com/results?search_query={artist}+{album}+{title}+video"
+    searchQueryURLFormat: "https://www.youtube.com/results?search_query={artist}+{album}+{title}+official+music+video"
