@@ -1,0 +1,5 @@
+version: 1
+MEDIASCAN_FILES_PATH: ../mediascan/out/files.yaml
+MUSIC_LIB_PATH_PREFIX: /data/
+HOST: 0.0.0.0
+DEBUG: true

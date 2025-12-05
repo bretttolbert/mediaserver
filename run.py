@@ -1,6 +1,14 @@
-from app import create_app
+import sys
+from pathlib import Path
 
-app = create_app()
+from app import create_app
+from app.utils.config.mediaserver_config_util import MediaServerConfigUtil
+
+config_filepath = None
+if len(sys.argv) > 1:
+    config_filepath = Path(sys.argv[1])
+config = MediaServerConfigUtil().load_config(config_filepath)
+app = create_app(config)
 
 if __name__ == "__main__":
-    app.run(debug=False, host="0.0.0.0")
+    app.run(debug=config.DEBUG, host=config.HOST)

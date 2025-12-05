@@ -25,16 +25,11 @@ from app.utils.media_files_utils import (
     get_genre_counts,
     get_artist_urls,
 )
+from app.utils.config.mediaserver_config_util import MediaServerConfigUtil
 
-MEDIASCAN_FILES_PATH = "../mediascan/out/files.yaml"
+config = MediaServerConfigUtil().load_config()
 
-# !!! Important security note !!!
-# Do not expose more than you need to with the music lib path below,
-# Every file under this path will be exposed by the server!
-# See the /getfile/ route.
-MUSIC_LIB_PATH_PREFIX = "/data/"
-
-files: MediaFiles = load_files_yaml(MEDIASCAN_FILES_PATH)
+files: MediaFiles = load_files_yaml(config.MEDIASCAN_FILES_PATH)
 
 
 @bp.route("/")
@@ -88,7 +83,7 @@ def name_that_tune_index() -> str:
 def send_report(path: str) -> Response:
     if not path.startswith("/"):
         path = "/" + path
-    path_prefix = MUSIC_LIB_PATH_PREFIX
+    path_prefix = config.MUSIC_LIB_PATH_PREFIX
     if not path_prefix.endswith("/"):
         path_prefix = path_prefix + "/"
     if path.startswith(path_prefix):
@@ -96,12 +91,12 @@ def send_report(path: str) -> Response:
         current_app.logger.debug(
             "/getfile/ path=%s path_without_prefix=%s", path, path_without_prefix
         )
-        return send_from_directory(MUSIC_LIB_PATH_PREFIX, path_without_prefix)
+        return send_from_directory(config.MUSIC_LIB_PATH_PREFIX, path_without_prefix)
     else:
         current_app.logger.warning(
             "path (%s) doesn't start with MUSIC_LIB_PATH_PREFIX (%s), refusing to serve it",
             path,
-            MUSIC_LIB_PATH_PREFIX,
+            config.MUSIC_LIB_PATH_PREFIX,
         )
         abort(404)
 
