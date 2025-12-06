@@ -7,6 +7,15 @@
 </head>
 <body>
     {% include 'links_bar.html' %}
+    <div class="results-info">
+    {{ "{:,}".format(files|length) }} results:
+    </div>
+    {% if request.args.getlist('album')|length > 0 and cover_path|length > 0 %}
+    <div>
+        <br>
+        <img src="{{ url_for('main.getfile', path=cover_path) }}" id="coverImg" width="1000" height="1000" />
+    </div>
+    {% endif %}
     {% if request.args.getlist('album')|length > 0 %}
     <div>
         {% if request.args.getlist('albumartist')|length > 0 %}
@@ -17,14 +26,16 @@
         <br>
     </div>
     {% endif %}
-    <div class="results-info">
-    {{ "{:,}".format(files|length) }} results:
-    </div>
     <div id="trackList">
     <table class="w-100">
-        <tr><th>Playback Options</th><th>Title</th><th>Artist</th><th>Album</th><th>Year</th><th>Genre</th></tr>
+        <tr><th>Title</th><th>Artist</th><th>Album</th><th>Year</th><th>Genre</th><th>Playback Options</th></tr>
         {% for file in files %}
         <tr>
+            <td>{{ file.title }}</td>
+            <td><a href="{{ url_for('main.albums', artist=file.artist) }}">{{ file.artist }}</a></td>
+            <td><a href="{{ url_for('main.tracks', artist=file.artist, album=file.album) }}">{{ file.album }}</a></td>
+            <td><a href="{{ url_for('main.albums', year=file.year) }}">{{ file.year }}</a></td>
+            <td><a href="{{ url_for('main.artists', genre=file.genre) }}">{{ file.genre }}</a></td>
             <td>
                 <table class="no-border">
                     
@@ -43,18 +54,9 @@
 
                 </table>
             </td>
-            <td>{{ file.title }}</td>
-            <td><a href="{{ url_for('main.albums', artist=file.artist) }}">{{ file.artist }}</a></td>
-            <td><a href="{{ url_for('main.tracks', artist=file.artist, album=file.album) }}">{{ file.album }}</a></td>
-            <td><a href="{{ url_for('main.albums', year=file.year) }}">{{ file.year }}</a></td>
-            <td><a href="{{ url_for('main.artists', genre=file.genre) }}">{{ file.genre }}</a></td>
         </tr>
         {% endfor %}
     </table>
-        {% if request.args.getlist('album')|length > 0 and cover_path|length > 0 %}
-            <br>
-            <img src="{{ url_for('main.getfile', path=cover_path) }}" id="coverImg" width="1000" height="1000" />
-        {% endif %}
     </div>
     {% include 'footer.html' %}
 </body>
