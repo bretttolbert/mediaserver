@@ -95,6 +95,27 @@ def send_report(path: str) -> Response:
     path_prefix = config.playback_methods.local.media_path
     if config.covers_path != path_prefix:
         path_prefix = config.covers_path
+
+    if not Path(path).exists():
+        # if it's a jpg, try looking for webp instead of jpg
+        # in case someone (me) converted the original jpgs to webp
+        root, ext = os.path.splitext(path)
+        if ext != ".jpg":
+            current_app.logger.error('File not found (and not a jpg): "%s"', path)
+            abort(404)
+        oldpath = path
+        path = root + ".webp"
+        current_app.logger.warning(
+            "Couldn't find file, trying different file extension:\noldpath=%s\nnewpath=%s",
+            oldpath,
+            path,
+        )
+    if not Path(path).exists():
+        current_app.logger.error('File not found: "%s"', path)
+        abort(404)
+    else:
+        current_app.logger.debug("File exists: %s", path)
+
     if not path_prefix.endswith("/"):
         path_prefix = path_prefix + "/"
     if path.startswith(path_prefix):
@@ -105,13 +126,9 @@ def send_report(path: str) -> Response:
             path_prefix,
             path_without_prefix,
         )
-        if not Path(path).exists():
-            # try looking for webp instead of jpg
-            # in case someone (me) converted the original jpgs to webp
-            root, ext = os.path.splitext(path)
-            path = root + ".webp"
-        if not Path(path).exists():
-            abort(404)
+        current_app.logger.debug(
+            'send_from_directory("%s", "%s")', path_prefix, path_without_prefix
+        )
         return send_from_directory(path_prefix, path_without_prefix)
     else:
         current_app.logger.warning(
