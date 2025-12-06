@@ -32,12 +32,12 @@ def create_app(config: MediaServerConfig):
         lambda args: format_search_query_url(args, config)
     )
     app.jinja_env.globals["PRESENT_YEAR"] = datetime.now().year
-    app.jinja_env.globals["PLAYBACK_METHOD_LOCAL_ENABLED"] = (
+    app.jinja_env.globals["PLAYBACK_METHOD_LOCAL_ENABLED"] = str(
         config.playback_methods.local.enabled
-    )
-    app.jinja_env.globals["PLAYBACK_METHOD_YOUTUBE_ENABLED"] = (
+    ).lower()
+    app.jinja_env.globals["PLAYBACK_METHOD_YOUTUBE_ENABLED"] = str(
         config.playback_methods.youtube.enabled
-    )
+    ).lower()
     app.jinja_env.globals["SEARCH_QUERY_URL_FORMAT"] = (
         config.playback_methods.youtube.search_query_url_format
     )

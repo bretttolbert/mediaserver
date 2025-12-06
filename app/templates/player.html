@@ -15,9 +15,9 @@
     <script src="{{ url_for('static', filename='hints_stub.js') }}"></script>
     {% endif %}
     <script>
-    var PLAYBACK_METHOD_LOCAL_ENABLED = "{{ PLAYBACK_METHOD_LOCAL_ENABLED }}"
-    var PLAYBACK_METHOD_YOUTUBE_ENABLED = "{{ PLAYBACK_METHOD_YOUTUBE_ENABLED }}"
-    var SEARCH_QUERY_URL_FORMAT = "{{ SEARCH_QUERY_URL_FORMAT }}";
+    let PLAYBACK_METHOD_LOCAL_ENABLED = ("{{ PLAYBACK_METHOD_LOCAL_ENABLED }}" == "true");
+    let PLAYBACK_METHOD_YOUTUBE_ENABLED = ("{{ PLAYBACK_METHOD_YOUTUBE_ENABLED }}" == "true");
+    let SEARCH_QUERY_URL_FORMAT = "{{ SEARCH_QUERY_URL_FORMAT }}";
 
     $(function() {
         // analogous to python function format_search_query_url
@@ -29,48 +29,52 @@
             return ret;
         }
 
-        $("#audioElem")[0].addEventListener('ended', function() {
-            //The repeat feature doesn't seem very useful (who wants to listen to the same song over and over??)
-            //So make continuous shuffle the default (and only) behavior.
-            /*
-            var repeat = $("#repeatChk").prop('checked');
-            if (repeat) {
-                setTimeout(function() {
-                    $("#audioElem")[0].play();
-                }, 1000);
-            }
-            */
-            loadTrack();
-            $("#audioElem")[0].addEventListener('canplaythrough', function() {
+        if (PLAYBACK_METHOD_LOCAL_ENABLED == "true")
+        {
+            $("#audioElem")[0].addEventListener('ended', function() {
+                //The repeat feature doesn't seem very useful (who wants to listen to the same song over and over??)
+                //So make continuous shuffle the default (and only) behavior.
+                /*
+                var repeat = $("#repeatChk").prop('checked');
+                if (repeat) {
+                    setTimeout(function() {
+                        $("#audioElem")[0].play();
+                    }, 1000);
+                }
+                */
+                loadTrack();
+                $("#audioElem")[0].addEventListener('canplaythrough', function() {
+                    var audio = $("#audioElem")[0];
+                    if (audio.paused) {
+                        audio.play();
+                    }
+                });
+            });
+            toggle_playback = function(this_elem) {
                 var audio = $("#audioElem")[0];
+                if (audio.paused) {
+                    audio.play();
+                    $("#playBtn").html('<i class="bi bi-pause-circle-fill"></i> Pause');
+                }else{
+                    audio.pause();
+                    $("#playBtn").html('<i class="bi bi-play-circle-fill"></i> Play');
+                }
+            }
+            $("#playBtn").click(function(){
+                toggle_playback();
+            });
+            $("#linkTitle").click(function(){
+                toggle_playback();
+            })
+            $("#restartBtn").click(function(){
+                var audio = $("#audioElem")[0];
+                audio.currentTime = 0;
                 if (audio.paused) {
                     audio.play();
                 }
             });
-        });
-        toggle_playback = function(this_elem) {
-            var audio = $("#audioElem")[0];
-            if (audio.paused) {
-                audio.play();
-                $("#playBtn").html('<i class="bi bi-pause-circle-fill"></i> Pause');
-            }else{
-                audio.pause();
-                $("#playBtn").html('<i class="bi bi-play-circle-fill"></i> Play');
-            }
         }
-        $("#playBtn").click(function(){
-            toggle_playback();
-        });
-        $("#linkTitle").click(function(){
-            toggle_playback();
-        })
-        $("#restartBtn").click(function(){
-            var audio = $("#audioElem")[0];
-            audio.currentTime = 0;
-            if (audio.paused) {
-                audio.play();
-            }
-        });
+
         function loadTrack() {
             resetHints();
             searchParams = new URLSearchParams(location.search);
@@ -92,7 +96,9 @@
             console.log("requestParams=" + JSON.stringify(requestParams));
             $.getJSON("api/track", requestParams, function(track) {
                 console.log(track);
-                $("#audioElem").prop("src", "/getfile/" + track.path);
+                if (PLAYBACK_METHOD_LOCAL_ENABLED) {
+                    $("#audioElem").prop("src", "/getfile/" + track.path);
+                }
                 $("#linkYear").html(track.year);
                 $("#linkGenre").html(track.genre);
                 $("#linkArtist").html(track.artist);
@@ -117,12 +123,14 @@
         }
         $('#nextBtn').click(function() {
             loadTrack();
-            $("#audioElem")[0].addEventListener('canplaythrough', function() {
-                var audio = $("#audioElem")[0];
-                if (audio.paused) {
-                    audio.play();
-                }
-            });
+            if (PLAYBACK_METHOD_LOCAL_ENABLED) {
+                $("#audioElem")[0].addEventListener('canplaythrough', function() {
+                    var audio = $("#audioElem")[0];
+                    if (audio.paused) {
+                        audio.play();
+                    }
+                });
+            }
         });
         loadTrack();
         //Can't autoplay initially (breaks DOM promise)
@@ -132,32 +140,40 @@
 </head>
 <body>
     {% include 'links_bar.html' %}
+
     <div id="playerControls">
-        {% if request.args.get('hints') == "1" %}
-        <h1>Random track, can you name it?</h1>
+        {% if PLAYBACK_METHOD_LOCAL_ENABLED %}
+            {% if request.args.get('hints') == "1" %}
+            <h1>Random track, can you name it?</h1>
+            {% endif %}
+            <button id="playBtn" class="btn btn-secondary btn-lg">
+                <i class="bi bi-play-circle-fill"></i> Play
+            </button>
+            <!--
+            <input type="checkbox" id="repeatChk"/>
+            <label for="repeatChk">Repeat</label>
+            -->
+            <button id="restartBtn" class="btn btn-secondary btn-lg">
+                <i class="bi bi-rewind-circle-fill"></i> Restart
+            </button>
         {% endif %}
-        <button id="playBtn" class="btn btn-secondary btn-lg">
-            <i class="bi bi-play-circle-fill"></i> Play
-        </button>
-        <!--
-        <input type="checkbox" id="repeatChk"/>
-        <label for="repeatChk">Repeat</label>
-        -->
-        <button id="restartBtn" class="btn btn-secondary btn-lg">
-            <i class="bi bi-rewind-circle-fill"></i> Restart
-        </button>
+
         <button id="nextBtn" class="btn btn-secondary btn-lg">
             <i class="bi bi-fast-forward-circle-fill"></i> Next
         </button>
         <br>
-        {% if request.args.get('hints') == "1" %}
-        {% include 'hints.html' %}
+        {% if PLAYBACK_METHOD_LOCAL_ENABLED and request.args.get('hints') == "1" %}
+            {% include 'hints.html' %}
         {% endif %}
     </div>
+
+    {% if PLAYBACK_METHOD_LOCAL_ENABLED %}
     <audio id="audioElem" class="full" controls>
         <source src="#" type="audio/mpeg" autoplay>
       Your browser does not support the audio element.
     </audio>
+    {% endif %}
+
     <div id="trackList">
         <a id="linkCover" href="#">
             <img src="#" id="coverImg" width="1000" height="1000" />
