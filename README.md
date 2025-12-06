@@ -4,7 +4,23 @@ A minimalist Flask web application for browsing and playing music files
 
 Uses my other project [mediascan](https://github.com/bretttolbert/mediascan) for scanning music library files. Currently this must be performed manually (both for initial music library scan and to re-scan music library)
 
-Development Status: Pre-Alpha
+## [mediaserver Live Demo (aka _Brettify_)](http://bretttolbert.com/mediaserver)
+
+### Filter by year range
+
+[bretttolbert.com/mediaserver/albums?minYear=1990&maxYear=2004](http://bretttolbert.com/mediaserver/albums?minYear=1990&maxYear=2004)
+
+### Filter by year range and genre(s)
+
+[bretttolbert.com/mediaserver/player?minYear=1960&maxYear=2024&genre=Industrial+Metal&genre=Punk&genre=Punk+Rock&genre=Heavy+Metal&genre=Hip+Hop&genre=Urbano&genre=Thrash+Metal&genre=Nu+Metal&genre=Rock+en+español&genre=Funk+Metal&genre=Hip-Hop+français](http://bretttolbert.com/mediaserver/player?minYear=1960&maxYear=2024&genre=Industrial+Metal&genre=Punk&genre=Punk+Rock&genre=Heavy+Metal&genre=Hip+Hop&genre=Urbano&genre=Thrash+Metal&genre=Nu+Metal&genre=Rock+en+español&genre=Funk+Metal&genre=Hip-Hop+français)
+
+### Filter by artist, album and title
+
+[bretttolbert.com/mediaserver/player?artist=Rush&album=Grace%20Under%20Pressure&title=The%20Body%20Electric](http://bretttolbert.com/mediaserver/player?artist=Rush&album=Grace%20Under%20Pressure&title=The%20Body%20Electric)
+
+## Screenshots
+
+[Screenshots](./doc/screenshots/README.md)
 
 ## Features
 
@@ -26,9 +42,6 @@ Development Status: Pre-Alpha
 - Direct download of music files via hyperlinks
 - Accessible from mobile devices (tested in Chrome on Android)
 
-## Screenshots
-
-[Screenshots](./doc/screenshots/README.md)
 
 ## Limitations
 
@@ -54,42 +67,52 @@ Development Status: Pre-Alpha
 ## Dependencies
 
 - [mediascan](https://github.com/bretttolbert/mediascan) A simple and fast Go (golang) command-line utility to recursively scan a directory for media files, extract metadata (including ID3v2 tags from both MP3 and M4A files), and save the output in a simple YAML format e.g. [files.yaml](https://github.com/bretttolbert/mediascan/blob/main/out/files.yaml), and a Python library with data classes for working with the YAML files output by `mediascan.go`.
+- [Flask-JSGlue](https://github.com/bretttolbert/Flask-JSGlue) This project depends on my fork of `Flask-JSGlue`, and it has not been published to pypi, so you'll have to clone the repo and install it from source (see below).
 
-## Quick Start
 
-- Configure `mediaPath`, etc. in the [`mediaserver_config.yaml`](./mediaserver_config.yaml)
+## Installation
 
+
+#### Install bretttolbert/Flask-JSGlue from GitHub source 
+- Clone the repo and install the `Flask-JSGlue` python package
 ```bash
+cd ~/Git
+git clone git@github.com:bretttolbert/Flask-JSGlue.git
+cd Flask-JSGlue
+python -m pip install .
+```
+
+#### Install bretttolbert/mediascan from GitHub source 
+- Clone the repo and install the `mediascan` python package
+```bash
+cd ~/Git
 git clone git@github.com:bretttolbert/mediascan.git
 cd mediascan
+python -m pip install .
+```
+- Modify the mediascan `conf.yaml` values (`mediadirs` etc.) as needed
+- Run mediascan.go (requires [go](https://go.dev/doc/install))
+```bash
+cd ~/Git/mediascan
 go run mediascan/src/mediascan.go conf/conf.yaml out/files.yaml
-cd ..
+```
+
+#### Install bretttolbert/mediaserver from GitHub source 
+- Clone the repo
+```bash
+cd ~/Git
 git clone git@github.com:bretttolbert/mediaserver.git
 cd mediaserver
+python -m pip install -r requirements.txt
+```
+- Configure `mediaPath`, etc. in the [`mediaserver_config.yaml`](./mediaserver_config.yaml)
+- Run mediaserver
+```bash
+cd ~/Git/mediaserver
 python run.py mediaserver_config.yaml
 ```
 
-## Player Filtered Continuous Shuffle Examples
-
-### Filter by year range
-
-```bash
-http://localhost:5000/player?minYear=1990&maxYear=2004
-```
-
-### Filter by year range and genre(s)
-
-```bash
-http://localhost:5000/player?minYear=1960&maxYear=2024&genre=Industrial+Metal&genre=Punk&genre=Punk+Rock&genre=Heavy+Metal&genre=Hip+Hop&genre=Urbano&genre=Thrash+Metal&genre=Nu+Metal&genre=Rock+en+español&genre=Funk+Metal&genre=Hip-Hop+français
-```
-
-### Filter by artist, album and title
-
-```bash
-http://localhost:5000/player?artist=Rush&album=Grace%20Under%20Pressure&title=The%20Body%20Electric
-```
-
-## Automatically start and run as a SystemD service
+#### Automatically start and run as a SystemD service
 
 - Customize the .service file [`mediaserver.service`](mediaserver.service) as required
     - Create a compatible Python virtual environment with the necessary dependencies
@@ -116,13 +139,3 @@ sudo systemctl restart mediaserver.service
 journalctl -fu mediaserver.service
 ```
 - Use `-fu` to follow the log so you can watch the server startup.
-
-
-## Set Flask environment variables
-
-I haven't found this necessary, but here's how to do it:
-
-```bash
-export FLASK_APP=run.py
-export FLASK_ENV=development
-```
