@@ -10,6 +10,7 @@ class MediaServerConfig(YAMLWizard):
     version: int = field(default=1)
     files_yaml_path: str = field(default="../mediascan/out/files.yaml")
     covers_path: str = field(default="/data/")
+    age_verification: bool = field(default=True)
     flask_config: FlaskConfig = field(default_factory=FlaskConfig)
     playback_methods: PlaybackMethodsConfig = field(
         default_factory=PlaybackMethodsConfig

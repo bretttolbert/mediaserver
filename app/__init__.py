@@ -51,6 +51,8 @@ def create_app(config: MediaServerConfig):
         config.playback_methods.youtube.search_query_url_format
     )
 
+    app.jinja_env.globals["AGE_VERIFICATION"] = config.age_verification
+
     from app.main import bp
 
     if url_prefix is None:

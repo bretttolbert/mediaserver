@@ -1,6 +1,7 @@
 version: 1
 filesYamlPath: ../mediascan/out/files.yaml
 coversPath: /var/www/html/Covers/
+ageVerification: true
 flaskConfig:
   host: 0.0.0.0
   port: 5000

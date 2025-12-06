@@ -1,0 +1,43 @@
+/* Full-screen overlay */
+#age-verification-overlay {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.9); /* Dark background with transparency */
+    z-index: 10000; /* Ensure it's above all other content */
+    color: white;
+    text-align: center;
+}
+
+/* Modal content box */
+#age-verification-modal {
+    padding: 30px;
+    background-color: #333;
+    border-radius: 12px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+    max-width: 400px;
+    width: 90%;
+}
+
+/* Buttons */
+#age-yes, #age-no {
+    margin: 10px;
+    padding: 10px 20px;
+    cursor: pointer;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+}
+
+#age-yes { background-color: #4CAF50; color: white; }
+#age-no { background-color: #f44336; color: white; }
+
+/* Hide the main body content while the modal is active (optional, set on body via JS) */
+body.age-verification-active {
+    overflow: hidden;
+}

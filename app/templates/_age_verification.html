@@ -1,0 +1,35 @@
+{% if AGE_VERIFICATION %}
+<div id="age-verification-overlay">
+    <div id="age-verification-modal">
+        <h1>Content Warning</h1>
+        <p>This website contains content intended for mature audiences only (18+).</p>
+        <p>Are you 18 years or older?</p>
+        <button id="age-yes">Yes, I am 18+</button>
+        <button id="age-no">No, exit</button>
+    </div>
+</div>
+<script>
+window.onload = function() {
+    const overlay = document.getElementById('age-verification-overlay');
+    const yesButton = document.getElementById('age-yes');
+    const noButton = document.getElementById('age-no');
+    const ageConfirmed = localStorage.getItem('ageConfirmed');
+
+    if (!ageConfirmed) {
+        overlay.style.display = 'flex';
+        document.body.classList.add('age-verification-active');
+    }
+
+    yesButton.onclick = function() {
+        localStorage.setItem('ageConfirmed', 'true');
+        overlay.style.display = 'none';
+        document.body.classList.remove('age-verification-active');
+    };
+
+    noButton.onclick = function() {
+        // Redirect if they are not old enough
+        window.location.href = 'https://www.google.com'; 
+    };
+};
+</script>
+{% endif %}
