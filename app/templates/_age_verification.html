@@ -15,15 +15,21 @@ window.onload = function() {
     const noButton = document.getElementById('age-no');
     const ageConfirmed = localStorage.getItem('ageConfirmed');
 
+    function hideAgeVerif() {
+        overlay.style.display = 'none';
+        document.body.classList.remove('age-verification-active');
+    }
+
     if (!ageConfirmed) {
         overlay.style.display = 'flex';
         document.body.classList.add('age-verification-active');
+    } else {
+        hideAgeVerif();
     }
 
     yesButton.onclick = function() {
         localStorage.setItem('ageConfirmed', 'true');
-        overlay.style.display = 'none';
-        document.body.classList.remove('age-verification-active');
+        hideAgeVerif();
     };
 
     noButton.onclick = function() {
