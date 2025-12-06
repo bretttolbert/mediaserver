@@ -46,7 +46,7 @@ def tracks() -> str:
     )
     cover_path: Path = Path()
     if len(files_list):
-        cover_path = get_cover_path(files_list[0], config)
+        cover_path = get_cover_path(config, files_list[0])
     return render_template(
         "tracks.html",
         files=sorted(
@@ -86,6 +86,8 @@ def send_report(path: str) -> Response:
     if not path.startswith("/"):
         path = "/" + path
     path_prefix = config.playback_methods.local.media_path
+    if config.covers_path != path_prefix:
+        path_prefix = config.covers_path
     if not path_prefix.endswith("/"):
         path_prefix = path_prefix + "/"
     if path.startswith(path_prefix):
@@ -93,14 +95,12 @@ def send_report(path: str) -> Response:
         current_app.logger.debug(
             "/getfile/ path=%s path_without_prefix=%s", path, path_without_prefix
         )
-        return send_from_directory(
-            config.playback_methods.local.media_path, path_without_prefix
-        )
+        return send_from_directory(path_prefix, path_without_prefix)
     else:
         current_app.logger.warning(
-            "path (%s) doesn't start with media_path (%s), refusing to serve it",
+            "path (%s) doesn't match expected media path prefix (%s), refusing to serve it",
             path,
-            config.playback_methods.local.media_path,
+            path_prefix,
         )
         abort(404)
 
@@ -200,7 +200,7 @@ def api_track():
     if not len(files_list):
         abort(404)
     file = random.choice(files_list)
-    cover_path = get_cover_path(file, config)
+    cover_path = get_cover_path(config, file)
     return {
         "path": file.path,
         "cover_path": str(cover_path),

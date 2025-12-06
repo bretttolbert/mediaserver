@@ -19,6 +19,7 @@ from app.types.arg_types import (
 )
 from app.types.album_info import AlbumInfo
 from app.utils.string_utils import str_in_list_ignore_case
+from app.utils.app_utils import get_config
 
 
 def filter_files(app: Flask, files: MediaFiles, args: ArgsDict) -> List[MediaFile]:
@@ -148,8 +149,17 @@ def get_artist_urls(
     return ret
 
 
-def get_cover_path(file: MediaFile, config: MediaServerConfig) -> Path:
+def get_cover_path(config: MediaServerConfig, file: MediaFile) -> Path:
     dir_path = Path(file.path.replace(os.path.basename(file.path), ""))
+    if config.covers_path != config.playback_methods.local.media_path:
+        # e.g. "/data/Music/Logic/Orville%20[2022]/cover.jpg"
+        # config.playback_methods.local.media_path = "/data/Music/"
+        # config.covers_path = "/var/www/html/Covers/"
+        dir_path = Path(
+            str(dir_path).replace(
+                config.playback_methods.local.media_path, config.covers_path
+            )
+        )
     return dir_path / "cover.jpg"
 
 
@@ -160,7 +170,7 @@ def get_albums(
 ) -> List[AlbumInfo]:
     """Returns a list of one AlbumInfo per unique album"""
     ret: Set[AlbumInfo] = set()  # type: ignore
-    config = app.config["MEDIASERVER_CONFIG"]
+    config = get_config(app)
     files_filtered = filter_files(app, files, args)
     for f in files_filtered:
         # try to go with albumartist first, in order to better group files
@@ -169,7 +179,7 @@ def get_albums(
         artist = f.albumartist
         if not len(artist):
             artist = f.artist
-        ret.add(AlbumInfo(artist, f.album, f.year, get_cover_path(f, config)))
+        ret.add(AlbumInfo(artist, f.album, f.year, get_cover_path(config, f)))
     sort = ArgValues.Scalar.Enum.Sort.Year
     if ArgTypes.Scalar.Enum.Sort in args:
         sort = args[ArgTypes.Scalar.Enum.Sort]

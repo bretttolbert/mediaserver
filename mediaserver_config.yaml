@@ -6,7 +6,7 @@ port: 5000
 debug: false
 playbackMethods:
   local:
-    enabled: true
+    enabled: false
     mediaPath: /data/
   youtube:
     enabled: true
