@@ -3,7 +3,7 @@ filesYamlPath: ../mediascan/out/files.yaml
 coversPath: /var/www/html/Covers/
 host: 0.0.0.0
 port: 5000
-debug: true
+debug: false
 playbackMethods:
   local:
     enabled: false

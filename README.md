@@ -101,7 +101,7 @@ http://localhost:5000/player?artist=Rush&album=Grace%20Under%20Pressure&title=Th
     2. `cp mediaserver.service /etc/systemd/system/`
     3. `cd /etc/systemd/system`
     4. `chmod 644 mediaserver.service`
-    5. `ln -s mediaserver.service ./multi-user.target-wants/mediaserver.service`
+    5. `ln -s mediaserver.service ./multi-user.target.wants/mediaserver.service`
 - Use the systemctl daemon-reload command to force systemd to load the mediaserver.service file
     1. `systemctl daemon-reload`
 - Start the mediaservice service and use journalctl to verify that it is running
