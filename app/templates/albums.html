@@ -32,7 +32,7 @@
     <div id="trackList">
     {% for album in albums %}
         <a href="/tracks?albumartist={{ album[0]|quote_plus }}&album={{ album[1]|quote_plus }}&year={{ album[2] }}">
-        <img src="/getfile/{{ album[3] }}" class="CoverImg" width="600" height="600" />
+        <img src="/getfile{{ album[3] }}" class="CoverImg" width="600" height="600" />
         </a>
     {% endfor %}
     </div>

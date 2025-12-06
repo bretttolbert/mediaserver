@@ -1,3 +1,8 @@
+import os
+import random
+from typing import List
+from pathlib import Path
+
 from flask import (
     abort,
     current_app,
@@ -6,9 +11,6 @@ from flask import (
     send_from_directory,
     Response,
 )
-import random
-from typing import List
-from pathlib import Path
 
 from mediascan import MediaFile
 
@@ -83,6 +85,11 @@ def name_that_tune_index() -> str:
 @bp.route("/getfile/<path:path>")
 def send_report(path: str) -> Response:
     config = get_config(current_app)
+
+    # path_prefix = /var/www/html/Covers/
+    # path = /var/www/html/Covers/MusicOther/Johnny Cash/With His Hot and Blue Guitar [1957]/cover.jpg
+    # path_without_prefix = MusicOther/Johnny Cash/With His Hot and Blue Guitar [1957]/cover.jpg
+
     if not path.startswith("/"):
         path = "/" + path
     path_prefix = config.playback_methods.local.media_path
@@ -93,8 +100,18 @@ def send_report(path: str) -> Response:
     if path.startswith(path_prefix):
         path_without_prefix = path[len(path_prefix) :]
         current_app.logger.debug(
-            "/getfile/ path=%s path_without_prefix=%s", path, path_without_prefix
+            '/getfile/ path="%s" path_prefix="%s" path_without_prefix="%s"',
+            path,
+            path_prefix,
+            path_without_prefix,
         )
+        if not Path(path).exists():
+            # try looking for webp instead of jpg
+            # in case someone (me) converted the original jpgs to webp
+            root, ext = os.path.splitext(path)
+            path = root + ".webp"
+        if not Path(path).exists():
+            abort(404)
         return send_from_directory(path_prefix, path_without_prefix)
     else:
         current_app.logger.warning(
