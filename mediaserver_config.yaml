@@ -6,6 +6,7 @@ flaskConfig:
   port: 5000
   debug: true
   rootPath: null
+  staticUrlPath: null
   urlPrefix: /mediaserver
 playbackMethods:
   local:

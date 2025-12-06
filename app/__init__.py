@@ -25,7 +25,8 @@ def format_search_query_url(args: Dict[str, str], config: MediaServerConfig):
 def create_app(config: MediaServerConfig):
     root_path = config.flask_config.root_path
     url_prefix = config.flask_config.url_prefix
-    app = Flask(__name__, root_path=root_path)
+    static_url_path = config.flask_config.static_url_path
+    app = Flask(__name__, root_path=root_path, static_url_path=static_url_path)
     flask_jsglue.init(app, url_prefix)
     app.logger.debug("flask_config.root_path: %s", root_path)
     app.logger.debug("flask_config.url_prefix: %s", url_prefix)
