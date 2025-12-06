@@ -9,7 +9,7 @@ flaskConfig:
   urlPrefix: /mediaserver
 playbackMethods:
   local:
-    enabled: false
+    enabled: true
     mediaPath: /data/
   youtube:
     enabled: true

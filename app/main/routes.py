@@ -74,7 +74,7 @@ from app.types.arg_types import (
 def player() -> str:
     kwargs = {}
     args: ArgsDict = get_request_args(request)
-    for k, v in args:
+    for k, v in args.items():
         kwargs[k] = v
     return render_template("player.html", **kwargs)
 
@@ -100,7 +100,7 @@ def getfile(path: str) -> Response:
     if not path.startswith("/"):
         path = "/" + path
     path_prefix = config.playback_methods.local.media_path
-    if config.covers_path != path_prefix:
+    if path.startswith(config.covers_path):
         path_prefix = config.covers_path
 
     if not Path(path).exists():

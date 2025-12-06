@@ -1,5 +1,7 @@
 from typing import Dict
+
 from flask import Flask
+import flask_jsglue
 
 from mediascan import load_files_yaml
 
@@ -7,7 +9,6 @@ from app.types.config.mediaserver_config import MediaServerConfig
 
 from datetime import datetime
 from urllib.parse import quote_plus
-from flask import Flask
 
 
 def format_search_query_url(args: Dict[str, str], config: MediaServerConfig):
@@ -25,6 +26,7 @@ def create_app(config: MediaServerConfig):
     root_path = config.flask_config.root_path
     url_prefix = config.flask_config.url_prefix
     app = Flask(__name__, root_path=root_path)
+    flask_jsglue.init(app, url_prefix)
     app.logger.debug("flask_config.root_path: %s", root_path)
     app.logger.debug("flask_config.url_prefix: %s", url_prefix)
     app.config["MEDIASERVER_CONFIG"] = config
@@ -48,12 +50,12 @@ def create_app(config: MediaServerConfig):
         config.playback_methods.youtube.search_query_url_format
     )
 
-    from app.main import bp as main_bp
+    from app.main import bp
 
     if url_prefix is None:
-        app.register_blueprint(main_bp)
+        app.register_blueprint(bp)
         app.jinja_env.globals["URL_PREFIX"] = ""
     else:
-        app.register_blueprint(main_bp, url_prefix=url_prefix)
+        app.register_blueprint(bp, url_prefix=url_prefix)
         app.jinja_env.globals["URL_PREFIX"] = url_prefix
     return app
