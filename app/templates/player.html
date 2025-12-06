@@ -15,8 +15,8 @@
     <script src="{{ url_for('static', filename='hints_stub.js') }}"></script>
     {% endif %}
     <script>
-    let PLAYBACK_METHOD_LOCAL_ENABLED = ("{{ PLAYBACK_METHOD_LOCAL_ENABLED }}" == "true");
-    let PLAYBACK_METHOD_YOUTUBE_ENABLED = ("{{ PLAYBACK_METHOD_YOUTUBE_ENABLED }}" == "true");
+    let PLAYBACK_METHOD_LOCAL_ENABLED = ("{{ PLAYBACK_METHOD_LOCAL_ENABLED }}" == "True");
+    let PLAYBACK_METHOD_YOUTUBE_ENABLED = ("{{ PLAYBACK_METHOD_YOUTUBE_ENABLED }}" == "True");
     let SEARCH_QUERY_URL_FORMAT = "{{ SEARCH_QUERY_URL_FORMAT }}";
 
     $(function() {
