@@ -22,10 +22,14 @@ def format_search_query_url(args: Dict[str, str], config: MediaServerConfig):
 
 
 def create_app(config: MediaServerConfig):
-    app = Flask(__name__)
+    root_path = config.flask_config.root_path
+    url_prefix = config.flask_config.url_prefix
+    app = Flask(__name__, root_path=root_path)
+    app.logger.debug("flask_config.root_path: %s", root_path)
+    app.logger.debug("flask_config.url_prefix: %s", url_prefix)
     app.config["MEDIASERVER_CONFIG"] = config
     app.config["MEDIA_FILES"] = load_files_yaml(config.files_yaml_path)
-    app.debug = config.debug
+    app.debug = config.flask_config.debug
     app.jinja_env.filters["quote_plus"] = lambda u: quote_plus(u)
     app.jinja_env.filters["make_list"] = lambda s: list(s)
     app.jinja_env.filters["format_search_query_url"] = (
@@ -46,5 +50,10 @@ def create_app(config: MediaServerConfig):
 
     from app.main import bp as main_bp
 
-    app.register_blueprint(main_bp)
+    if url_prefix is None:
+        app.register_blueprint(main_bp)
+        app.jinja_env.globals["URL_PREFIX"] = ""
+    else:
+        app.register_blueprint(main_bp, url_prefix=url_prefix)
+        app.jinja_env.globals["URL_PREFIX"] = url_prefix
     return app

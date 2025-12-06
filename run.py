@@ -11,4 +11,8 @@ config = MediaServerConfigUtil().load_config(config_filepath)
 app = create_app(config)
 
 if __name__ == "__main__":
-    app.run(debug=config.debug, host=config.host, port=config.port)
+    app.run(
+        debug=config.flask_config.debug,
+        host=config.flask_config.host,
+        port=config.flask_config.port,
+    )

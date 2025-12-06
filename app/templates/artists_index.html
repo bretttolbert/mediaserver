@@ -10,62 +10,62 @@
     <table class="no-border w-100">
         <table class="w-100">
             <tr><th>All Artists</th></tr>
-            <tr><td><a href="/artists?sort=count">all artists (sorted by count)</a></td></tr>
-            <tr><td><a href="/artists?sort=name">all artists (sorted by name)</a></td></tr>
-            <tr><td><a href="/artists-cloud">artists word cloud</a></td></tr>
+            <tr><td><a href="{{ url_for('main.artists', sort='count') }}">all artists (sorted by count)</a></td></tr>
+            <tr><td><a href="{{ url_for('main.artists', sort='name') }}">all artists (sorted by name)</a></td></tr>
+            <tr><td><a href="{{ url_for('main.artists_cloud') }}">artists word cloud</a></td></tr>
         </table>
         <table class="w-100">
             <tr><th>Artists by year range</th></tr>
-            <tr><td><a href="/artists?sort=count&minYear=2020&maxYear=2029">artists 2020-2029</a></td></tr>
-            <tr><td><a href="/artists?sort=count&minYear=2010&maxYear=2019">artists 2010-2019</a></td></tr>
-            <tr><td><a href="/artists?sort=count&minYear=2000&maxYear=2009">artists 2000-2009</a></td></tr>
-            <tr><td><a href="/artists?sort=count&minYear=1990&maxYear=1999">artists 1990-1999</a></td></tr>
-            <tr><td><a href="/artists?sort=count&minYear=1980&maxYear=1989">artists 1980-1989</a></td></tr>
-            <tr><td><a href="/artists?sort=count&minYear=1970&maxYear=1979">artists 1970-1979</a></td></tr>
-            <tr><td><a href="/artists?sort=count&minYear=1960&maxYear=1969">artists 1960-1969</a></td></tr>
+            <tr><td><a href="{{ url_for('main.artists', sort='count', minYear=2020, maxYear=2029) }}">artists 2020-2029</a></td></tr>
+            <tr><td><a href="{{ url_for('main.artists', sort='count', minYear=2010, maxYear=2019) }}">artists 2010-2019</a></td></tr>
+            <tr><td><a href="{{ url_for('main.artists', sort='count', minYear=2000, maxYear=2009) }}">artists 2000-2009</a></td></tr>
+            <tr><td><a href="{{ url_for('main.artists', sort='count', minYear=1990, maxYear=1999) }}">artists 1990-1999</a></td></tr>
+            <tr><td><a href="{{ url_for('main.artists', sort='count', minYear=1980, maxYear=1989) }}">artists 1980-1989</a></td></tr>
+            <tr><td><a href="{{ url_for('main.artists', sort='count', minYear=1970, maxYear=1979) }}">artists 1970-1979</a></td></tr>
+            <tr><td><a href="{{ url_for('main.artists', sort='count', minYear=1960, maxYear=1969) }}">artists 1960-1969</a></td></tr>
         </table>
         <table class="w-100">
             <tr><th>Artists by genre</th></tr>
-            <tr><td><a href="/artists?sort=count&genre=Classic%20Rock">artists Classic Rock</a></td></tr>
-            <tr><td><a href="/artists?sort=count&genre=Heavy%20Metal">artists genre Heavy Metal</a></td></tr>
-			<tr><td><a href="/artists?sort=count&genre=Hip-Hop">artists genre Hip-Hop</a></td></tr>
+            <tr><td><a href="{{ url_for('main.artists', sort='count', genre=['Classic Rock']) }}">artists Classic Rock</a></td></tr>
+            <tr><td><a href="{{ url_for('main.artists', sort='count', genre=['Heavy Metal']) }}">artists genre Heavy Metal</a></td></tr>
+			<tr><td><a href="{{ url_for('main.artists', sort='count', genre=['Hip-Hop']) }}">artists genre Hip-Hop</a></td></tr>
         </table>
         <table class="w-100">
             <tr><th>Artists by year range and genre</th></tr>
-			<tr><td><a href="/artists?sort=count&minYear=1960&maxYear={{ PRESENT_YEAR }}&genre=Industrial+Metal&genre=Punk&genre=Punk+Rock&genre=Heavy+Metal&genre=Hip+Hop&genre=Urbano&genre=Thrash+Metal&genre=Nu+Metal&genre=Rock+en+español&genre=Funk+Metal&genre=Hip-Hop+français">artists workout mix</a></td></tr>
-			<tr><td><a href="/artists?sort=count&minYear=2015&maxYear={{ PRESENT_YEAR }}&genre=Hip-Hop">artists 2015-{{ PRESENT_YEAR }} Hip-Hop</a></td></tr>
-            <tr><td><a href="/artists?sort=count&minYear=1998&maxYear=2008&genre=Post-Hardcore">artists 1998-2008 Post-Hardcore</a></td></tr>
-            <tr><td><a href="/artists?sort=count&minYear=1995&maxYear=2015&genre=Indie%20Rock">artists 1995-2015 Indie Rock</a></td></tr>
-            <tr><td><a href="/artists?sort=count&minYear=1995&maxYear=2015&genre=Indie%20Folk">artists 1995-2015 Indie Folk</a></td></tr>
-            <tr><td><a href="/artists?sort=count&minYear=2005&maxYear=2014&genre=Hip-Hop">artists 2005-2014 Hip-Hop</a></td></tr>
-            <tr><td><a href="/artists?sort=count&minYear=1995&maxYear=2004&genre=Pop%20Rock">artists 1995-2004 Pop Rock</a></td></tr>
-            <tr><td><a href="/artists?sort=count&minYear=1995&maxYear=2004&genre=Hip-Hop">artists 1995-2004 Hip-Hop</a></td></tr>
-            <tr><td><a href="/artists?sort=count&minYear=1989&maxYear=1999&genre=Alternative%20Rock">artists 1989-1999 Alternative Rock</a></td></tr>
-            <tr><td><a href="/artists?sort=count&minYear=1985&maxYear=1994&genre=Hip-Hop">artists 1985-1994 Hip-Hop</a></td></tr>
-            <tr><td><a href="/artists?sort=count&minYear=1985&maxYear=1994&genre=Grunge">artists 1985-1994 Grunge</a></td></tr>
-            <tr><td><a href="/artists?sort=count&minYear=1985&maxYear=1994&genre=Funk%20Rock&genre=Funk%20Metal">artists 1985-1994 Funk Rock, Funk Metal</a></td></tr>
-            <tr><td><a href="/artists?sort=count&minYear=1985&maxYear=1994&genre=Classic%20Country&genre=Country&genre=Country%20Pop">artists 1985-1994 Classic Country</a></td></tr>
-            <tr><td><a href="/artists?sort=count&minYear=1990&maxYear=1999&genre=Alternative%20Metal">artists 1990-1999 Alternative Metal</a></td></tr>
-            <tr><td><a href="/artists?sort=count&minYear=1980&maxYear=1989&genre=Alternative%20Rock">artists 1980-1989 Alternative Rock</a></td></tr>
-            <tr><td><a href="/artists?sort=count&minYear=1980&maxYear=1989&genre=Classic%20Pop">artists 1980-1989 Classic Pop</a></td></tr>
-            <tr><td><a href="/artists?sort=count&minYear=1980&maxYear=1989&genre=Classic%20Rock">artists 1980-1989 Classic Rock</a></td></tr>
-            <tr><td><a href="/artists?sort=count&minYear=1970&maxYear=1989&genre=Classic%20Prog">artists 1970-1989 Classic Prog</a></td></tr>
-            <tr><td><a href="/artists?sort=count&minYear=1970&maxYear=1989&genre=Heavy%20Metal&genre=Glam%20Metal">artists 1970-1989 Heavy Metal, Glam Metal</a></td></tr>
-            <tr><td><a href="/artists?sort=count&minYear=1970&maxYear=1989&genre=New%20Wave">artists 1970-1989 New-Wave</a></td></tr>
-            <tr><td><a href="/artists?sort=count&minYear=1970&maxYear=1989&genre=Electronic&genre=Electronic%20(Instrumental)">artists 1970-1989 Electronic, Electronic (Instrumental)</a></td></tr>
-            <tr><td><a href="/artists?sort=count&minYear=1979&maxYear=1989&genre=Punk&genre=Punk%20Rock">artists 1979-1989 Punk, Punk Rock</a></td></tr>
-            <tr><td><a href="/artists?sort=count&minYear=1979&maxYear=1989&genre=Post-Punk">artists 1979-1989 Post-Punk</a></td></tr>
-            <tr><td><a href="/artists?sort=count&minYear=1970&maxYear=1979&genre=Funk">artists 1970-1979 Funk</a></td></tr>
-            <tr><td><a href="/artists?sort=count&minYear=1970&maxYear=1979&genre=R%26B/Soul">artists 1970-1979 R&B/Soul</a></td></tr>
-            <tr><td><a href="/artists?sort=count&minYear=1970&maxYear=1979&genre=Classic%20Rock">artists 1970-1979 Classic Rock</a></td></tr>
-        	<tr><td><a href="/artists?sort=count&minYear=1970&maxYear=1979&genre=Soft%20Rock">artists 1970-1979 Soft Rock</a></td></tr>
-        	<tr><td><a href="/artists?sort=count&minYear=1965&maxYear=1974&genre=Psychedelic%20Rock">artists 1965-1974 Psychedelic Rock</a></td></tr>
+			<tr><td><a href="{{ url_for('main.artists', sort='count', minYear=1960, maxYear=PRESENT_YEAR, genre=['Industrial Metal', 'Punk', 'Punk Rock', 'Heavy Metal', 'Hip-Hop', 'Urbano', 'Thrash Metal', 'Nu Metal', 'Rock en español', 'Funk Metal', 'Hip-Hop français']) }}">artists workout mix</a></td></tr>
+			<tr><td><a href="{{ url_for('main.artists', sort='count', minYear=2015, maxYear=PRESENT_YEAR, genre=['Hip-Hop']) }}">artists 2015-{{ PRESENT_YEAR }} Hip-Hop</a></td></tr>
+            <tr><td><a href="{{ url_for('main.artists', sort='count', minYear=1998, maxYear=2008, genre=['Post-Hardcore']) }}">artists 1998-2008 Post-Hardcore</a></td></tr>
+            <tr><td><a href="{{ url_for('main.artists', sort='count', minYear=1995, maxYear=2015, genre=['Indie Rock']) }}">artists 1995-2015 Indie Rock</a></td></tr>
+            <tr><td><a href="{{ url_for('main.artists', sort='count', minYear=1995, maxYear=2015, genre=['Indie Folk']) }}">artists 1995-2015 Indie Folk</a></td></tr>
+            <tr><td><a href="{{ url_for('main.artists', sort='count', minYear=2005, maxYear=2014, genre=['Hip-Hop']) }}">artists 2005-2014 Hip-Hop</a></td></tr>
+            <tr><td><a href="{{ url_for('main.artists', sort='count', minYear=1995, maxYear=2004, genre=['Pop Rock']) }}">artists 1995-2004 Pop Rock</a></td></tr>
+            <tr><td><a href="{{ url_for('main.artists', sort='count', minYear=1995, maxYear=2004, genre=['Hip-Hop']) }}">artists 1995-2004 Hip-Hop</a></td></tr>
+            <tr><td><a href="{{ url_for('main.artists', sort='count', minYear=1989, maxYear=1999, genre=['Alternative Rock']) }}">artists 1989-1999 Alternative Rock</a></td></tr>
+            <tr><td><a href="{{ url_for('main.artists', sort='count', minYear=1985, maxYear=1994, genre=['Hip-Hop']) }}">artists 1985-1994 Hip-Hop</a></td></tr>
+            <tr><td><a href="{{ url_for('main.artists', sort='count', minYear=1985, maxYear=1994, genre=['Grunge']) }}">artists 1985-1994 Grunge</a></td></tr>
+            <tr><td><a href="{{ url_for('main.artists', sort='count', minYear=1985, maxYear=1994, genre=['Funk Rock', 'Funk Metal']) }}">artists 1985-1994 Funk Rock, Funk Metal</a></td></tr>
+            <tr><td><a href="{{ url_for('main.artists', sort='count', minYear=1985, maxYear=1994, genre=['Classic Country', 'Country', 'Country Pop']) }}">artists 1985-1994 Classic Country</a></td></tr>
+            <tr><td><a href="{{ url_for('main.artists', sort='count', minYear=1990, maxYear=1999, genre=['Alternative Metal']) }}">artists 1990-1999 Alternative Metal</a></td></tr>
+            <tr><td><a href="{{ url_for('main.artists', sort='count', minYear=1980, maxYear=1989, genre=['Alternative Rock']) }}">artists 1980-1989 Alternative Rock</a></td></tr>
+            <tr><td><a href="{{ url_for('main.artists', sort='count', minYear=1980, maxYear=1989, genre=['Classic Pop']) }}">artists 1980-1989 Classic Pop</a></td></tr>
+            <tr><td><a href="{{ url_for('main.artists', sort='count', minYear=1980, maxYear=1989, genre=['Classic Rock']) }}">artists 1980-1989 Classic Rock</a></td></tr>
+            <tr><td><a href="{{ url_for('main.artists', sort='count', minYear=1970, maxYear=1989, genre=['Classic Prog']) }}">artists 1970-1989 Classic Prog</a></td></tr>
+            <tr><td><a href="{{ url_for('main.artists', sort='count', minYear=1970, maxYear=1989, genre=['Heavy Metal', 'Glam Metal']) }}">artists 1970-1989 Heavy Metal, Glam Metal</a></td></tr>
+            <tr><td><a href="{{ url_for('main.artists', sort='count', minYear=1970, maxYear=1989, genre=['New Wave']) }}">artists 1970-1989 New-Wave</a></td></tr>
+            <tr><td><a href="{{ url_for('main.artists', sort='count', minYear=1970, maxYear=1989, genre=['Electronic', 'Electronic (Instrumental)']) }}">artists 1970-1989 Electronic, Electronic (Instrumental)</a></td></tr>
+            <tr><td><a href="{{ url_for('main.artists', sort='count', minYear=1979, maxYear=1989, genre=['Punk', 'Punk Rock']) }}">artists 1979-1989 Punk, Punk Rock</a></td></tr>
+            <tr><td><a href="{{ url_for('main.artists', sort='count', minYear=1979, maxYear=1989, genre=['Post-Punk']) }}">artists 1979-1989 Post-Punk</a></td></tr>
+            <tr><td><a href="{{ url_for('main.artists', sort='count', minYear=1970, maxYear=1979, genre=['Funk']) }}">artists 1970-1979 Funk</a></td></tr>
+            <tr><td><a href="{{ url_for('main.artists', sort='count', minYear=1970, maxYear=1979, genre=['R&B/Soul']) }}">artists 1970-1979 R&B/Soul</a></td></tr>
+            <tr><td><a href="{{ url_for('main.artists', sort='count', minYear=1970, maxYear=1979, genre=['Classic Rock']) }}">artists 1970-1979 Classic Rock</a></td></tr>
+        	<tr><td><a href="{{ url_for('main.artists', sort='count', minYear=1970, maxYear=1979, genre=['Soft Rock']) }}">artists 1970-1979 Soft Rock</a></td></tr>
+        	<tr><td><a href="{{ url_for('main.artists', sort='count', minYear=1965, maxYear=1974, genre=['Psychedelic Rock']) }}">artists 1965-1974 Psychedelic Rock</a></td></tr>
         </table>
         <table class="w-100">
             <tr><th>Artists by year</th></tr>
             <!-- Show present day down to 1950 -->
             {% for year in range(1950,PRESENT_YEAR+1)[::-1] %}
-                <tr><td><a href="/artists?sort=count&year={{ year }}">artists {{ year }}</a></td></tr>
+                <tr><td><a href="{{ url_for('main.artists', sort='count', year=year) }}">artists {{ year }}</a></td></tr>
             {% endfor %}
         </table>
     </table>

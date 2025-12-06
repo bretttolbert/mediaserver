@@ -141,6 +141,10 @@
 <body>
     {% include 'links_bar.html' %}
 
+    <a id="linkCover" href="#">
+        <img src="#" id="coverImg" width="1000" height="1000" />
+    </a>
+
     <div id="playerControls">
         {% if PLAYBACK_METHOD_LOCAL_ENABLED %}
             {% if request.args.get('hints') == "1" %}
@@ -175,9 +179,6 @@
     {% endif %}
 
     <div id="trackList">
-        <a id="linkCover" href="#">
-            <img src="#" id="coverImg" width="1000" height="1000" />
-        </a>
         <table>
             <tr><th>Playback Options</th>
                 <td>

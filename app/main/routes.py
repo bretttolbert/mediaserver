@@ -65,11 +65,18 @@ def tracks_index() -> str:
     return render_template("tracks_index.html")
 
 
+from app.types.arg_types import (
+    ArgsDict,
+)
+
+
 @bp.route("/player")
 def player() -> str:
-    return render_template(
-        "player.html",
-    )
+    kwargs = {}
+    args: ArgsDict = get_request_args(request)
+    for k, v in args:
+        kwargs[k] = v
+    return render_template("player.html", **kwargs)
 
 
 @bp.route("/player/index")
@@ -83,7 +90,7 @@ def name_that_tune_index() -> str:
 
 
 @bp.route("/getfile/<path:path>")
-def send_report(path: str) -> Response:
+def getfile(path: str) -> Response:
     config = get_config(current_app)
 
     # path_prefix = /var/www/html/Covers/
@@ -152,14 +159,14 @@ def genres() -> str:
 
 
 @bp.route("/genres/index")
-def genre_index() -> str:
+def genres_index() -> str:
     return render_template(
         "genres_index.html",
     )
 
 
 @bp.route("/artists")
-def artist_counts() -> str:
+def artists() -> str:
     sort: str = ""
     value = request.args.get("sort")
     if value:
@@ -176,7 +183,7 @@ def artist_counts() -> str:
 
 
 @bp.route("/artists/index")
-def artist_index() -> str:
+def artists_index() -> str:
     return render_template(
         "artists_index.html",
     )

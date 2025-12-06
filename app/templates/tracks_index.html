@@ -10,26 +10,26 @@
     <table class="no-border w-100">
         <table class="w-100">
             <tr>
-                <td><a href="/tracks?minYear=2015&maxYear=2025">tracks year range 2015-2025</a></td>
+                <td><a href="{{ url_for('main.tracks', minYear=2015, maxYear=2025) }}">tracks year range 2015-2025</a></td>
             </tr>
             <tr>
-                <td><a href="/tracks?minYear=2000&maxYear=2015">tracks year range 2000-2015</a></td>
+                <td><a href="{{ url_for('main.tracks', minYear=2000, maxYear=2015) }}">tracks year range 2000-2015</a></td>
             </tr>
             <tr>
-                <td><a href="/tracks?minYear=1990&maxYear=1999">tracks year range 1990-1999</a></td>
+                <td><a href="{{ url_for('main.tracks', minYear=1990, maxYear=1999) }}">tracks year range 1990-1999</a></td>
             </tr>
             <tr>
-                <td><a href="/tracks?minYear=1980&maxYear=1989">tracks year range 1980-1989</a></td>
+                <td><a href="{{ url_for('main.tracks', minYear=1980, maxYear=1989) }}">tracks year range 1980-1989</a></td>
             </tr>
             <tr>
-                <td><a href="/tracks?minYear=1970&maxYear=1979">tracks year range 1970-1979</a></td>
+                <td><a href="{{ url_for('main.tracks', minYear=1970, maxYear=1979) }}">tracks year range 1970-1979</a></td>
             </tr>
         </table>
         <table class="w-100">
 
         <!-- Show present day down to 1950 -->
         {% for year in range(1950,PRESENT_YEAR+1)[::-1] %}
-            <tr><td><a href="/tracks?year={{ year }}">tracks {{ year }}</a></td></tr>
+            <tr><td><a href="{{ url_for('main.tracks', year=year) }}">tracks {{ year }}</a></td></tr>
         {% endfor %}
 
         </table>
