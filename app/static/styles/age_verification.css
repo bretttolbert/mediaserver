@@ -1,6 +1,6 @@
 /* Full-screen overlay */
 #age-verification-overlay {
-    display: flex;
+    display: none;
     justify-content: center;
     align-items: center;
     position: fixed;
