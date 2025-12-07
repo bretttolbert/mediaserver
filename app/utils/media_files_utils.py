@@ -151,13 +151,13 @@ def get_artist_urls(
 
 def get_cover_path(config: MediaServerConfig, file: MediaFile) -> Path:
     dir_path = Path(file.path.replace(os.path.basename(file.path), ""))
-    if config.covers_path != config.playback_methods.local.media_path:
+    if config.album_covers_path != config.playback_methods.local.media_path:
         # e.g. "/data/Music/Logic/Orville%20[2022]/cover.jpg"
         # config.playback_methods.local.media_path = "/data/Music/"
-        # config.covers_path = "/var/www/html/Covers/"
+        # config.album_covers_path = "/var/www/html/Covers/"
         dir_path = Path(
             str(dir_path).replace(
-                config.playback_methods.local.media_path, config.covers_path
+                config.playback_methods.local.media_path, config.album_covers_path
             )
         )
     return dir_path / "cover.jpg"
@@ -169,7 +169,7 @@ def get_albums(
     args: ArgsDict,
 ) -> List[AlbumInfo]:
     """Returns a list of one AlbumInfo per unique album"""
-    ret: Set[AlbumInfo] = set()  # type: ignore
+    album_set: Set[AlbumInfo] = set()  # type: ignore
     config = get_config(app)
     files_filtered = filter_files(app, files, args)
     for f in files_filtered:
@@ -179,14 +179,25 @@ def get_albums(
         artist = f.albumartist
         if not len(artist):
             artist = f.artist
-        ret.add(AlbumInfo(artist, f.album, f.year, get_cover_path(config, f)))
+        album_set.add(AlbumInfo(artist, f.album, f.year, get_cover_path(config, f)))
+
+    ret: List[AlbumInfo] = list(album_set)
     sort = ArgValues.Scalar.Enum.Sort.Year
     if ArgTypes.Scalar.Enum.Sort in args:
         sort = args[ArgTypes.Scalar.Enum.Sort]
-
     if sort == ArgValues.Scalar.Enum.Sort.Artist:
-        return sorted(ret, key=lambda album: album.artist)
+        ret = sorted(ret, key=lambda album: album.artist)
     if sort == ArgValues.Scalar.Enum.Sort.Album:
-        return sorted(ret, key=lambda album: album.album)
+        ret = sorted(ret, key=lambda album: album.album)
     else:  # default: sort by year (descending)
-        return sorted(ret, key=lambda album: album.year, reverse=True)
+        ret = sorted(ret, key=lambda album: album.year, reverse=True)
+
+    # now that we have it sorted as specified, slice if necessary to keep the
+    # result count below the configured max results limit for album covers
+    if (
+        config.max_results_album_covers > 0
+        and len(ret) > config.max_results_album_covers
+    ):
+        ret = ret[: config.max_results_album_covers]
+
+    return ret

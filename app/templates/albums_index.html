@@ -8,10 +8,12 @@
 <body>
     {% include 'links_bar.html' %}
     <table class="no-border w-100">
+        {% if not LIMIT_BANDWIDTH %}
         <table class="w-100">
             <tr><th>All Albums</th></tr>
             <tr><td><a href="{{ url_for('main.albums') }}">all albums</a></td></tr>
         </table>
+        {% endif %}
         <table class="w-100">
             <tr><th>Albums by year range</th></tr>
             <tr><td><a href="{{ url_for('main.albums', minYear=2020, maxYear=2029) }}">albums 2020-2029</a></td></tr>

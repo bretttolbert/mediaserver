@@ -100,8 +100,8 @@ def getfile(path: str) -> Response:
     if not path.startswith("/"):
         path = "/" + path
     path_prefix = config.playback_methods.local.media_path
-    if path.startswith(config.covers_path):
-        path_prefix = config.covers_path
+    if path.startswith(config.album_covers_path):
+        path_prefix = config.album_covers_path
 
     if not Path(path).exists():
         # if it's a jpg, try looking for webp instead of jpg

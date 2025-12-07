@@ -8,7 +8,7 @@
 <body>
     {% include 'links_bar.html' %}
     <div class="results-info">
-    {{ "{:,}".format(artist_counts|length) }} {{ artist_counts|result_or_results }}:
+    {{ artist_counts|result_or_results }}:
     </div>
     <div id="trackList">
     <table class="w-100">

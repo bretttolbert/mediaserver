@@ -27,7 +27,7 @@
     </div>
     {% endif %}
     <div class="results-info">
-    {{ "{:,}".format(albums|length) }} {{ albums|result_or_results }}:
+    {{ albums|result_or_results_album_covers }}:
     </div>
     <div id="trackList">
     {% for album in albums %}
