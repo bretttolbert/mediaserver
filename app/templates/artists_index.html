@@ -24,12 +24,6 @@
             <tr><td><a href="{{ url_for('main.artists', sort='count', minYear=1970, maxYear=1979) }}">artists 1970-1979</a></td></tr>
             <tr><td><a href="{{ url_for('main.artists', sort='count', minYear=1960, maxYear=1969) }}">artists 1960-1969</a></td></tr>
         </table>
-        <table class="w-100">
-            <tr><th>Artists by genre</th></tr>
-            <tr><td><a href="{{ url_for('main.artists', sort='count', genre=['Classic Rock']) }}">artists Classic Rock</a></td></tr>
-            <tr><td><a href="{{ url_for('main.artists', sort='count', genre=['Heavy Metal']) }}">artists genre Heavy Metal</a></td></tr>
-			<tr><td><a href="{{ url_for('main.artists', sort='count', genre=['Hip-Hop']) }}">artists genre Hip-Hop</a></td></tr>
-        </table>
         {% include 'x_by_genre.html' %}
         {% include 'x_by_year_range_and_genre.html' %}
         <table class="w-100">
