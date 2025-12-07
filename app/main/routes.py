@@ -32,9 +32,7 @@ from app.utils.app_utils import get_config, get_media_files
 
 @bp.route("/")
 def root() -> str:
-    return render_template(
-        "albums_index.html",
-    )
+    return render_template("albums_index.html", index_type="albums")
 
 
 @bp.route("/tracks")
@@ -100,6 +98,10 @@ def getfile(path: str) -> Response:
     if not path.startswith("/"):
         path = "/" + path
     path_prefix = config.playback_methods.local.media_path
+    # if (
+    #    path.startswith(config.album_covers_path)
+    #    or config.album_covers_path != config.playback_methods.local.media_path
+    # ):
     if path.startswith(config.album_covers_path):
         path_prefix = config.album_covers_path
 
@@ -160,9 +162,7 @@ def genres() -> str:
 
 @bp.route("/genres/index")
 def genres_index() -> str:
-    return render_template(
-        "genres_index.html",
-    )
+    return render_template("genres_index.html", index_type="genres")
 
 
 @bp.route("/artists")
@@ -184,9 +184,7 @@ def artists() -> str:
 
 @bp.route("/artists/index")
 def artists_index() -> str:
-    return render_template(
-        "artists_index.html",
-    )
+    return render_template("artists_index.html", index_type="artists")
 
 
 @bp.route("/albums")
@@ -206,9 +204,7 @@ def albums() -> str:
 
 @bp.route("/albums/index")
 def albums_index() -> str:
-    return render_template(
-        "albums_index.html",
-    )
+    return render_template("albums_index.html", index_type="albums")
 
 
 @bp.route("/genres-cloud")
