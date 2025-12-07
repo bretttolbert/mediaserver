@@ -6,9 +6,9 @@
     {% include '_css.html' %}
 </head>
 <body>
-    {% include 'links_bar.html' %}
+    {% include 'links_bar_without_years.html' %}
     <div class="results-info">
-    {{ "{:,}".format(files|length) }} results:
+    {{ "{:,}".format(files|length) }} {{ files|result_or_results }}:
     </div>
     {% if request.args.getlist('album')|length > 0 and cover_path|length > 0 %}
     <div>

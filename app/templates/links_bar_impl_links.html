@@ -1,0 +1,10 @@
+{% include '_age_verification.html' %}
+<td><a href="{{ url_for('main.albums_index') }}">albums</a></td>
+<td><a href="{{ url_for('main.artists_index') }}">artists</a></td>
+<td><a href="{{ url_for('main.genres_index') }}">genres</a></td>
+<td><a href="{{ url_for('main.player_index') }}">player</a></td>
+
+{% if PLAYBACK_METHOD_LOCAL_ENABLED %}
+<td><a href="{{ url_for('main.name_that_tune_index') }}"><i>name that tune</i></a></td>
+{% endif %}
+<td><a href="{{ url_for('main.tracks_index') }}">tracks</a></td>

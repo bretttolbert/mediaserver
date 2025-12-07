@@ -33,6 +33,9 @@ def create_app(config: MediaServerConfig):
     app.config["MEDIASERVER_CONFIG"] = config
     app.config["MEDIA_FILES"] = load_files_yaml(config.files_yaml_path)
     app.debug = config.flask_config.debug
+    app.jinja_env.filters["result_or_results"] = lambda l: (
+        "result" if len(l) == 1 else "results"
+    )
     app.jinja_env.filters["quote_plus"] = lambda u: quote_plus(u)
     app.jinja_env.filters["make_list"] = lambda s: list(s)
     app.jinja_env.filters["format_search_query_url"] = (
