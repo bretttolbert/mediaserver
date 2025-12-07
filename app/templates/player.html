@@ -113,7 +113,7 @@
                 
                 if (PLAYBACK_METHOD_LOCAL_ENABLED) {
                     $("#audioElem").prop("src", Flask.url_for("main.getfile", {path: track.path}));
-                    $("#playLocalMediaLink").prop("href", Flask.url_for("player", {artist: track.artist, album: track.album, title: track.title}));
+                    $("#playLocalMediaLink").prop("href", Flask.url_for("main.player", {artist: track.artist, album: track.album, title: track.title}));
                 }
                 if (PLAYBACK_METHOD_YOUTUBE_ENABLED) {
                     $("#searchYouTubeLink").prop("href", formatSearchQueryURL(track.artist, track.album, track.title));
