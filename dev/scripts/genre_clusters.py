@@ -5,8 +5,13 @@ from mediascan import Genre
 
 """
 Note: I used this script to generate some of the genre cluster links
-It's only based on the genre name, not the quality of the music, so
-it's not very good, e.g. it groups "Glam Rock" with "Goth Rock", etc.
+It's only based on the genre name (e.g. "Classic Rock"), not the quality 
+of the music, so it's not very good, e.g. it groups "Glam Rock" with "Goth Rock", 
+so some manual editing was still required. Otherwise this code could be 
+integrated into the app. Nonetheless the script was very helpful and could
+easily be repurposed for myriad other uses.
+TODO: Research more advanced forms of genre classification and introduce
+genre tag-checking or auto-tagging feature.
 """
 
 # List of genres
