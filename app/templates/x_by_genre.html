@@ -1,76 +1,101 @@
 <table class="w-100">
     <tr><th>{{ index_type | capitalize }} by genre(s)</th></tr>
     
-    <!-- greater than 500 album results genres (todo: add "show more results" button) -->
+    <!-- greater than 500 album results genres (todo: add "show more results" button) 
+    for the ones tagged EXCESSIVELY_HIGH_COUNT_GENRE. 
+    -->
 
+    <!-- EXCESSIVELY_HIGH_COUNT_GENRE (2693) -->
     {% with tr_genres=['Classic Rock'] %}
     {% include 'x_by_genre_tr.html' %}
     {% endwith %}
 
+    <!-- EXCESSIVELY_HIGH_COUNT_GENRE (1792) -->
     {% with tr_genres=['Indie Rock'] %}
     {% include 'x_by_genre_tr.html' %}
     {% endwith %}
 
-    {% with tr_genres=['Indie Folk'] %}
-    {% include 'x_by_genre_tr.html' %}
-    {% endwith %}
-
-    {% with tr_genres=['Hip-Hop', 'Hip-Hop français', 'Hip-Hop/Electronic', 'Hip-Hop/Reggae', 'Trip hop', 'Urbano'] %}
-    {% include 'x_by_genre_tr.html' %}
-    {% endwith %}
-
-    {% with tr_genres=['Post-Hardcore', 'Emo / Pop-Rock'] %}
-    {% include 'x_by_genre_tr.html' %}
-    {% endwith %}
-
-    {% with tr_genres=['Pop Rock'] %}
-    {% include 'x_by_genre_tr.html' %}
-    {% endwith %}
-
+    <!-- EXCESSIVELY_HIGH_COUNT_GENRE (1635) -->
     {% with tr_genres=['Alternative Rock'] %}
     {% include 'x_by_genre_tr.html' %}
     {% endwith %}
 
+    <!-- MEDIUM_HIGH_COUNT_GENRE (279) -->
+    {% with tr_genres=['Indie Folk'] %}
+    {% include 'x_by_genre_tr.html' %}
+    {% endwith %}
+
+    <!-- MEDIUM_HIGH_COUNT_GENRE (195) -->
     {% with tr_genres=['Alternative Metal'] %}
     {% include 'x_by_genre_tr.html' %}
     {% endwith %}
 
-    {% with tr_genres=['Grunge'] %}
+    <!-- Hip-Hop Mix -->
+    {% with tr_genres=['Hip-Hop', 'Hip-Hop français', 'Hip-Hop/Electronic', 'Hip-Hop/Reggae', 'Trip hop', 'Urbano'] %}
     {% include 'x_by_genre_tr.html' %}
     {% endwith %}
 
+    <!-- Emo mix -->
+    {% with tr_genres=['Post-Hardcore', 'Emo / Pop-Rock'] %}
+    {% include 'x_by_genre_tr.html' %}
+    {% endwith %}
+
+    <!-- Rock around the world Mix -->
+    {% with tr_genres=['Rock français', 'Rock brasileiro', 'Rock en español', 'Korean Rock', 'Japanese Rock', 'Zamrock'] %}
+    {% include 'x_by_genre_tr.html' %}
+    {% endwith %}
+
+    <!-- Funk Rock/Metal Mix -->
     {% with tr_genres=['Funk Metal', 'Funk Rock'] %}
     {% include 'x_by_genre_tr.html' %}
     {% endwith %}
 
-    {% with tr_genres=['Classic Pop'] %}
+    <!-- Alternative Mix (Everything Alt Except 'Alternative Rock' and 'Alternative Metal') )-->
+    {% with tr_genres=['Alternative', 'Shoegaze', 'Noise Rock', 'Grunge'] %}
     {% include 'x_by_genre_tr.html' %}
     {% endwith %}
 
+    <!-- Pop Mix -->
+    {% with tr_genres=['Classic Pop', 'Britpop', 'Pop', 'Dream Pop', 'Pop Rock'] %}
+    {% include 'x_by_genre_tr.html' %}
+    {% endwith %}
+
+    <!-- Soft Rock Mix -->
     {% with tr_genres=['Soft Rock', 'Easy Listening'] %}
     {% include 'x_by_genre_tr.html' %}
     {% endwith %}
 
+    <!-- Psychedelic Rock Mix -->
     {% with tr_genres=['Psychedelic Rock'] %}
     {% include 'x_by_genre_tr.html' %}
     {% endwith %}
 
+    <!-- Classig Prog Mix -->
     {% with tr_genres=['Classic Prog'] %}
     {% include 'x_by_genre_tr.html' %}
     {% endwith %}
 
+    <!-- Heavy Metal Mix -->
     {% with tr_genres=['Heavy Metal, Glam Metal'] %}
     {% include 'x_by_genre_tr.html' %}
     {% endwith %}
 
+    <!-- Post-Punk Mix -->
+    {% with tr_genres=['Heavy Metal, Glam Metal'] %}
+    {% include 'x_by_genre_tr.html' %}
+    {% endwith %}
+
+    <!-- Electronic Mix -->
     {% with tr_genres=['Electronic', 'Electronica', 'Electronic (Instrumental)', 'Dance/Electronic', 'Deep House', 'Trance', 'Techno', 'Eurodance'] %}
     {% include 'x_by_genre_tr.html' %}
     {% endwith %}
 
+    <!-- Punk Mix -->
     {% with tr_genres=['Punk', 'Punk Rock', 'Horror Punk', 'Punk français', 'Ska Punk'] %}
     {% include 'x_by_genre_tr.html' %}
     {% endwith %}
 
+    <!-- New Wave Mix -->
     {% with tr_genres=['New Wave', 'Synth-pop', 'New Wave français'] %}
     {% include 'x_by_genre_tr.html' %}
     {% endwith %}
@@ -86,7 +111,7 @@
     {% endwith %}
 
     <!-- Latin Mix -->
-    {% with tr_genres=['Latin', 'Norteño', 'Latin Pop', 'Urbano', 'Latin Funk', 'Reggaeton', 'Rock en español', 'Rock brasileiro', 'Afrobeat'] %}
+    {% with tr_genres=['Latin', 'Cumbia', 'Norteño', 'Latin Pop', 'Urbano', 'Latin Funk', 'Reggaeton', 'Rock en español', 'Rock brasileiro', 'Afrobeat'] %}
     {% include 'x_by_genre_tr.html' %}
     {% endwith %}
 
@@ -100,6 +125,11 @@
     {% include 'x_by_genre_tr.html' %}
     {% endwith %}
 
+    <!-- Industrial Mix -->
+    {% with tr_genres=['Industrial Metal', 'Industrial', 'Post-Industrial'] %}
+    {% include 'x_by_genre_tr.html' %}
+    {% endwith %}
+    
     <!-- Country Mix -->
     {% with tr_genres=['Classic Country', 'Country', 'Country Pop'] %}
     {% include 'x_by_genre_tr.html' %}
@@ -135,11 +165,6 @@
     {% include 'x_by_genre_tr.html' %}
     {% endwith %}
 
-    <!-- Alternative Mix -->
-    {% with tr_genres=['Alternative', 'Alternative Metal', 'Alternative Rock'] %}
-    {% include 'x_by_genre_tr.html' %}
-    {% endwith %}
-
     <!-- Misc rock mix -->
     {% with tr_genres=['Acid Rock', 'Art Rock', 'Celtic Rock', 'Emo / Pop-Rock', 'Experimental Ambient Rock', 'Glam Rock', 'Goth Rock', 'Indie Rock', 'Japanese Rock', 'Korean Rock', 'Noise Rock', 'Pop Rock', 'Post-Grunge', 'Post-Hardcore', 'Post-Industrial', 'Post-Punk', 'Post-Rock', 'Prog Rock', 'Psychedelic Rock', 'Punk Rock', 'Reggae Rock', 'Rock brasileiro', 'Rock en español', 'Rock italiano', 'Soft Rock', 'Southern Punk Rock', 'Southern Rock', 'Stoner Rock'] %}
     {% include 'x_by_genre_tr.html' %}
@@ -155,7 +180,7 @@
     {% include 'x_by_genre_tr.html' %}
     {% endwith %}
 
-    <!-- workout mix -->
+    <!-- Workout mix -->
     {% with tr_genres=['Industrial Metal', 'Punk', 'Punk Rock', 'Heavy Metal', 'Hip-Hop', 'Urbano', 'Thrash Metal', 'Nu Metal', 'Rock en español', 'Funk Metal', 'Hip-Hop français'] %}
     {% include 'x_by_genre_tr.html' %}
     {% endwith %}
