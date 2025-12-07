@@ -208,7 +208,7 @@ def genres_cloud() -> str:
     return render_template(
         "word-cloud.html",
         word_cloud_data=get_word_cloud_data_genres(get_media_files(current_app)),
-        word_cloud_type="genres",
+        word_cloud_type="genre",
     )
 
 
@@ -219,7 +219,7 @@ def artists_cloud() -> str:
         word_cloud_data=get_word_cloud_data_artists(
             current_app, get_media_files(current_app), get_request_args(request)
         ),
-        word_cloud_type="artists",
+        word_cloud_type="artist",
     )
 
 
