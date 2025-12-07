@@ -1,6 +1,6 @@
 import os
 import random
-from typing import List
+from typing import Dict, List
 from pathlib import Path
 
 from flask import (
@@ -20,11 +20,11 @@ from app.utils.request_args_utils import get_request_args
 from app.utils.media_files_utils import (
     filter_files,
     get_cover_path,
-    get_genre_urls,
+    get_word_cloud_data_genres,
     get_albums,
     get_artist_counts,
     get_genre_counts,
-    get_artist_urls,
+    get_word_cloud_data_artists,
 )
 
 from app.utils.app_utils import get_config, get_media_files
@@ -41,9 +41,7 @@ def tracks() -> str:
     config = get_config(current_app)
     args = get_request_args(request)
     current_app.logger.debug("tracks args=%s", args_dict_to_str(args))
-    files_list: List[MediaFile] = filter_files(
-        current_app, get_media_files(current_app), args
-    )
+    files_list: List[MediaFile] = filter_files(current_app, get_media_files(current_app), args)
     cover_path: Path = Path()
     if len(files_list):
         cover_path = get_cover_path(config, files_list[0])
@@ -135,9 +133,7 @@ def getfile(path: str) -> Response:
             path_prefix,
             path_without_prefix,
         )
-        current_app.logger.debug(
-            'send_from_directory("%s", "%s")', path_prefix, path_without_prefix
-        )
+        current_app.logger.debug('send_from_directory("%s", "%s")', path_prefix, path_without_prefix)
         return send_from_directory(path_prefix, path_without_prefix)
     else:
         current_app.logger.warning(
@@ -211,7 +207,8 @@ def albums_index() -> str:
 def genres_cloud() -> str:
     return render_template(
         "word-cloud.html",
-        word_urls=get_genre_urls(get_media_files(current_app)),
+        word_cloud_data=get_word_cloud_data_genres(get_media_files(current_app)),
+        word_cloud_type="genres",
     )
 
 
@@ -219,9 +216,10 @@ def genres_cloud() -> str:
 def artists_cloud() -> str:
     return render_template(
         "word-cloud.html",
-        word_urls=get_artist_urls(
+        word_cloud_data=get_word_cloud_data_artists(
             current_app, get_media_files(current_app), get_request_args(request)
         ),
+        word_cloud_type="artists",
     )
 
 
@@ -231,9 +229,7 @@ def api_track():
     config = get_config(current_app)
     args = get_request_args(request)
     current_app.logger.debug("api/track args=%s", args_dict_to_str(args))
-    files_list: List[MediaFile] = filter_files(
-        current_app, get_media_files(current_app), args
-    )
+    files_list: List[MediaFile] = filter_files(current_app, get_media_files(current_app), args)
     if not len(files_list):
         abort(404)
     file = random.choice(files_list)

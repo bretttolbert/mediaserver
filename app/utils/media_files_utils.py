@@ -65,12 +65,8 @@ def filter_files(app: Flask, files: MediaFiles, args: ArgsDict) -> List[MediaFil
         for arg_type, file_value in arg_type_list_file_value_map.items():
             if arg_type in args:
                 arg_value_list = cast(ArgValueListStr, args[arg_type])
-                app.logger.debug(
-                    "filtering based on %s[] arg = [%s]", arg_type, arg_value_list
-                )
-                if len(arg_value_list) and not str_in_list_ignore_case(
-                    file_value, arg_value_list
-                ):
+                app.logger.debug("filtering based on %s[] arg = [%s]", arg_type, arg_value_list)
+                if len(arg_value_list) and not str_in_list_ignore_case(file_value, arg_value_list):
                     app.logger.debug(
                         "skipping file (value=%s) based on %s[] arg = [%s]",
                         file_value,
@@ -107,9 +103,7 @@ def get_genre_counts(files: MediaFiles, sort: str) -> Dict[str, int]:
         return dict(sorted(ret.items(), key=lambda item: item[1], reverse=True))
 
 
-def get_artist_counts(
-    app: Flask, files: MediaFiles, args: ArgsDict, sort: str
-) -> Dict[str, int]:
+def get_artist_counts(app: Flask, files: MediaFiles, args: ArgsDict, sort: str) -> Dict[str, int]:
     ret: Dict[str, int] = {}
     files_filtered = filter_files(app, files, args)
     for f in files_filtered:
@@ -123,11 +117,11 @@ def get_artist_counts(
         return dict(sorted(ret.items(), key=lambda item: item[1], reverse=True))
 
 
-def get_genre_urls(files: MediaFiles) -> List[Dict[str, str]]:
+def get_word_cloud_data_genres(files: MediaFiles) -> List[Dict[str, str]]:
     ret: List[Dict[str, str]] = []
     genres = get_genres(files)
     for g in genres:
-        ret.append({"text": g, "url": f"/artists-cloud?genre={quote_plus(g)}"})
+        ret.append({"text": g})
     return ret
 
 
@@ -139,13 +133,11 @@ def get_artists(app: Flask, files: MediaFiles, args: ArgsDict) -> List[str]:
     return sorted(ret)
 
 
-def get_artist_urls(
-    app: Flask, files: MediaFiles, args: ArgsDict
-) -> List[Dict[str, str]]:
+def get_word_cloud_data_artists(app: Flask, files: MediaFiles, args: ArgsDict) -> List[Dict[str, str]]:
     ret: List[Dict[str, str]] = []
     artists = get_artists(app, files, args)
     for a in artists:
-        ret.append({"text": a, "url": f"/albums?artist={quote_plus(a)}"})
+        ret.append({"text": a})
     return ret
 
 
@@ -155,11 +147,7 @@ def get_cover_path(config: MediaServerConfig, file: MediaFile) -> Path:
         # e.g. "/data/Music/Logic/Orville%20[2022]/cover.jpg"
         # config.playback_methods.local.media_path = "/data/Music/"
         # config.album_covers_path = "/var/www/html/Covers/"
-        dir_path = Path(
-            str(dir_path).replace(
-                config.playback_methods.local.media_path, config.album_covers_path
-            )
-        )
+        dir_path = Path(str(dir_path).replace(config.playback_methods.local.media_path, config.album_covers_path))
     return dir_path / "cover.jpg"
 
 
@@ -194,10 +182,7 @@ def get_albums(
 
     # now that we have it sorted as specified, slice if necessary to keep the
     # result count below the configured max results limit for album covers
-    if (
-        config.max_results_album_covers > 0
-        and len(ret) > config.max_results_album_covers
-    ):
+    if config.max_results_album_covers > 0 and len(ret) > config.max_results_album_covers:
         ret = ret[: config.max_results_album_covers]
 
     return ret

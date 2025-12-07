@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>word cloud</title>
+    {{ JSGlue.include() }}
     {% include '_css.html' %}
 </head>
 <body>
@@ -12,8 +13,8 @@
     <script src="{{ url_for('static',filename='d3.layout.cloud.js') }}"></script>
     <script type="module">
 
-    function word_cloud(word_urls) {
-        console.log(word_urls)
+    function word_cloud(word_cloud_data) {
+        console.log(word_cloud_data)
 
         //var fill = d3.scaleOrdinal(d3.schemeCategory10);
         //var fill = d3.scale.category20();
@@ -31,7 +32,7 @@
             }
         }
 
-        var words = word_urls
+        var words = word_cloud_data
 
         var width = 1920;
         var height = 1080;
@@ -69,12 +70,13 @@
             })
             .text(function(d) { return d.text; })
             .on("click", function (d, i){
-                console.log("d.url=" + d.url)
-                window.open(d.url, "_blank");
+                let url = Flask.url_for("main.albums", {"{{ word_cloud_type }}": d.text});
+                console.log("url=" + url);
+                window.open(url, "_blank");
             });
         }
     }
-    word_cloud({{ word_urls|safe }})
+    word_cloud({{ word_cloud_data|safe }})
     </script>
 </body>
 </html>
