@@ -31,7 +31,7 @@
             return ret;
         }
 
-        if (PLAYBACK_METHOD_LOCAL_ENABLED == "true")
+        if (PLAYBACK_METHOD_LOCAL_ENABLED)
         {
             $("#audioElem")[0].addEventListener('ended', function() {
                 //The repeat feature doesn't seem very useful (who wants to listen to the same song over and over??)
@@ -112,7 +112,9 @@
                 $("#linkCover").prop("href", Flask.url_for("main.tracks", {artist: track.artist, album: track.album}));
                 
                 if (PLAYBACK_METHOD_LOCAL_ENABLED) {
-                    $("#audioElem").prop("src", Flask.url_for("main.getfile", {path: track.path}));
+                    let media_file_path = Flask.url_for("main.getfile", {path: track.path});
+                    console.log("media_file_path: " + media_file_path);
+                    $("#audioElem").prop("src", media_file_path);
                     $("#playLocalMediaLink").prop("href", Flask.url_for("main.player", {artist: track.artist, album: track.album, title: track.title}));
                 }
                 if (PLAYBACK_METHOD_YOUTUBE_ENABLED) {
