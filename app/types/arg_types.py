@@ -65,6 +65,7 @@ class ArgValueScalarEnumSort(StrEnum):
     Year = "year"
     Artist = "artist"
     Album = "album"
+    Random = "random"
 
 
 class ArgValuesScalarEnum:

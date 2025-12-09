@@ -24,6 +24,7 @@ from app.utils.media_files_utils import (
     get_albums,
     get_artist_counts,
     get_genre_counts,
+    get_tracks,
     get_word_cloud_data_artists,
 )
 
@@ -41,17 +42,13 @@ def tracks() -> str:
     config = get_config(current_app)
     args = get_request_args(request)
     current_app.logger.debug("tracks args=%s", args_dict_to_str(args))
-    files_list: List[MediaFile] = filter_files(current_app, get_media_files(current_app), args)
+    tracks: List[MediaFile] = get_tracks(current_app, get_media_files(current_app), args)
     cover_path: Path = Path()
-    if len(files_list):
-        cover_path = get_cover_path(config, files_list[0])
+    if len(tracks):
+        cover_path = get_cover_path(config, tracks[0])
     return render_template(
         "tracks.html",
-        files=sorted(
-            files_list,
-            key=lambda x: x.year,
-            reverse=True,
-        ),
+        files=tracks,
         cover_path=str(cover_path),
     )
 
@@ -163,17 +160,12 @@ def genres_index() -> str:
 
 @bp.route("/artists")
 def artists() -> str:
-    sort: str = ""
-    value = request.args.get("sort")
-    if value:
-        sort = value
     return render_template(
         "artists.html",
         artist_counts=get_artist_counts(
             current_app,
             get_media_files(current_app),
             get_request_args(request),
-            sort=sort,
         ),
     )
 

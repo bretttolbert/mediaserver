@@ -1,4 +1,5 @@
 import os
+import random
 from typing import cast, Dict, List
 from urllib.parse import quote_plus  # type: ignore
 from pathlib import Path
@@ -103,18 +104,58 @@ def get_genre_counts(files: MediaFiles, sort: str) -> Dict[str, int]:
         return dict(sorted(ret.items(), key=lambda item: item[1], reverse=True))
 
 
-def get_artist_counts(app: Flask, files: MediaFiles, args: ArgsDict, sort: str) -> Dict[str, int]:
+def get_tracks(app: Flask, files: MediaFiles, args: ArgsDict) -> List[MediaFile]:
+    ret = filter_files(app, files, args)
+
+    sort = ArgValues.Scalar.Enum.Sort.Random
+    if ArgTypes.Scalar.Enum.Sort in args:
+        sort = args[ArgTypes.Scalar.Enum.Sort]
+
+    # Don't reorder tracks if displaying tracks for single album or a specific artist
+    if (
+        ArgTypes.List.Str.Album not in args
+        and ArgTypes.List.Str.Artist not in args
+        and ArgTypes.List.Str.AlbumArtist not in args
+    ):
+        if sort == ArgValues.Scalar.Enum.Sort.Year:
+            ret = list(
+                sorted(
+                    ret,
+                    key=lambda x: x.year,
+                    reverse=True,
+                )
+            )
+        elif sort == ArgValues.Scalar.Enum.Sort.Random:
+            random.shuffle(ret)
+
+    return ret
+
+
+def get_artist_counts(app: Flask, files: MediaFiles, args: ArgsDict) -> Dict[str, int]:
     ret: Dict[str, int] = {}
+
     files_filtered = filter_files(app, files, args)
     for f in files_filtered:
         if f.artist in ret:
             ret[f.artist] += 1
         else:
             ret[f.artist] = 1
+
+    sort = ArgValues.Scalar.Enum.Sort.Year
+    if ArgTypes.Scalar.Enum.Sort in args:
+        sort = args[ArgTypes.Scalar.Enum.Sort]
+
     if sort == ArgValues.Scalar.Enum.Sort.Name:
         return dict(sorted(ret.items(), key=lambda item: item[0], reverse=False))
+    elif sort == ArgValues.Scalar.Enum.Sort.Random:
+        items = list(ret.items())
+        random.shuffle(items)
+        return dict(items)
     else:  # default sort: by count
-        return dict(sorted(ret.items(), key=lambda item: item[1], reverse=True))
+        items = sorted(ret.items(), key=lambda item: item[1], reverse=True)
+        ret = dict(items)
+
+    return ret
 
 
 def get_word_cloud_data_genres(files: MediaFiles) -> List[Dict[str, str]]:
@@ -170,15 +211,19 @@ def get_albums(
         album_set.add(AlbumInfo(artist, f.album, f.year, get_cover_path(config, f)))
 
     ret: List[AlbumInfo] = list(album_set)
-    sort = ArgValues.Scalar.Enum.Sort.Year
+    sort = ArgValues.Scalar.Enum.Sort.Random
     if ArgTypes.Scalar.Enum.Sort in args:
         sort = args[ArgTypes.Scalar.Enum.Sort]
+
     if sort == ArgValues.Scalar.Enum.Sort.Artist:
         ret = sorted(ret, key=lambda album: album.artist)
-    if sort == ArgValues.Scalar.Enum.Sort.Album:
+    elif sort == ArgValues.Scalar.Enum.Sort.Album:
         ret = sorted(ret, key=lambda album: album.album)
-    else:  # default: sort by year (descending)
+    elif sort == ArgValues.Scalar.Enum.Sort.Year:
+        # sort by year (descending)
         ret = sorted(ret, key=lambda album: album.year, reverse=True)
+    elif sort == ArgValues.Scalar.Enum.Sort.Random:
+        random.shuffle(ret)
 
     # now that we have it sorted as specified, slice if necessary to keep the
     # result count below the configured max results limit for album covers

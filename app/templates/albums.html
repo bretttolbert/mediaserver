@@ -9,7 +9,7 @@
     {% include 'links_bar.html' %}
 
     <div>
-    <a href="{{ url_for('main.player', artist=request.args.getlist('artist'), genre=request.args.getlist('genre'), minYear=request.args.getlist('minYear'), maxYear=request.args.getlist('maxYear')) }}">Shuffle 
+    <a href="{{ url_for('main.player', artist=request.args.getlist('artist'), genre=request.args.getlist('genre'), minYear=request.args.get('minYear'), maxYear=request.args.get('maxYear')) }}">Shuffle 
     
     {% if request.args.getlist('artist')|length > 0 %}
     {{ request.args.getlist('artist') | join(', ') }} 
