@@ -9,8 +9,8 @@ flaskConfig:
   host: 0.0.0.0
   port: 5000
   debug: true
-  rootPath: null
-  staticUrlPath: null
+  rootPath: /home/brett/Git/bretttolbert/mediax/mediaserver/app
+  staticUrlPath: /mediaserver/static
   urlPrefix: /mediaserver
 playbackMethods:
   local:

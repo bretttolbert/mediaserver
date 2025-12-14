@@ -50,8 +50,13 @@
     {% include 'x_by_genre_tr.html' %}
     {% endwith %}
 
-    <!-- Alternative Mix (Everything Alt Except 'Alternative Rock' and 'Alternative Metal') )-->
-    {% with tr_genres=['Alternative', 'Shoegaze', 'Noise Rock', 'Grunge'] %}
+    <!-- Alternative Metal Mix (Excluding 'Alternative Rock') )-->
+    {% with tr_genres=['Alternative Metal', 'Grunge', 'Sludge Metal', 'Stoner Rock'] %}
+    {% include 'x_by_genre_tr.html' %}
+    {% endwith %}
+
+    <!-- Alternative Soft Rock Mix (Excluding 'Alternative Rock') )-->
+    {% with tr_genres=['Alternative', 'Shoegaze', 'Noise Rock'] %}
     {% include 'x_by_genre_tr.html' %}
     {% endwith %}
 

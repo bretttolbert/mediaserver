@@ -1,111 +1,154 @@
 <table class="w-100">
     <tr><th>{{ index_type | capitalize }} by year range and genre(s)</th></tr>
 
-    {% with tr_min_year=1960, tr_max_year=PRESENT_YEAR, tr_genres=['Industrial Metal', 'Punk', 'Punk Rock', 'Heavy Metal', 'Hip-Hop', 'Urbano', 'Thrash Metal', 'Nu Metal', 'Rock en español', 'Funk Metal', 'Hip-Hop français'] %}
-    {% include 'x_by_year_range_and_genre_tr.html' %}
-    {% endwith %}
-
+    <!-- 2015-present Hip-Hop Mix -->
     {% with tr_min_year=2015, tr_max_year=PRESENT_YEAR, tr_genres=['Hip-Hop', 'Hip-Hop français', 'Hip-Hop/Electronic', 'Hip-Hop/Reggae', 'Trip hop'] %}
     {% include 'x_by_year_range_and_genre_tr.html' %}
     {% endwith %}
 
+    <!-- Late 90s to early 2000s Emo Mix -->
     {% with tr_min_year=1998, tr_max_year=2008, tr_genres=['Post-Hardcore', 'Emo / Pop-Rock'] %}
     {% include 'x_by_year_range_and_genre_tr.html' %}
     {% endwith %}
 
+    <!-- Mid 90s to early 2010s Indie Mix -->
     {% with tr_min_year=1995, tr_max_year=2015, tr_genres=['Indie Rock'] %}
     {% include 'x_by_year_range_and_genre_tr.html' %}
     {% endwith %}
 
+    <!-- Mid 90s to early 2010s Indie Folk Mix -->
     {% with tr_min_year=1995, tr_max_year=2015, tr_genres=['Indie Folk'] %}
     {% include 'x_by_year_range_and_genre_tr.html' %}
     {% endwith %}
 
+    <!-- Late 00s to mid 2010s Hip-Hop Mix -->
     {% with tr_min_year=2005, tr_max_year=2014, tr_genres=['Hip-Hop'] %}
     {% include 'x_by_year_range_and_genre_tr.html' %}
     {% endwith %}
 
+    <!-- Mid 90s and early 00s Pop Rock Mix -->
     {% with tr_min_year=1995, tr_max_year=2004, tr_genres=['Pop Rock'] %}
     {% include 'x_by_year_range_and_genre_tr.html' %}
     {% endwith %}
 
+    <!-- Mid 90s to early 00s Hip-Hop Mix -->
     {% with tr_min_year=1995, tr_max_year=2004, tr_genres=['Hip-Hop'] %}
     {% include 'x_by_year_range_and_genre_tr.html' %}
     {% endwith %}
 
-    {% with tr_min_year=1989, tr_max_year=1999, tr_genres=['Alternative Rock'] %}
+    <!-- 90s Metal Mix -->
+    {% with tr_min_year=1990, tr_max_year=1999, tr_genres=['Black Metal', 'Death Metal', 'Doom Metal', 'Glam Metal', 'Heavy Metal', 'Industrial Metal', 'Nu Metal', 'Post-Black Metal', 'Post-Metal', 'Sludge Metal', 'Thrash Metal'] %}
+    {% include 'x_by_genre_tr.html' %}
+    {% endwith %}
+
+    <!-- 90s and early 2000s Alternative Metal Mix (Excluding 'Alternative Rock') )
+    Tool etc. 
+    -->
+    {% with tr_min_year=1990, tr_max_year=2004, tr_genres=['Alternative Metal'] %}
     {% include 'x_by_year_range_and_genre_tr.html' %}
     {% endwith %}
 
+    <!-- Very late 80s and 90s Alternative Rock Mix -->
+    {% with tr_min_year=1988, tr_max_year=1999, tr_genres=['Alternative Rock'] %}
+    {% include 'x_by_year_range_and_genre_tr.html' %}
+    {% endwith %}
+
+    <!-- Mid 80s and early 90s Hip-Hop Mix -->
     {% with tr_min_year=1985, tr_max_year=1994, tr_genres=['Hip-Hop'] %}
     {% include 'x_by_year_range_and_genre_tr.html' %}
     {% endwith %}
 
-    {% with tr_min_year=1985, tr_max_year=1994, tr_genres=['Grunge'] %}
+    <!-- Late 80s to Early 90s Alternative Metal Mix (Excluding 'Alternative Rock') )
+    Nirvana, Melvins, Fudge Tunnel, Kyuss, Tool 
+    -->
+    {% with tr_min_year=1985, tr_max_year=1994, tr_genres=['Alternative Metal', 'Grunge', 'Sludge Metal', 'Stoner Rock'] %}
     {% include 'x_by_year_range_and_genre_tr.html' %}
     {% endwith %}
 
+    <!-- 80s Metal Mix -->
+    {% with tr_min_year=1980, tr_max_year=1989, tr_genres=['Black Metal', 'Death Metal', 'Doom Metal', 'Glam Metal', 'Heavy Metal', 'Industrial Metal', 'Nu Metal', 'Post-Black Metal', 'Post-Metal', 'Sludge Metal', 'Thrash Metal'] %}
+    {% include 'x_by_genre_tr.html' %}
+    {% endwith %}
+
+    <!-- Late 80s to Early 90s Funk Rock/Metal Mix -->
     {% with tr_min_year=1985, tr_max_year=1994, tr_genres=['Funk Metal', 'Funk Rock'] %}
     {% include 'x_by_year_range_and_genre_tr.html' %}
     {% endwith %}
 
+    <!-- Late 80s to Early 90s Country Mix -->
     {% with tr_min_year=1985, tr_max_year=1994, tr_genres=['Classic Country', 'Country', 'Country Pop'] %}
     {% include 'x_by_year_range_and_genre_tr.html' %}
     {% endwith %}
 
-    {% with tr_min_year=1990, tr_max_year=1999, tr_genres=['Alternative Metal'] %}
+    <!-- 80s Alternative Soft Rock Mix (Excluding 'Alternative Rock') )-->
+    {% with tr_min_year=1980, tr_max_year=1989, tr_genres=['Alternative', 'Shoegaze', 'Noise Rock'] %}
     {% include 'x_by_year_range_and_genre_tr.html' %}
     {% endwith %}
 
-    {% with tr_min_year=1980, tr_max_year=1989, tr_genres=['Alternative Rock', 'Shoegaze'] %}
+    <!-- 80s Pop Mix -->
+    {% with tr_min_year=1980, tr_max_year=1989, tr_genres=['Classic Pop', 'Britpop', 'Pop', 'Dream Pop', 'Pop Rock'] %}
     {% include 'x_by_year_range_and_genre_tr.html' %}
     {% endwith %}
 
-    {% with tr_min_year=1980, tr_max_year=1989, tr_genres=['Classic Pop'] %}
-    {% include 'x_by_year_range_and_genre_tr.html' %}
-    {% endwith %}
-
+    <!-- 80s Classic Rock Mix -->
     {% with tr_min_year=1980, tr_max_year=1989, tr_genres=['Classic Rock'] %}
     {% include 'x_by_year_range_and_genre_tr.html' %}
     {% endwith %}
 
+    <!-- 80s Classic Prog Rock Mix -->
     {% with tr_min_year=1980, tr_max_year=1989, tr_genres=['Classic Prog'] %}
     {% include 'x_by_year_range_and_genre_tr.html' %}
     {% endwith %}
 
+    <!-- 80s Hair Metal Mix -->
     {% with tr_min_year=1980, tr_max_year=1989, tr_genres=['Heavy Metal', 'Glam Metal'] %}
     {% include 'x_by_year_range_and_genre_tr.html' %}
     {% endwith %}
 
-    {% with tr_min_year=1970, tr_max_year=1989, tr_genres=['New Wave', 'Synth-pop', 'New Wave français'] %}
+    <!-- Late 70s and 80s New Wave Mix -->
+    {% with tr_min_year=1975, tr_max_year=1989, tr_genres=['New Wave', 'Synth-pop', 'New Wave français'] %}
     {% include 'x_by_year_range_and_genre_tr.html' %}
     {% endwith %}
 
+    <!-- Late 70s and 80s Electronic Mix -->
     {% with tr_min_year=1970, tr_max_year=1989, tr_genres=['Electronic', 'Electronic (Instrumental)'] %}
     {% include 'x_by_year_range_and_genre_tr.html' %}
     {% endwith %}
 
+    <!-- Late 70s and 80s Punk Mix -->
     {% with tr_min_year=1975, tr_max_year=1989, tr_genres=['Punk', 'Punk Rock', 'Horror Punk'] %}
     {% include 'x_by_year_range_and_genre_tr.html' %}
     {% endwith %}
 
+    <!-- Late 70s and 80s Post-Punk/Goth Mix -->
     {% with tr_min_year=1975, tr_max_year=1989, tr_genres=['Post-Punk', 'Goth Rock'] %}
     {% include 'x_by_year_range_and_genre_tr.html' %}
     {% endwith %}
 
+    <!-- 70s Funk Mix -->
     {% with tr_min_year=1969, tr_max_year=1979, tr_genres=['Funk'] %}
     {% include 'x_by_year_range_and_genre_tr.html' %}
     {% endwith %}
 
+    <!-- 70s Soul Mix -->
     {% with tr_min_year=1969, tr_max_year=1979, tr_genres=['R&B/Soul'] %}
     {% include 'x_by_year_range_and_genre_tr.html' %}
     {% endwith %}
 
+    <!-- 70s Soft Rock Mix -->
     {% with tr_min_year=1965, tr_max_year=1979, tr_genres=['Classic Rock', 'Soft Rock', 'Easy Listening', 'Psychedelic Rock'] %}
     {% include 'x_by_year_range_and_genre_tr.html' %}
     {% endwith %}
 
+    <!-- 60s Psychedelic Rock Mix -->
     {% with tr_min_year=1959, tr_max_year=1964, tr_genres=['Classic Rock', 'Soft Rock', 'Psychedelic Rock'] %}
     {% include 'x_by_year_range_and_genre_tr.html' %}
     {% endwith %}
+
+    <!-- Misc. Workout (High Energy) Mix -->
+    {% with tr_min_year=1960, tr_max_year=PRESENT_YEAR, tr_genres=['Industrial Metal', 'Punk', 'Punk Rock', 'Heavy Metal', 'Hip-Hop', 'Urbano', 'Thrash Metal', 'Nu Metal', 'Rock en español', 'Funk Metal', 'Hip-Hop français'] %}
+    {% include 'x_by_year_range_and_genre_tr.html' %}
+    {% endwith %}
+
+
 </table>
