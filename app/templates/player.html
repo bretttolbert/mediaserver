@@ -144,9 +144,11 @@
 <body>
     {% include 'links_bar_without_years.html' %}
 
-    <a id="linkCover" href="#">
-        <img src="#" id="coverImg" width="1000" height="1000" />
-    </a>
+    <div id="cover">
+        <a id="linkCover" href="#">
+            <img src="#" id="coverImg" class="cover-img single-img" width="1000" height="1000" />
+        </a>
+    </div>
 
     <div id="playerControls">
         {% if PLAYBACK_METHOD_LOCAL_ENABLED %}

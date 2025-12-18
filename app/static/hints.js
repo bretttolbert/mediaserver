@@ -1,12 +1,23 @@
+const hidden_elements = ["trackList", "cover"];
+function hide() {
+    for (let elem of hidden_elements) {
+        $(`#${elem}`).hide();
+    }
+}
+function show() {
+    for (let elem of hidden_elements) {
+        $(`#${elem}`).show();
+    }
+}
 function resetHints() {
-    $("#trackList").hide();
+    hide();
     $(".hint").hide();
     $(".hintChk").prop("checked", false);
     $("#showBtn").prop("disabled", false);
     $(".hintChk").prop("disabled", false);
 }
 function hideAndLockHints() {
-    $("#trackList").show();
+    show();
     $(".hint").hide();  // continuing to show hints would be redundant
     $(".hintChk").prop("checked", false);
     $("#showBtn").prop("disabled", true);  // once details are shown, it's permanent

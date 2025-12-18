@@ -116,23 +116,100 @@ input[type=checkbox]
   font-size: small;
 }
 
-/* Default styles for all screen sizes (mobile-first approach) 
-   Display full-res to fit the entire screen
-   Viewport (width=720) gets scaled to actual mobile screen width
-   E.g. my phone's browser-reported screen size is 411x770
-   Viewport tag has width=720 and initial-scale=0.5 
-   Something which 720px width in our css does not actually
-   fill the screen, because 0.5 * 720 = 360
-   To fill my phone's screen (411x720),
-   we have to specify a width of 822px which is translated to 411px
+/* 
+  Default: Native resolution (actual resolution of .webp cover images)
+  Default styles for all screen sizes (mobile-first approach) 
+  Display full-res to fit the entire screen
+  <meta name="viewport" content="width=720px, initial-scale=0.5, user-scalable=no">
+  I tried using percentages and ended up with gaps and misaligned images.
 */
 .cover-img {
-  width: 822px; 
-  height: 822px; 
+  width: 1000px; 
+  height: 1000px; 
   display: block; /* Helps with alignment */
+  float: left;
 }
 
-/* Styles for screens wider than 1000px (e.g., large desktops)
+/*
+ * 720x1280 (my phone resolution) (no scrollbar)
+ * One in a row
+ * 720
+ */
+@media only screen and (min-width: 720px) {
+  .cover-img {
+    width: 720px;
+    height: 720px;
+    float: none;
+  }
+}
+
+/*
+ * 1080x2400 (fancy phone resolution) (no scrollbar)
+ * One in a row
+ * 1080
+ */
+@media only screen and (min-width: 720px) {
+  .cover-img {
+    width: 1080px;
+    height: 1080px;
+    float: none;
+  }
+}
+
+/*
+ * 800x600 (common ancient desktop resolution) (subtract 5px for scrollbar)
+ * Two in a row
+ * 800/2=400
+ */
+@media only screen and (min-width: 1366px) {
+  .cover-img {
+    width: 395px;
+    height: 395px;
+    float: left;
+  }
+}
+
+/*
+ * 1366x782 (common older desktop resolution) (subtract 5px for scrollbar)
+ * Two in a row
+ * 1366/2=683
+ */
+@media only screen and (min-width: 1366px) {
+  .cover-img {
+    width: 678px;
+    height: 678px;
+    float: left;
+  }
+}
+
+/*
+ * 1440x3200 (super fancy phone resolution) (no scrollbar)
+ * Two in a row
+ * 1440/2=720
+ */
+@media only screen and (min-width: 1366px) {
+  .cover-img {
+    width: 720px;
+    height: 720px;
+    float: left;
+  }
+}
+
+/*
+ * 1536x864 (common desktop resolution) (subtract 5px for scrollbar)
+ * Three in a row
+ * 1536/3=512
+ */
+@media only screen and (min-width: 1366px) {
+  .cover-img {
+    width: 507px;
+    height: 507px;
+    float: left;
+  }
+}
+
+/* 1920x966 (my desktop resolution) (subtract 5px for scrollbar)
+   Three in a row
    Ironically, the smaller font size looks better on larger screens
    since they can display three album covers in a row
    E.g. my browser screen size is 1920x966, 
@@ -145,18 +222,4 @@ input[type=checkbox]
     height: 635px;
     float: left;
   }
-}
-
-/* TODO: Make it work for other people's screens
-*/
-
-/*
- Unlike the albums page, the player and tracks pages never show 
- more than one cover image, so they're styled a bit differently
-*/
-.single-img {
-  width: 822px; 
-  height: 822px; 
-  float: none;
-  display: inline;
 }

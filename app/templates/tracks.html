@@ -13,7 +13,7 @@
     {% if request.args.getlist('album')|length > 0 and cover_path|length > 0 %}
     <div>
         <br>
-        <img src="{{ url_for('main.getfile', path=cover_path) }}" id="coverImg" width="1000" height="1000" />
+        <img src="{{ url_for('main.getfile', path=cover_path) }}" id="coverImg" class="cover-img single-img" width="1000" height="1000" />
     </div>
     {% endif %}
     {% if request.args.getlist('album')|length > 0 %}

@@ -38,7 +38,11 @@
     <div id="trackList">
     {% for album in albums %}
         <a href="{{ url_for('main.tracks', albumartist=album[0], album=album[1], year=album[2]) }}">
-            <img src="{{ url_for('main.getfile', path=album[3]) }}" class="CoverImg" width="600" height="600" />
+            {% if albums|length > 1 %}
+            <img src="{{ url_for('main.getfile', path=album[3]) }}" class="cover-img" width="1000" height="1000" />
+            {% else %}
+            <img src="{{ url_for('main.getfile', path=album[3]) }}" class="cover-img single-img" width="1000" height="1000" />
+            {% endif %}
         </a>
     {% endfor %}
     </div>
