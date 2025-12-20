@@ -48,7 +48,7 @@
                     {% if PLAYBACK_METHOD_YOUTUBE_ENABLED %}
                     {% set args = { 'artist': file.artist, 'album': file.album, 'title': file.title } %}
                     <tr class="no-border"><td>
-                        <a href="{{ args | format_search_query_url }}">🔍 YouTube</a>
+                        <a href="{{ args | format_search_query_url }}" href="#" target="_blank" rel="noopener noreferrer">🔍 YouTube</a>
                     </td></tr>
                     {% endif %}
 
