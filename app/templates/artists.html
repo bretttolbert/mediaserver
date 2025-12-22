@@ -12,23 +12,24 @@
         {{ artist_counts|result_or_results }}:
         </div>
         <div id="trackList">
-        <table class="w-100">
-            <tr>
-                <th><a href="{{ url_for('main.artists', genre=request.args.getlist('genre'), minYear=request.args.get('minYear'), maxYear=request.args.get('maxYear'), sort='count') }}">Count</a></th>
-                <th><a href="{{ url_for('main.artists', genre=request.args.getlist('genre'), minYear=request.args.get('minYear'), maxYear=request.args.get('maxYear'), sort='name') }}">Artist</a></th>
-                <th><a href="{{ url_for('main.artists', genre=request.args.getlist('genre'), minYear=request.args.get('minYear'), maxYear=request.args.get('maxYear'), sort='random') }}">Shuffle</a></a></th>
-            </tr>
-        {% for artist in artist_counts %}
-            <tr>
-                <td>{{ artist_counts[artist] }}</td>
-                <td>{{ artist }}</td>
-                <td>
-                    <a href="{{ url_for('main.albums', artist=artist) }}">albums</a> 
-                    <a href="{{ url_for('main.tracks', artist=artist) }}">tracks</a> 
-                    <a href="{{ url_for('main.player', artist=artist) }}">shuffle</a> 
-                </td>
-            </tr>
-        {% endfor %}
+            <table class="w-100">
+                <tr>
+                    <th><a href="{{ url_for('main.artists', genre=request.args.getlist('genre'), minYear=request.args.get('minYear'), maxYear=request.args.get('maxYear'), sort='count') }}">Count</a></th>
+                    <th><a href="{{ url_for('main.artists', genre=request.args.getlist('genre'), minYear=request.args.get('minYear'), maxYear=request.args.get('maxYear'), sort='name') }}">Artist</a></th>
+                    <th><a href="{{ url_for('main.artists', genre=request.args.getlist('genre'), minYear=request.args.get('minYear'), maxYear=request.args.get('maxYear'), sort='random') }}">Shuffle</a></a></th>
+                </tr>
+            {% for artist in artist_counts %}
+                <tr>
+                    <td>{{ artist_counts[artist] }}</td>
+                    <td>{{ artist }}</td>
+                    <td>
+                        <a href="{{ url_for('main.albums', artist=artist) }}">albums</a> 
+                        <a href="{{ url_for('main.tracks', artist=artist) }}">tracks</a> 
+                        <a href="{{ url_for('main.player', artist=artist) }}">shuffle</a> 
+                    </td>
+                </tr>
+            {% endfor %}
+            </table>
         </div>
     </main>
     {% include 'footer.html' %}
