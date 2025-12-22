@@ -16,7 +16,7 @@
             <tr>
                 <th><a href="{{ url_for('main.artists', genre=request.args.getlist('genre'), minYear=request.args.get('minYear'), maxYear=request.args.get('maxYear'), sort='count') }}">Count</a></th>
                 <th><a href="{{ url_for('main.artists', genre=request.args.getlist('genre'), minYear=request.args.get('minYear'), maxYear=request.args.get('maxYear'), sort='name') }}">Artist</a></th>
-                <td><a href="{{ url_for('main.artists', genre=request.args.getlist('genre'), minYear=request.args.get('minYear'), maxYear=request.args.get('maxYear'), sort='random') }}">Shuffle</a></a></td>
+                <th><a href="{{ url_for('main.artists', genre=request.args.getlist('genre'), minYear=request.args.get('minYear'), maxYear=request.args.get('maxYear'), sort='random') }}">Shuffle</a></a></th>
             </tr>
         {% for artist in artist_counts %}
             <tr>
