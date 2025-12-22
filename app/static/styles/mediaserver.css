@@ -3,7 +3,11 @@ body {
     color: white;
     font-family: sans-serif;
     text-align: center;
-    font-size: 24pt;
+    font-size: 2em;
+    display: flex;
+    flex-direction: column; /* Stack children vertically */
+    min-height: 100vh;      /* Ensures body takes at least full viewport height */
+    margin: 0;              /* Removes default body margins */
 }
 
 #header {
@@ -11,6 +15,7 @@ body {
 }
 
 #footer {
+  flex: 1;
   margin-top: 1em;
   font-size: 0.8em;
   background-color: #333;
