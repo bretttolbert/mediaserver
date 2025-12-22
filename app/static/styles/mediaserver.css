@@ -1,22 +1,40 @@
 body {
-    background-color: black;
+    background-color: #0d1117;
     color: white;
     font-family: sans-serif;
     text-align: center;
     font-size: 24pt;
 }
 
+#header {
+  background-color: #333;
+}
+
+#footer {
+  margin-top: 1em;
+  font-size: 0.8em;
+  background-color: #333;
+}
+
+th {
+  background-color: #333;
+}
+
 table {
   width: 100%;
   border-collapse: collapse;
-  margin-top: 1em;
 }
 
 th, td {
   width: 0px;
-  border: 1px solid black;
+  border: 0px;
   padding: 4px;
   text-align: center;
+}
+
+.playback-options th {
+  background-color: #0d1117;
+  text-align: right;
 }
 
 .no-border {
@@ -29,10 +47,6 @@ th, td {
 
 .no-border th {
   border: 0px;
-}
-
-th {
-  background-color: black;
 }
 
 /* no underline */
@@ -111,10 +125,6 @@ input[type=checkbox]
   margin-bottom: 1em;
 }
 
-#footer {
-  margin: 1em;
-  font-size: small;
-}
 
 /* Default styles for all screen sizes (mobile-first approach) 
    Display full-res to fit the entire screen

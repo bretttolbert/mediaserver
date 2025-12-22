@@ -3,61 +3,63 @@
 <head>
     <meta charset="UTF-8">
     <title>tracks</title>
-    {% include '_css.html' %}
+    {% include 'css.html' %}
 </head>
 <body>
-    {% include 'links_bar_without_years.html' %}
-    <div class="results-info">
-    {{ files|result_or_results }}:
-    </div>
-    {% if request.args.getlist('album')|length > 0 and cover_path|length > 0 %}
-    <div>
-        <br>
-        <img src="{{ url_for('main.getfile', path=cover_path) }}" id="coverImg" class="cover-img single-img" width="1000" height="1000" />
-    </div>
-    {% endif %}
-    {% if request.args.getlist('album')|length > 0 %}
-    <div>
-        {% if request.args.getlist('albumartist')|length > 0 %}
-        <a class="navLink" href="{{ url_for('main.player', artist=request.args.get('albumartist'), album=request.args.get('album')) }}">Shuffle Album {{ request.args.get('album') }}</a>
-        {% elif request.args.getlist('artist')|length > 0 %}
-        <a class="navLink" href="{{ url_for('main.player', artist=request.args.get('artist'), album=request.args.get('album')) }}">Shuffle Album {{ request.args.get('album') }}</a>
+    {% include 'header_without_years.html' %}
+    <main>
+        <div class="results-info">
+        {{ files|result_or_results }}:
+        </div>
+        {% if request.args.getlist('album')|length > 0 and cover_path|length > 0 %}
+        <div>
+            <br>
+            <img src="{{ url_for('main.getfile', path=cover_path) }}" id="coverImg" class="cover-img single-img" width="1000" height="1000" />
+        </div>
         {% endif %}
-        <br>
-    </div>
-    {% endif %}
-    <div id="trackList">
-    <table class="w-100">
-        <tr><th>Title</th><th>Artist</th><th>Album</th><th>Year</th><th>Genre</th><th>Playback Options</th></tr>
-        {% for file in files %}
-        <tr>
-            <td>{{ file.title }}</td>
-            <td><a href="{{ url_for('main.albums', artist=file.artist) }}">{{ file.artist }}</a></td>
-            <td><a href="{{ url_for('main.tracks', artist=file.artist, album=file.album) }}">{{ file.album }}</a></td>
-            <td><a href="{{ url_for('main.albums', year=file.year) }}">{{ file.year }}</a></td>
-            <td><a href="{{ url_for('main.artists', genre=file.genre) }}">{{ file.genre }}</a></td>
-            <td>
-                <table class="no-border">
-                    
-                    {% if PLAYBACK_METHOD_LOCAL_ENABLED %}
-                    <tr class="no-border"><td>
-                        <a href="{{ url_for('main.player', artist=file.artist, album=file.album, title=file.title) }}">▶ Local Media</a>
-                    </td></tr>
-                    {% endif %}
+        {% if request.args.getlist('album')|length > 0 %}
+        <div>
+            {% if request.args.getlist('albumartist')|length > 0 %}
+            <a class="navLink" href="{{ url_for('main.player', artist=request.args.get('albumartist'), album=request.args.get('album')) }}">Shuffle Album <i>{{ request.args.get('album') }}</i></a>
+            {% elif request.args.getlist('artist')|length > 0 %}
+            <a class="navLink" href="{{ url_for('main.player', artist=request.args.get('artist'), album=request.args.get('album')) }}">Shuffle Album <i>{{ request.args.get('album') }}</i></a>
+            {% endif %}
+            <br>
+        </div>
+        {% endif %}
+        <div id="trackList">
+        <table class="w-100">
+            <tr><th>Title</th><th>Artist</th><th>Album</th><th>Year</th><th>Genre</th><th>Playback Options</th></tr>
+            {% for file in files %}
+            <tr>
+                <td>{{ file.title }}</td>
+                <td><a href="{{ url_for('main.albums', artist=file.artist) }}">{{ file.artist }}</a></td>
+                <td><a href="{{ url_for('main.tracks', artist=file.artist, album=file.album) }}">{{ file.album }}</a></td>
+                <td><a href="{{ url_for('main.albums', year=file.year) }}">{{ file.year }}</a></td>
+                <td><a href="{{ url_for('main.artists', genre=file.genre) }}">{{ file.genre }}</a></td>
+                <td>
+                    <table class="no-border">
+                        
+                        {% if PLAYBACK_METHOD_LOCAL_ENABLED %}
+                        <tr class="no-border"><td>
+                            <a href="{{ url_for('main.player', artist=file.artist, album=file.album, title=file.title) }}">▶ Local Media</a>
+                        </td></tr>
+                        {% endif %}
 
-                    {% if PLAYBACK_METHOD_YOUTUBE_ENABLED %}
-                    {% set args = { 'artist': file.artist, 'album': file.album, 'title': file.title } %}
-                    <tr class="no-border"><td>
-                        <a href="{{ args | format_search_query_url }}" href="#" target="_blank" rel="noopener noreferrer">🔍 YouTube</a>
-                    </td></tr>
-                    {% endif %}
+                        {% if PLAYBACK_METHOD_YOUTUBE_ENABLED %}
+                        {% set args = { 'artist': file.artist, 'album': file.album, 'title': file.title } %}
+                        <tr class="no-border"><td>
+                            <a href="{{ args | format_search_query_url }}" href="#" target="_blank" rel="noopener noreferrer">🔍 YouTube</a>
+                        </td></tr>
+                        {% endif %}
 
-                </table>
-            </td>
-        </tr>
-        {% endfor %}
-    </table>
-    </div>
+                    </table>
+                </td>
+            </tr>
+            {% endfor %}
+        </table>
+        </div>
+    </main>
     {% include 'footer.html' %}
 </body>
 </html>

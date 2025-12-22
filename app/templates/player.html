@@ -5,7 +5,7 @@
     <title>player</title>
     {{ JSGlue.include() }}
     <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
-    {% include '_css.html' %}
+    {% include 'css.html' %}
     <script
     src="https://code.jquery.com/jquery-3.7.1.min.js"
     integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo="
@@ -142,7 +142,7 @@
     </script>
 </head>
 <body>
-    {% include 'links_bar_without_years.html' %}
+    {% include 'header_without_years.html' %}
 
     <div id="cover">
         <a id="linkCover" href="#">
@@ -184,8 +184,8 @@
     {% endif %}
 
     <div id="trackList">
-        <table>
-            <tr><th>Playback Options</th>
+        <table class="playback-options">
+            <tr><th>Playback Options:</th>
                 <td>
                     <table class="no-border">
                         {% if PLAYBACK_METHOD_LOCAL_ENABLED %}
@@ -197,11 +197,11 @@
                     </table>
                 </td>
             </tr>
-            <tr><th>Title</th><td><a id="linkTitle" href="#">TITLE</a></td></tr>
-            <tr><th>Artist</th><td><a id="linkArtist" href="#">ARTIST</a></td></tr>
-            <tr><th>Album</th><td><a id="linkAlbum" href="#">ALBUM</a> </td></tr>
-            <tr><th>Genre</th><td><a id="linkGenre" href="#">GENRE</a></td></tr>
-            <tr><th>Year</th><td><a id="linkYear" href="#">YEAR</a> </td></tr>
+            <tr><th>Title:</th><td><a id="linkTitle" href="#">TITLE</a></td></tr>
+            <tr><th>Artist:</th><td><a id="linkArtist" href="#">ARTIST</a></td></tr>
+            <tr><th>Album:</th><td><a id="linkAlbum" href="#">ALBUM</a> </td></tr>
+            <tr><th>Genre:</th><td><a id="linkGenre" href="#">GENRE</a></td></tr>
+            <tr><th>Year:</th><td><a id="linkYear" href="#">YEAR</a> </td></tr>
         </table>
     </div>
     {% include 'footer.html' %}

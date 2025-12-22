@@ -3,49 +3,57 @@
 <head>
     <meta charset="UTF-8">
     <title>albums</title>
-    {% include '_css.html' %}
+    {% include 'css.html' %}
 </head>
 <body>
-    {% include 'links_bar.html' %}
+    {% include 'header.html' %}
+    <main>
+        <div>
+        <a href="{{ url_for('main.player', artist=request.args.getlist('artist'), genre=request.args.getlist('genre'), year=request.args.get('year'), minYear=request.args.get('minYear'), maxYear=request.args.get('maxYear')) }}">Shuffle 
+        
+        <i>
+        {% if request.args.getlist('artist')|length > 0 %}
+        {{ request.args.getlist('artist') | join(', ') }} 
+        {% endif %}
 
-    <div>
-    <a href="{{ url_for('main.player', artist=request.args.getlist('artist'), genre=request.args.getlist('genre'), minYear=request.args.get('minYear'), maxYear=request.args.get('maxYear')) }}">Shuffle 
-    
-    {% if request.args.getlist('artist')|length > 0 %}
-    {{ request.args.getlist('artist') | join(', ') }} 
-    {% endif %}
+        {% if request.args.getlist('genre')|length > 0 %}
+        {{ request.args.getlist('genre') | join(', ') }}
+        {% endif %}
 
-    {% if request.args.getlist('genre')|length > 0 %}
-    {{ request.args.getlist('genre') | join(', ') }}
-    {% endif %}
+        {% if request.args.getlist('year')|length > 0 %}
+        {{ request.args.get('year') }}
 
-    {% if request.args.getlist('minYear')|length > 0 %}
-    {{ request.args.get('minYear') }}
-    -
-    {% endif %}
-    {% if request.args.getlist('maxYear')|length > 0 %}
-    {{ request.args.get('maxYear') }} 
-    {% endif %}
+        {% endif %}
 
-    </a>
-    <br>
-    </div>
+        {% if request.args.getlist('minYear')|length > 0 %}
+        {{ request.args.get('minYear') }}
+        -
+        {% endif %}
+        {% if request.args.getlist('maxYear')|length > 0 %}
+        {{ request.args.get('maxYear') }} 
+        {% endif %}
+        </i>
 
-
-    <div class="results-info">
-    {{ albums|result_or_results_album_covers }}:
-    </div>
-    <div id="trackList">
-    {% for album in albums %}
-        <a href="{{ url_for('main.tracks', albumartist=album[0], album=album[1], year=album[2]) }}">
-            {% if albums|length > 1 %}
-            <img src="{{ url_for('main.getfile', path=album[3]) }}" class="cover-img" width="1000" height="1000" />
-            {% else %}
-            <img src="{{ url_for('main.getfile', path=album[3]) }}" class="cover-img single-img" width="1000" height="1000" />
-            {% endif %}
         </a>
-    {% endfor %}
-    </div>
+        <br>
+        </div>
+
+
+        <div class="results-info">
+        {{ albums|result_or_results_album_covers }}:
+        </div>
+        <div id="trackList">
+        {% for album in albums %}
+            <a href="{{ url_for('main.tracks', albumartist=album[0], album=album[1], year=album[2]) }}">
+                {% if albums|length > 1 %}
+                <img src="{{ url_for('main.getfile', path=album[3]) }}" class="cover-img" width="1000" height="1000" />
+                {% else %}
+                <img src="{{ url_for('main.getfile', path=album[3]) }}" class="cover-img single-img" width="1000" height="1000" />
+                {% endif %}
+            </a>
+        {% endfor %}
+        </div>
+    </main>
     {% include 'footer.html' %}
 </body>
 </html>

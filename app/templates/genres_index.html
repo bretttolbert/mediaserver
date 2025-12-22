@@ -3,23 +3,25 @@
 <head>
     <meta charset="UTF-8">
     <title>albums</title>
-    {% include '_css.html' %}
+    {% include 'css.html' %}
 </head>
 <body>
-    {% include 'links_bar.html' %}
-    <table class="no-border w-100">
-        <table class="w-100">
-            <tr>
-                <td><a href="{{ url_for('main.genres', sort='count') }}">genres (sorted by count)</a></td>
-            </tr>
-            <tr>
-                <td><a href="{{ url_for('main.genres', sort='name') }}">genres (sorted by name)</a></td>
-            </tr>
-            <tr>
-                <td><a href="{{ url_for('main.genres_cloud') }}">genres word cloud</a></td>
-            </tr>
+    {% include 'header.html' %}
+    <main>
+        <table class="no-border w-100">
+            <table class="w-100">
+                <tr>
+                    <td><a href="{{ url_for('main.genres', sort='count') }}">genres (sorted by count)</a></td>
+                </tr>
+                <tr>
+                    <td><a href="{{ url_for('main.genres', sort='name') }}">genres (sorted by name)</a></td>
+                </tr>
+                <tr>
+                    <td><a href="{{ url_for('main.genres_cloud') }}">genres word cloud</a></td>
+                </tr>
+            </table>
         </table>
-    </table>
+    </main>
     {% include 'footer.html' %}
 </body>
 </html>
