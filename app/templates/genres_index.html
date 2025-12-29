@@ -8,7 +8,7 @@
 <body>
     {% include 'header.html' %}
     <main>
-        <table class="no-border w-100">
+        <div>
             <table class="w-100">
                 <tr>
                     <td><a href="{{ url_for('main.genres', sort='count') }}">genres (sorted by count)</a></td>
@@ -20,7 +20,7 @@
                     <td><a href="{{ url_for('main.genres_cloud') }}">genres word cloud</a></td>
                 </tr>
             </table>
-        </table>
+        </div>
     </main>
     {% include 'footer.html' %}
 </body>

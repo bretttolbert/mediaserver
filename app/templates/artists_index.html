@@ -8,7 +8,7 @@
 <body>
     {% include 'header.html' %}
     <main>
-        <table class="no-border w-100">
+        <div>
             <table class="w-100">
                 <tr><th>All Artists</th></tr>
                 <tr><td><a href="{{ url_for('main.artists', sort='count') }}">all artists (sorted by count)</a></td></tr>
@@ -34,7 +34,7 @@
                     <tr><td><a href="{{ url_for('main.artists', sort='count', year=year) }}">artists {{ year }}</a></td></tr>
                 {% endfor %}
             </table>
-        </table>
+        </div>
     </main>
     {% include 'footer.html' %}
 </body>

@@ -8,7 +8,7 @@
 <body>
     {% include 'header.html' %}
     <main>
-        <table class="no-border w-100">
+        <div>
             <table class="w-100">
                 <tr>
                     <td><a href="{{ url_for('main.tracks', minYear=2015, maxYear=2025) }}">tracks year range 2015-2025</a></td>
@@ -34,7 +34,7 @@
             {% endfor %}
 
             </table>
-        </table>
+        </div>
     </main>
     {% include 'footer.html' %}
 </body>

@@ -8,7 +8,7 @@
 <body>
     {% include 'header.html' %}
     <main>
-        <table class="no-border w-100">
+        <div>
             <table class="w-100">
                 <!-- First option is to shuffle 1950 to present day -->
                 <tr><td><a href="{{ url_for('main.player', hints=1, minYear=1950, maxYear=PRESENT_YEAR) }}"></i><i>name that tune {{ PRESENT_YEAR-75 }}-{{ PRESENT_YEAR }}</i></a></td></tr>
@@ -26,7 +26,7 @@
             {% endfor %}
 
             </table>
-        </table>
+        </div>
     </main>
     {% include 'footer.html' %}
 </body>

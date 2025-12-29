@@ -8,7 +8,7 @@
 <body>
     {% include 'header.html' %}
     <main>
-        <table class="no-border w-100">
+        <div>
             <table class="w-100">
                 <tr><td><a href="{{ url_for('main.player', minYear=1960, maxYear=PRESENT_YEAR) }}">shuffle all</a></td></tr>
                 <tr><td><a href="{{ url_for('main.player', minYear=1960, maxYear=PRESENT_YEAR, genre=['Industrial Metal','Punk','Punk Rock','Heavy Metal','Hip Hop','Urbano','Thrash Metal','Nu Metal','Rock en español','Funk Metal','Hip-Hop français']) }}">shuffle workout</a></td></tr>
@@ -26,7 +26,7 @@
             {% endfor %}
 
             </table>
-        </table>
+        </div>
     </main>
     {% include 'footer.html' %}
 </body>
