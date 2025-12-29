@@ -143,67 +143,68 @@
 </head>
 <body>
     {% include 'header_without_years.html' %}
+    <main>
+        <div id="cover">
+            <a id="linkCover" href="#">
+                <img src="#" id="coverImg" class="cover-img single-img" width="1000" height="1000" />
+            </a>
+        </div>
 
-    <div id="cover">
-        <a id="linkCover" href="#">
-            <img src="#" id="coverImg" class="cover-img single-img" width="1000" height="1000" />
-        </a>
-    </div>
-
-    <div id="playerControls">
-        {% if PLAYBACK_METHOD_LOCAL_ENABLED %}
-            {% if request.args.get('hints') == "1" %}
-            <h1>Random track, can you name it?</h1>
+        <div id="playerControls">
+            {% if PLAYBACK_METHOD_LOCAL_ENABLED %}
+                {% if request.args.get('hints') == "1" %}
+                <h1>Random track, can you name it?</h1>
+                {% endif %}
+                <button id="playBtn" class="btn btn-secondary btn-lg">
+                    <i class="bi bi-play-circle-fill"></i> Play
+                </button>
+                <!--
+                <input type="checkbox" id="repeatChk"/>
+                <label for="repeatChk">Repeat</label>
+                -->
+                <button id="restartBtn" class="btn btn-secondary btn-lg">
+                    <i class="bi bi-rewind-circle-fill"></i> Restart
+                </button>
             {% endif %}
-            <button id="playBtn" class="btn btn-secondary btn-lg">
-                <i class="bi bi-play-circle-fill"></i> Play
+
+            <button id="nextBtn" class="btn btn-secondary btn-lg">
+                <i class="bi bi-fast-forward-circle-fill"></i> Next
             </button>
-            <!--
-            <input type="checkbox" id="repeatChk"/>
-            <label for="repeatChk">Repeat</label>
-            -->
-            <button id="restartBtn" class="btn btn-secondary btn-lg">
-                <i class="bi bi-rewind-circle-fill"></i> Restart
-            </button>
+            <br>
+            {% if PLAYBACK_METHOD_LOCAL_ENABLED and request.args.get('hints') == "1" %}
+                {% include 'hints.html' %}
+            {% endif %}
+        </div>
+
+        {% if PLAYBACK_METHOD_LOCAL_ENABLED %}
+        <audio id="audioElem" class="full" controls>
+            <source src="#" type="audio/mpeg" autoplay>
+        Your browser does not support the audio element.
+        </audio>
         {% endif %}
 
-        <button id="nextBtn" class="btn btn-secondary btn-lg">
-            <i class="bi bi-fast-forward-circle-fill"></i> Next
-        </button>
-        <br>
-        {% if PLAYBACK_METHOD_LOCAL_ENABLED and request.args.get('hints') == "1" %}
-            {% include 'hints.html' %}
-        {% endif %}
-    </div>
-
-    {% if PLAYBACK_METHOD_LOCAL_ENABLED %}
-    <audio id="audioElem" class="full" controls>
-        <source src="#" type="audio/mpeg" autoplay>
-      Your browser does not support the audio element.
-    </audio>
-    {% endif %}
-
-    <div id="trackList">
-        <table class="playback-options">
-            <tr><th>Playback Options:</th>
-                <td>
-                    <table class="no-border">
-                        {% if PLAYBACK_METHOD_LOCAL_ENABLED %}
-                        <tr class="no-border"><td><a id="playLocalMediaLink" href="#">▶ Local Media</a></td></tr>
-                        {% endif %}
-                        {% if PLAYBACK_METHOD_YOUTUBE_ENABLED %}
-                        <tr class="no-border"><td><a id="searchYouTubeLink" href="#" target="_blank" rel="noopener noreferrer">🔍 YouTube</a></td></tr>
-                        {% endif %}
-                    </table>
-                </td>
-            </tr>
-            <tr><th>Title:</th><td><a id="linkTitle" href="#">TITLE</a></td></tr>
-            <tr><th>Artist:</th><td><a id="linkArtist" href="#">ARTIST</a></td></tr>
-            <tr><th>Album:</th><td><a id="linkAlbum" href="#">ALBUM</a> </td></tr>
-            <tr><th>Genre:</th><td><a id="linkGenre" href="#">GENRE</a></td></tr>
-            <tr><th>Year:</th><td><a id="linkYear" href="#">YEAR</a> </td></tr>
-        </table>
-    </div>
+        <div id="trackList">
+            <table class="playback-options">
+                <tr><th>Playback Options:</th>
+                    <td>
+                        <table class="no-border">
+                            {% if PLAYBACK_METHOD_LOCAL_ENABLED %}
+                            <tr class="no-border"><td><a id="playLocalMediaLink" href="#">▶ Local Media</a></td></tr>
+                            {% endif %}
+                            {% if PLAYBACK_METHOD_YOUTUBE_ENABLED %}
+                            <tr class="no-border"><td><a id="searchYouTubeLink" href="#" target="_blank" rel="noopener noreferrer">🔍 YouTube</a></td></tr>
+                            {% endif %}
+                        </table>
+                    </td>
+                </tr>
+                <tr><th>Title:</th><td><a id="linkTitle" href="#">TITLE</a></td></tr>
+                <tr><th>Artist:</th><td><a id="linkArtist" href="#">ARTIST</a></td></tr>
+                <tr><th>Album:</th><td><a id="linkAlbum" href="#">ALBUM</a> </td></tr>
+                <tr><th>Genre:</th><td><a id="linkGenre" href="#">GENRE</a></td></tr>
+                <tr><th>Year:</th><td><a id="linkYear" href="#">YEAR</a> </td></tr>
+            </table>
+        </div>
+    </main>
     {% include 'footer.html' %}
 </body>
 </html>

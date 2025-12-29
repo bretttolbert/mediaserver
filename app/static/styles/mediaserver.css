@@ -14,11 +14,18 @@ body {
   background-color: #333;
 }
 
+#main {
+  flex-grow: 1; /* Allows main content to grow and take up available space */
+}
+
 #footer {
-  flex: 1;
-  margin-top: 1em;
+  margin-top: auto; /* Pushes the footer to the bottom */
   font-size: 0.8em;
   background-color: #333;
+}
+
+.links-bar {
+  margin-bottom: 1em;
 }
 
 th {
@@ -125,11 +132,6 @@ input[type=checkbox]
     margin-top: 10px;
     margin-bottom: 10px;
 }
-
-.links-bar {
-  margin-bottom: 1em;
-}
-
 
 /* Default styles for all screen sizes (mobile-first approach) 
    Display full-res to fit the entire screen
