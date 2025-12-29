@@ -5,7 +5,7 @@ body {
     text-align: center;
     font-size: 2em;
     display: flex;
-    flex-direction: column; /* Stack children vertically */
+    flex-direction: column; /* Stack children (header/main/footer) vertically */
     min-height: 100vh;      /* Ensures body takes at least full viewport height */
     margin: 0;              /* Removes default body margins */
 }
