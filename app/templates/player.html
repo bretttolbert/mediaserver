@@ -149,7 +149,6 @@
                 <img src="#" id="coverImg" class="cover-img single-img" width="1000" height="1000" />
             </a>
         </div>
-
         <div id="playerControls">
             {% if PLAYBACK_METHOD_LOCAL_ENABLED %}
                 {% if request.args.get('hints') == "1" %}
@@ -175,14 +174,6 @@
                 {% include 'hints.html' %}
             {% endif %}
         </div>
-
-        {% if PLAYBACK_METHOD_LOCAL_ENABLED %}
-        <audio id="audioElem" class="full" controls>
-            <source src="#" type="audio/mpeg" autoplay>
-        Your browser does not support the audio element.
-        </audio>
-        {% endif %}
-
         <div id="trackList">
             <table class="playback-options">
                 <tr><th>Playback Options:</th>
@@ -204,6 +195,14 @@
                 <tr><th>Year:</th><td><a id="linkYear" href="#">YEAR</a> </td></tr>
             </table>
         </div>
+
+        {% if PLAYBACK_METHOD_LOCAL_ENABLED %}
+        <audio id="audioElem" class="full" controls>
+            <source src="#" type="audio/mpeg" autoplay>
+        Your browser does not support the audio element.
+        </audio>
+        {% endif %}
+
     </main>
     {% include 'footer.html' %}
 </body>
