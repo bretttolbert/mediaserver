@@ -27,6 +27,9 @@ class ArgTypeListStr(ArgType):
     Album = "album"
     Title = "title"
     Year = "year"
+    CountryCode = "countryCode"
+    RegionCode = "regionCode"
+    City = "city"
 
 
 class ArgTypeList:

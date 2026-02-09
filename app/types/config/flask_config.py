@@ -11,4 +11,4 @@ class FlaskConfig(YAMLWizard):
     root_path: Optional[str] = field(default=None)
     static_url_path: Optional[str] = field(default=None)
     url_prefix: Optional[str] = field(default=None)
-    debug: bool = field(default=False)
+    debug: bool = field(default=True)

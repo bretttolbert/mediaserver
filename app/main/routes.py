@@ -1,6 +1,6 @@
 import os
 import random
-from typing import Dict, List
+from typing import List
 from pathlib import Path
 
 from flask import (
@@ -47,7 +47,9 @@ def tracks() -> str:
     config = get_config(current_app)
     args = get_request_args(request)
     current_app.logger.debug("tracks args=%s", args_dict_to_str(args))
-    tracks: List[MediaFile] = get_tracks(current_app, get_mediascan_files(current_app), args)
+    tracks: List[MediaFile] = get_tracks(
+        current_app, get_mediascan_files(current_app), get_mediascan_artists(current_app), args
+    )
     cover_path: Path = Path()
     if len(tracks):
         cover_path = get_cover_path(config, tracks[0])
@@ -170,12 +172,13 @@ def artists() -> str:
         artist_counts=get_artist_counts(
             current_app,
             get_mediascan_files(current_app),
+            get_mediascan_artists(current_app),
             get_request_args(request),
         ),
     )
 
 
-@bp.route("/artist-country-codes")
+@bp.route("/artist-countries")
 def artist_country_codes() -> str:
     return render_template(
         "artist_geo_codes.html",
@@ -187,7 +190,7 @@ def artist_country_codes() -> str:
     )
 
 
-@bp.route("/artist-region-codes")
+@bp.route("/artist-regions")
 def artist_region_codes() -> str:
     return render_template(
         "artist_geo_codes.html",
@@ -225,6 +228,7 @@ def albums() -> str:
             for album in get_albums(
                 current_app,
                 get_mediascan_files(current_app),
+                get_mediascan_artists(current_app),
                 get_request_args(request),
             )
         ],
@@ -250,7 +254,7 @@ def artists_cloud() -> str:
     return render_template(
         "word-cloud.html",
         word_cloud_data=get_word_cloud_data_artists(
-            current_app, get_mediascan_files(current_app), get_request_args(request)
+            current_app, get_mediascan_files(current_app), get_mediascan_artists(current_app), get_request_args(request)
         ),
         word_cloud_type="artist",
     )
@@ -262,7 +266,9 @@ def api_track():
     config = get_config(current_app)
     args = get_request_args(request)
     current_app.logger.debug("api/track args=%s", args_dict_to_str(args))
-    files_list: List[MediaFile] = filter_files(current_app, get_mediascan_files(current_app), args)
+    files_list: List[MediaFile] = filter_files(
+        current_app, get_mediascan_files(current_app), get_mediascan_artists(current_app), args
+    )
     if not len(files_list):
         abort(404)
     file = random.choice(files_list)

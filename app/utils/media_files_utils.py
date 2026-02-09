@@ -1,7 +1,7 @@
 import json
 import os
 import random
-from typing import cast, Dict, List
+from typing import cast, Dict, List, Set
 from urllib.parse import quote_plus  # type: ignore
 from pathlib import Path
 import sys
@@ -26,38 +26,54 @@ from app.utils.string_utils import str_in_list_ignore_case
 from app.utils.app_utils import get_config
 
 
-def filter_files(app: Flask, files: MediaFiles, args: ArgsDict) -> List[MediaFile]:
-    app.logger.debug("filter_files args=%s", args_dict_to_str(args))
+def filter_files(app: Flask, files: MediaFiles, artists: Artists, args: ArgsDict) -> List[MediaFile]:
+    app.logger.info("filter_files args=%s", args_dict_to_str(args))
 
     ret: List[MediaFile] = []
     for f in files.files:
+        # get artist associated with this file
+        artist = None
+        for a in artists.artists:
+            if f.path.startswith(a.path):
+                artist = a
+                break
+        if artist is None:
+            app.logger.error(f"Failed to find artist for file '{f.path}'")
+
         # ArgTypeScalarInt:
         arg_type = ArgTypes.Scalar.Int.MinYear
         if arg_type in args:
             arg_value = cast(ArgValueScalarInt, args[arg_type])
             if arg_value and f.year < arg_value:
-                app.logger.debug(
+                app.logger.info(
                     "skipping file (value=%s) based on filter arg %s=%s",
                     arg_value,
                     arg_type,
                     arg_value,
                 )
-                app.logger.debug("filter_files args=%s", args_dict_to_str(args))
+                app.logger.info("filter_files args=%s", args_dict_to_str(args))
                 continue
         arg_type = ArgTypes.Scalar.Int.MaxYear
         if arg_type in args:
             arg_value = cast(ArgValueScalarInt, args[arg_type])
             if arg_value and f.year > arg_value:
-                app.logger.debug(
+                app.logger.info(
                     "skipping file (value=%s) based on filter arg %s=%s",
                     arg_value,
                     arg_type,
                     arg_value,
                 )
-                app.logger.debug("filter_files args=%s", args_dict_to_str(args))
+                app.logger.info("filter_files args=%s", args_dict_to_str(args))
                 continue
         # ArgTypeListStr:
         skip_file = False
+        country_code = ""
+        region_code = ""
+        city = ""
+        if artist is not None:
+            country_code = artist.artist_data.country_code
+            region_code = artist.artist_data.region_code
+            city = artist.artist_data.city
         arg_type_list_file_value_map: Dict[ArgType, str] = {
             ArgTypes.List.Str.Artist: f.artist,
             ArgTypes.List.Str.AlbumArtist: f.albumartist,
@@ -65,24 +81,27 @@ def filter_files(app: Flask, files: MediaFiles, args: ArgsDict) -> List[MediaFil
             ArgTypes.List.Str.Genre: f.genre,
             ArgTypes.List.Str.Title: f.title,
             ArgTypes.List.Str.Year: str(f.year),
+            ArgTypes.List.Str.CountryCode: country_code,
+            ArgTypes.List.Str.RegionCode: region_code,
+            ArgTypes.List.Str.City: city,
         }
         for arg_type, file_value in arg_type_list_file_value_map.items():
             if arg_type in args:
                 arg_value_list = cast(ArgValueListStr, args[arg_type])
-                app.logger.debug("filtering based on %s[] arg = [%s]", arg_type, arg_value_list)
+                app.logger.info("filtering based on %s[] arg = [%s]", arg_type, arg_value_list)
                 if len(arg_value_list) and not str_in_list_ignore_case(file_value, arg_value_list):
-                    app.logger.debug(
+                    app.logger.info(
                         "skipping file (value=%s) based on %s[] arg = [%s]",
                         file_value,
                         arg_type,
                         arg_value_list,
                     )
-                    app.logger.debug("filter_files args=%s", args_dict_to_str(args))
+                    app.logger.info("filter_files args=%s", args_dict_to_str(args))
                     skip_file = True
                     break
         if not skip_file:
-            # app.logger.debug("appending file %s", f)
-            # app.logger.debug("filter_files args=%s", args_dict_to_str(args))
+            # app.logger.info("appending file %s", f)
+            # app.logger.info("filter_files args=%s", args_dict_to_str(args))
             ret.append(f)
     return ret
 
@@ -107,8 +126,8 @@ def get_genre_counts(files: MediaFiles, sort: str) -> Dict[str, int]:
         return dict(sorted(ret.items(), key=lambda item: item[1], reverse=True))
 
 
-def get_tracks(app: Flask, files: MediaFiles, args: ArgsDict) -> List[MediaFile]:
-    ret = filter_files(app, files, args)
+def get_tracks(app: Flask, files: MediaFiles, artists: Artists, args: ArgsDict) -> List[MediaFile]:
+    ret = filter_files(app, files, artists, args)
 
     sort = ArgValues.Scalar.Enum.Sort.Random
     if ArgTypes.Scalar.Enum.Sort in args:
@@ -134,10 +153,10 @@ def get_tracks(app: Flask, files: MediaFiles, args: ArgsDict) -> List[MediaFile]
     return ret
 
 
-def get_artist_counts(app: Flask, files: MediaFiles, args: ArgsDict) -> Dict[str, int]:
+def get_artist_counts(app: Flask, files: MediaFiles, artists: Artists, args: ArgsDict) -> Dict[str, int]:
     ret: Dict[str, int] = {}
 
-    files_filtered = filter_files(app, files, args)
+    files_filtered = filter_files(app, files, artists, args)
     for f in files_filtered:
         if f.artist in ret:
             ret[f.artist] += 1
@@ -248,18 +267,20 @@ def get_word_cloud_data_genres(files: MediaFiles) -> List[Dict[str, str]]:
     return ret
 
 
-def get_artists(app: Flask, files: MediaFiles, args: ArgsDict) -> List[str]:
+def get_artists(app: Flask, files: MediaFiles, artists: Artists, args: ArgsDict) -> List[str]:
     ret: Set[str] = set()  # type: ignore
-    files_filtered = filter_files(app, files, args)
+    files_filtered = filter_files(app, files, artists, args)
     for f in files_filtered:
         ret.add(f.artist)
     return sorted(ret)
 
 
-def get_word_cloud_data_artists(app: Flask, files: MediaFiles, args: ArgsDict) -> List[Dict[str, str]]:
+def get_word_cloud_data_artists(
+    app: Flask, files: MediaFiles, artists: Artists, args: ArgsDict
+) -> List[Dict[str, str]]:
     ret: List[Dict[str, str]] = []
-    artists = get_artists(app, files, args)
-    for a in artists:
+    artists_filtered = get_artists(app, files, artists, args)
+    for a in artists_filtered:
         ret.append({"text": a})
     return ret
 
@@ -277,12 +298,13 @@ def get_cover_path(config: MediaServerConfig, file: MediaFile) -> Path:
 def get_albums(
     app: Flask,
     files: MediaFiles,
+    artists: Artists,
     args: ArgsDict,
 ) -> List[AlbumInfo]:
     """Returns a list of one AlbumInfo per unique album"""
     album_set: Set[AlbumInfo] = set()  # type: ignore
     config = get_config(app)
-    files_filtered = filter_files(app, files, args)
+    files_filtered = filter_files(app, files, artists, args)
     for f in files_filtered:
         # try to go with albumartist first, in order to better group files
         # in the same album together, but fallback to artist as key if
