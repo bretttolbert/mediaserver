@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Artists by {{ code_type }}</title>
+    {% include 'css.html' %}
+</head>
+<body>
+    {% include 'header.html' %}
+    <main>
+        <div class="results-info">
+        {{ artist_code_counts|result_or_results }}:
+        </div>
+        <div id="trackList">
+            <table class="w-100">
+                <tr>
+                    <th>Count</th>
+                    <th>{{ code_type }}</th>
+                    {% if code_type != "City" %}
+                    <th>{{ code_type }} Code</th>
+                    {% endif %}
+                </tr>
+            {% for code in artist_code_counts %}
+                <tr>
+                    <td>{{ artist_code_counts[code] }}</td>
+                    {% if code_type != "City" %}
+                    <td>{{ code_name_map[code] }}</td>
+                    {% endif %}
+                    <td>{{ code }}</td>
+                </tr>
+            {% endfor %}
+            </table>
+        </div>
+    </main>
+    {% include 'footer.html' %}
+</body>
+</html>

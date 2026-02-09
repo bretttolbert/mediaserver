@@ -1,4 +1,5 @@
 #!/bin/bash
 
-go run mediascan/mediascan/src/mediascan.go mediascan/conf/conf.yaml mediascan/out/files.yaml
-
+cd mediascan
+go run cmd/scanfiles/main.go conf/conf.yaml out/files.yaml
+cd ..

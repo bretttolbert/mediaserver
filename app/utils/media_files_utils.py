@@ -1,12 +1,15 @@
+import json
 import os
 import random
 from typing import cast, Dict, List
 from urllib.parse import quote_plus  # type: ignore
 from pathlib import Path
+import sys
+from flask.json import jsonify
 
 from flask import Flask
 
-from mediascan import MediaFiles, MediaFile
+from mediascan import Artists, MediaFiles, MediaFile
 
 from app.types.config.mediaserver_config import MediaServerConfig
 from app.types.arg_types import (
@@ -154,6 +157,85 @@ def get_artist_counts(app: Flask, files: MediaFiles, args: ArgsDict) -> Dict[str
     else:  # default sort: by count
         items = sorted(ret.items(), key=lambda item: item[1], reverse=True)
         ret = dict(items)
+
+    return ret
+
+
+def get_static_json_data(app: Flask, filename: str):
+    if app.static_folder is None:
+        sys.exit(1)
+    full_path = os.path.join(app.static_folder, "json_data", filename)
+    try:
+        with open(full_path, "r") as json_file:
+            return json.load(json_file)
+    except FileNotFoundError:
+        app.logger.error("Data file not found")
+    except json.JSONDecodeError:
+        app.logger.error("Could not decode JSON from file")
+    return {}
+
+
+def get_country_code_name_map(app: Flask) -> Dict[str, str]:
+    return get_static_json_data(app, "country_code_name_map.json")
+
+
+def get_region_code_name_map(app: Flask) -> Dict[str, str]:
+    return get_static_json_data(app, "region_code_name_map.json")
+
+
+def get_artist_country_code_counts(app: Flask, artists: Artists, args: ArgsDict) -> Dict[str, int]:
+    ret: Dict[str, int] = {}
+    for artist in artists.artists:
+        if artist.artist_data.country_code in ret:
+            ret[artist.artist_data.country_code] += 1
+        else:
+            ret[artist.artist_data.country_code] = 1
+
+    # default sort: by count
+    items = sorted(ret.items(), key=lambda item: item[1], reverse=True)
+    ret = dict(items)
+
+    return ret
+
+
+def get_artist_region_code_counts(app: Flask, artists: Artists, args: ArgsDict) -> Dict[str, int]:
+    ret: Dict[str, int] = {}
+    for artist in artists.artists:
+        if artist.artist_data.region_code in ret:
+            ret[artist.artist_data.region_code] += 1
+        else:
+            ret[artist.artist_data.region_code] = 1
+
+    # default sort: by count
+    items = sorted(ret.items(), key=lambda item: item[1], reverse=True)
+    ret = dict(items)
+
+    return ret
+
+
+def get_artist_city_counts(app: Flask, artists: Artists, args: ArgsDict) -> Dict[str, int]:
+    country_code_name_map = get_country_code_name_map(app)
+    region_code_name_map = get_region_code_name_map(app)
+    ret: Dict[str, int] = {}
+    for artist in artists.artists:
+        city_qualifiers = []
+        if artist.artist_data.region_code in region_code_name_map:
+            region_name = region_code_name_map[artist.artist_data.region_code]
+            city_qualifiers.append(region_name)
+        if artist.artist_data.country_code in country_code_name_map:
+            country_name = country_code_name_map[artist.artist_data.country_code]
+            city_qualifiers.append(country_name)
+        city_uniq = artist.artist_data.city
+        if len(city_qualifiers):
+            city_uniq = f"{city_uniq} ({', '.join(city_qualifiers)})"
+        if city_uniq in ret:
+            ret[city_uniq] += 1
+        else:
+            ret[city_uniq] = 1
+
+    # default sort: by count
+    items = sorted(ret.items(), key=lambda item: item[1], reverse=True)
+    ret = dict(items)
 
     return ret
 

@@ -1,14 +1,13 @@
 from typing import Dict, Iterable, Optional
-
+from datetime import datetime
+from urllib.parse import quote_plus
+from pathlib import Path
 from flask import Flask
 import flask_jsglue
 
-from mediascan import load_files_yaml
+from mediascan import load_files_yaml, load_artists_yaml
 
 from app.types.config.mediaserver_config import MediaServerConfig
-
-from datetime import datetime
-from urllib.parse import quote_plus
 
 
 def format_search_query_url(args: Dict[str, str], config: MediaServerConfig):
@@ -28,17 +27,13 @@ def format_results_string(l: Iterable, max_results: int):
 
 
 def register_filters(app: Flask, config: MediaServerConfig):
-    app.jinja_env.filters["result_or_results"] = lambda l: format_results_string(
-        l, config.max_results
-    )
-    app.jinja_env.filters["result_or_results_album_covers"] = (
-        lambda l: format_results_string(l, config.max_results_album_covers)
+    app.jinja_env.filters["result_or_results"] = lambda l: format_results_string(l, config.max_results)
+    app.jinja_env.filters["result_or_results_album_covers"] = lambda l: format_results_string(
+        l, config.max_results_album_covers
     )
     app.jinja_env.filters["quote_plus"] = lambda u: quote_plus(u)
     app.jinja_env.filters["make_list"] = lambda s: list(s)
-    app.jinja_env.filters["format_search_query_url"] = (
-        lambda args: format_search_query_url(args, config)
-    )
+    app.jinja_env.filters["format_search_query_url"] = lambda args: format_search_query_url(args, config)
 
 
 def set_globals(
@@ -46,26 +41,18 @@ def set_globals(
     config: MediaServerConfig,
 ):
     app.jinja_env.globals["PRESENT_YEAR"] = datetime.now().year
-    app.jinja_env.globals["PLAYBACK_METHOD_LOCAL_ENABLED"] = (
-        config.playback_methods.local.enabled
-    )
+    app.jinja_env.globals["PLAYBACK_METHOD_LOCAL_ENABLED"] = config.playback_methods.local.enabled
 
-    app.jinja_env.globals["PLAYBACK_METHOD_YOUTUBE_ENABLED"] = (
-        config.playback_methods.youtube.enabled
-    )
+    app.jinja_env.globals["PLAYBACK_METHOD_YOUTUBE_ENABLED"] = config.playback_methods.youtube.enabled
 
-    app.jinja_env.globals["SEARCH_QUERY_URL_FORMAT"] = (
-        config.playback_methods.youtube.search_query_url_format
-    )
+    app.jinja_env.globals["SEARCH_QUERY_URL_FORMAT"] = config.playback_methods.youtube.search_query_url_format
 
     app.jinja_env.globals["AGE_VERIFICATION"] = config.age_verification
 
     app.jinja_env.globals["LIMIT_BANDWIDTH"] = config.limit_bandwidth
 
 
-def register_blueprint(
-    app: Flask, config: MediaServerConfig, url_prefix: Optional[str] = None
-):
+def register_blueprint(app: Flask, config: MediaServerConfig, url_prefix: Optional[str] = None):
     from app.main import bp
 
     if url_prefix is None:
@@ -86,7 +73,8 @@ def create_app(config: MediaServerConfig):
     app.logger.debug("flask_config.url_prefix: %s", url_prefix)
     app.logger.debug("flask_config.static_url_path: %s", static_url_path)
     app.config["MEDIASERVER_CONFIG"] = config
-    app.config["MEDIA_FILES"] = load_files_yaml(config.files_yaml_path)
+    app.config["MEDIASCAN_FILES"] = load_files_yaml(str(Path(config.mediascan_yaml_path).joinpath("files.yaml")))
+    app.config["MEDIASCAN_ARTISTS"] = load_artists_yaml(str(Path(config.mediascan_yaml_path).joinpath("artists.yaml")))
     app.debug = config.flask_config.debug
     register_filters(app, config)
     set_globals(app, config)

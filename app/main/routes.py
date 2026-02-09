@@ -23,12 +23,17 @@ from app.utils.media_files_utils import (
     get_word_cloud_data_genres,
     get_albums,
     get_artist_counts,
+    get_artist_country_code_counts,
+    get_artist_region_code_counts,
+    get_artist_city_counts,
     get_genre_counts,
     get_tracks,
     get_word_cloud_data_artists,
+    get_country_code_name_map,
+    get_region_code_name_map,
 )
 
-from app.utils.app_utils import get_config, get_media_files
+from app.utils.app_utils import get_config, get_mediascan_files, get_mediascan_artists
 
 
 @bp.route("/")
@@ -42,7 +47,7 @@ def tracks() -> str:
     config = get_config(current_app)
     args = get_request_args(request)
     current_app.logger.debug("tracks args=%s", args_dict_to_str(args))
-    tracks: List[MediaFile] = get_tracks(current_app, get_media_files(current_app), args)
+    tracks: List[MediaFile] = get_tracks(current_app, get_mediascan_files(current_app), args)
     cover_path: Path = Path()
     if len(tracks):
         cover_path = get_cover_path(config, tracks[0])
@@ -149,7 +154,7 @@ def genres() -> str:
         sort = value
     return render_template(
         "genres.html",
-        genre_counts=get_genre_counts(get_media_files(current_app), sort=sort),
+        genre_counts=get_genre_counts(get_mediascan_files(current_app), sort=sort),
     )
 
 
@@ -164,9 +169,45 @@ def artists() -> str:
         "artists.html",
         artist_counts=get_artist_counts(
             current_app,
-            get_media_files(current_app),
+            get_mediascan_files(current_app),
             get_request_args(request),
         ),
+    )
+
+
+@bp.route("/artist-country-codes")
+def artist_country_codes() -> str:
+    return render_template(
+        "artist_geo_codes.html",
+        code_type="Country",
+        artist_code_counts=get_artist_country_code_counts(
+            current_app, get_mediascan_artists(current_app), get_request_args(request)
+        ),
+        code_name_map=get_country_code_name_map(current_app),
+    )
+
+
+@bp.route("/artist-region-codes")
+def artist_region_codes() -> str:
+    return render_template(
+        "artist_geo_codes.html",
+        code_type="Region",
+        artist_code_counts=get_artist_region_code_counts(
+            current_app, get_mediascan_artists(current_app), get_request_args(request)
+        ),
+        code_name_map=get_region_code_name_map(current_app),
+    )
+
+
+@bp.route("/artist-cities")
+def artist_cities() -> str:
+    return render_template(
+        "artist_geo_codes.html",
+        code_type="City",
+        artist_code_counts=get_artist_city_counts(
+            current_app, get_mediascan_artists(current_app), get_request_args(request)
+        ),
+        code_name_map=None,
     )
 
 
@@ -183,7 +224,7 @@ def albums() -> str:
             album.to_tuple()
             for album in get_albums(
                 current_app,
-                get_media_files(current_app),
+                get_mediascan_files(current_app),
                 get_request_args(request),
             )
         ],
@@ -199,7 +240,7 @@ def albums_index() -> str:
 def genres_cloud() -> str:
     return render_template(
         "word-cloud.html",
-        word_cloud_data=get_word_cloud_data_genres(get_media_files(current_app)),
+        word_cloud_data=get_word_cloud_data_genres(get_mediascan_files(current_app)),
         word_cloud_type="genre",
     )
 
@@ -209,7 +250,7 @@ def artists_cloud() -> str:
     return render_template(
         "word-cloud.html",
         word_cloud_data=get_word_cloud_data_artists(
-            current_app, get_media_files(current_app), get_request_args(request)
+            current_app, get_mediascan_files(current_app), get_request_args(request)
         ),
         word_cloud_type="artist",
     )
@@ -221,7 +262,7 @@ def api_track():
     config = get_config(current_app)
     args = get_request_args(request)
     current_app.logger.debug("api/track args=%s", args_dict_to_str(args))
-    files_list: List[MediaFile] = filter_files(current_app, get_media_files(current_app), args)
+    files_list: List[MediaFile] = filter_files(current_app, get_mediascan_files(current_app), args)
     if not len(files_list):
         abort(404)
     file = random.choice(files_list)

@@ -77,9 +77,8 @@
             });
         }
 
-        function loadTrack() {
-            resetHints();
-            searchParams = new URLSearchParams(location.search);
+        function getRequestParams() {
+            const searchParams = new URLSearchParams(location.search);
             var requestParams = {};
             const scalarKeys = ["minYear", "maxYear"]; //all others are list keys
             for (const key of searchParams.keys()) {
@@ -94,11 +93,16 @@
                     requestParams[key] = values;
                 }
             }
+            return requestParams
+        }
+
+        function loadTrack() {
+            resetHints();
             console.log("loadTrack location.search=" + location.search);
+            const requestParams = getRequestParams();
             console.log("requestParams=" + JSON.stringify(requestParams));
             $.getJSON("api/track", requestParams, function(track) {
                 console.log(track);
-
                 $("#linkYear").html(track.year);
                 $("#linkGenre").html(track.genre);
                 $("#linkArtist").html(track.artist);
