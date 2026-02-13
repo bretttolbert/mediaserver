@@ -26,19 +26,55 @@ from app.utils.string_utils import str_in_list_ignore_case
 from app.utils.app_utils import get_config
 
 
+def file_and_artist_paths_match(file_path: str, artist_path: str):
+    """
+    compare the artist and track (media file) paths
+    this is is the most foolproof method,
+    since we can assume a given file was scanned from a given artist directory
+    if the leading part of the file path (i.e. the artist dir path) is identical.
+    TODO: Add validation to ensure artist_name[0] matches ID3 tag albumartist value(s).
+
+    # Prevent incomplete match e.g. these do not match:
+    # "/data/Music/M"
+    # "/data/Music/Municipal Waste/Hazardous Mutation [2005]/01 - Intro - Deathripper.mp3"
+    """
+    # below was SLOW:
+    #   return str(Path(file_path).parent.parent) == artist_path
+    # so now have this:
+    tokens = file_path.split(os.sep)
+    # leading slash results in first token being '', this ensures leading slash will be restored by the join
+    file_artist_path = "/".join(tokens[:-2])
+    # as processed above, file_artist_path will not have a trailing slash, so use startswith
+    # just in case file_path has a trailing slash
+    return artist_path.startswith(file_artist_path)
+
+
+# These arguments require artist data from artists.yaml file (generated from artist.yaml files)
+ARGS_REQUIRING_ARTIST = [ArgTypes.List.Str.CountryCode, ArgTypes.List.Str.RegionCode, ArgTypes.List.Str.City]
+
+
 def filter_files(app: Flask, files: MediaFiles, artists: Artists, args: ArgsDict) -> List[MediaFile]:
     app.logger.info("filter_files args=%s", args_dict_to_str(args))
 
     ret: List[MediaFile] = []
     for f in files.files:
-        # get artist associated with this file
         artist = None
-        for a in artists.artists:
-            if f.path.startswith(a.path):
-                artist = a
-                break
-        if artist is None:
-            app.logger.error(f"Failed to find artist for file '{f.path}'")
+        get_artist = False
+
+        # if any of the arguments requiring artists.yaml data are in the supplied arguments
+        if any(item in args.keys() for item in ARGS_REQUIRING_ARTIST):
+            get_artist = True
+
+        if get_artist:
+            # get artist associated with this file
+            # TODO: Optimize
+            artist = None
+            for a in artists.artists:
+                if file_and_artist_paths_match(f.path, a.path):
+                    artist = a
+                    break
+            if artist is None:
+                app.logger.error(f"Failed to find artist for file '{f.path}'")
 
         # ArgTypeScalarInt:
         arg_type = ArgTypes.Scalar.Int.MinYear
