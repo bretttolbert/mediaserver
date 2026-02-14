@@ -4,10 +4,23 @@ from urllib.parse import quote_plus
 from pathlib import Path
 from flask import Flask
 import flask_jsglue
+import sqlite3
+import pandas as pd
 
 from mediascan import load_files_yaml, load_artists_yaml
 
 from app.types.config.mediaserver_config import MediaServerConfig
+
+
+class MediaScanDatabaseConnection:
+    def __init__(self, mediascan_db_file_path: str):
+        self._conn: sqlite3.Connection = sqlite3.connect(mediascan_db_file_path)
+        # cur: sqlite3.Cursor = conn.cursor()
+        # mediafiles_df = pd.read_sql_query("SELECT * FROM mediafile", conn)
+        # artists_df = pd.read_sql_query("SELECT * FROM artist", conn)
+
+    def get_conn(self):
+        return self._conn
 
 
 def format_search_query_url(args: Dict[str, str], config: MediaServerConfig):
@@ -73,8 +86,12 @@ def create_app(config: MediaServerConfig):
     app.logger.debug("flask_config.url_prefix: %s", url_prefix)
     app.logger.debug("flask_config.static_url_path: %s", static_url_path)
     app.config["MEDIASERVER_CONFIG"] = config
-    app.config["MEDIASCAN_FILES"] = load_files_yaml(str(Path(config.mediascan_yaml_path).joinpath("files.yaml")))
-    app.config["MEDIASCAN_ARTISTS"] = load_artists_yaml(str(Path(config.mediascan_yaml_path).joinpath("artists.yaml")))
+    # app.config["MEDIASCAN_FILES"] = load_files_yaml(str(Path(config.mediascan_yaml_path).joinpath("files.yaml")))
+    # app.config["MEDIASCAN_ARTISTS"] = load_artists_yaml(str(Path(config.mediascan_yaml_path).joinpath("artists.yaml")))
+    db_conn = MediaScanDatabaseConnection(config.mediascan_database_file_path)
+    app.config["MEDIASCAN_DB_CONN"] = db_conn
+    app.config["MEDIASCAN_FILES_DF"] = pd.read_sql_query("SELECT * FROM mediafile", db_conn)
+    app.config["MEDIASCAN_ARTISTS_DF"] = pd.read_sql_query("SELECT * FROM artists", db_conn)
     app.debug = config.flask_config.debug
     register_filters(app, config)
     set_globals(app, config)

@@ -1,5 +1,5 @@
 version: 1
-mediascanYamlPath: ../mediascan/out/
+mediascanDatabaseFilePath: ../mediascan/out/mediascan.db
 albumCoversPath: /var/www/html/Covers/
 ageVerification: true
 limitBandwidth: true
