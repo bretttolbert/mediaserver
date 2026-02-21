@@ -8,7 +8,7 @@ from app.types.config.flask_config import FlaskConfig
 @dataclass
 class MediaServerConfig(YAMLWizard):
     version: int = field(default=1)
-    mediascan_database_file_path: str = field(default="../mediascan/out/mediascan.db")
+    mediascan_database_file_path: str = field(default="sqlite:///../mediascan/out/mediascan.db")
     album_covers_path: str = field(default="/data/")
     age_verification: bool = field(default=True)
     limit_bandwidth: bool = field(default=True)

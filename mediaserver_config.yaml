@@ -1,5 +1,5 @@
 version: 1
-mediascanDatabaseFilePath: ../mediascan/out/mediascan.db
+mediascanDatabaseFilePath: sqlite:///../mediascan/out/mediascan.db
 albumCoversPath: /var/www/html/Covers/
 ageVerification: true
 limitBandwidth: true
@@ -8,7 +8,7 @@ maxResultsAlbumCovers: 500
 flaskConfig:
   host: 0.0.0.0
   port: 5000
-  debug: false
+  debug: true
   useDebugger: false
   useReloader: false
   rootPath: /home/brett/Git/bretttolbert/mediax/mediaserver/app

@@ -16,6 +16,37 @@
                 <tr><td><a href="{{ url_for('main.artists_cloud') }}">artists word cloud</a></td></tr>
             </table>
             <table class="w-100">
+                <tr><th>Artists by Country</th></tr>
+                <tr><td><a href="{{ url_for('main.artists', sort='count', countryCode='US') }}">United States</a></td></tr>
+                <tr><td><a href="{{ url_for('main.artists', sort='count', countryCode='GB') }}">United Kingdom</a></td></tr>
+                <tr><td><a href="{{ url_for('main.artists', sort='count', countryCode='MX') }}">Mexico</a></td></tr>
+                <tr><td><a href="{{ url_for('main.artists', sort='count', countryCode='CA') }}">Canada</a></td></tr>
+                <tr><td><a href="{{ url_for('main.artists', sort='count', countryCode='FR') }}">France</a></td></tr>
+                <tr><td><a href="{{ url_for('main.artists', sort='count', countryCode='AU') }}">Australia</a></td></tr>
+                <tr><td><a href="{{ url_for('main.artists', sort='count', countryCode='DE') }}">Germany</a></td></tr>
+                <tr><td><a href="{{ url_for('main.artist_country_codes') }}">[Show All Countries]</a></td></tr>
+            </table>
+            <table class="w-100">
+                <tr><th>Artists by Region</th></tr>
+                <tr><td><a href="{{ url_for('main.artists', sort='count', regionCode='US-CA') }}">California</a></td></tr>
+                <tr><td><a href="{{ url_for('main.artists', sort='count', regionCode='US-NY') }}">New York</a></td></tr>
+                <tr><td><a href="{{ url_for('main.artists', sort='count', regionCode='GB-LND') }}">London</a></td></tr>
+                <tr><td><a href="{{ url_for('main.artists', sort='count', regionCode='US-TX') }}">Texas</a></td></tr>
+                <tr><td><a href="{{ url_for('main.artists', sort='count', regionCode='US-GA') }}">Georgia</a></td></tr>
+                <tr><td><a href="{{ url_for('main.artist_region_codes') }}">[Show All Regions]</a></td></tr>
+            </table>
+            <table class="w-100">
+                <tr><th>Artists by City</th></tr>
+                <tr><td><a href="{{ url_for('main.artists', sort='count', city='London') }}">London (London, United Kingdom)</a></td></tr>
+                <tr><td><a href="{{ url_for('main.artists', sort='count', city='New York') }}">New York City (New York, United States)</a></td></tr>
+                <tr><td><a href="{{ url_for('main.artists', sort='count', city='Los Angeles') }}">Los Angeles (California, United States)</a></td></tr>
+                <tr><td><a href="{{ url_for('main.artists', sort='count', city='Chicago') }}">Chicago (Illinois, United States)</a></td></tr>
+                <tr><td><a href="{{ url_for('main.artists', sort='count', city='San Francisco') }}">San Francisco (California, United States)</a></td></tr>
+                <tr><td><a href="{{ url_for('main.artists', sort='count', city='Paris') }}">Paris (Île-de-France, France)</a></td></tr>
+                <tr><td><a href="{{ url_for('main.artists', sort='count', city='Atlanta') }}">Atlanta (Georgia, United States)</a></td></tr>
+                <tr><td><a href="{{ url_for('main.artist_cities') }}">[Show All Cities]</a></td></tr>
+            </table>
+            <table class="w-100">
                 <tr><th>Artists by year range</th></tr>
                 <tr><td><a href="{{ url_for('main.artists', sort='count', minYear=2020, maxYear=2029) }}">artists 2020-2029</a></td></tr>
                 <tr><td><a href="{{ url_for('main.artists', sort='count', minYear=2010, maxYear=2019) }}">artists 2010-2019</a></td></tr>

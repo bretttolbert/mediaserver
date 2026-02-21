@@ -18,7 +18,7 @@ from app.main import bp
 from app.types.arg_types import args_dict_to_str
 from app.utils.request_args_utils import get_request_args
 from app.utils.media_files_utils import (
-    filter_files,
+    get_files_list,
     get_cover_path,
     get_word_cloud_data_genres,
     get_albums,
@@ -33,7 +33,12 @@ from app.utils.media_files_utils import (
     get_region_code_name_map,
 )
 
-from app.utils.app_utils import get_config, get_mediascan_files, get_mediascan_artists
+# from app.utils.app_utils import get_config, get_mediascan_files, get_mediascan_artists
+from app.utils.app_utils import (
+    get_config,
+    get_mediascan_db_artists,
+    get_mediascan_db_files_artists_joined,
+)
 
 
 @bp.route("/")
@@ -48,7 +53,7 @@ def tracks() -> str:
     args = get_request_args(request)
     current_app.logger.debug("tracks args=%s", args_dict_to_str(args))
     tracks: List[MediaFile] = get_tracks(
-        current_app, get_mediascan_files(current_app), get_mediascan_artists(current_app), args
+        current_app, get_mediascan_db_files_artists_joined(current_app), get_mediascan_db_artists(current_app), args
     )
     cover_path: Path = Path()
     if len(tracks):
@@ -156,7 +161,7 @@ def genres() -> str:
         sort = value
     return render_template(
         "genres.html",
-        genre_counts=get_genre_counts(get_mediascan_files(current_app), sort=sort),
+        genre_counts=get_genre_counts(get_mediascan_db_files_artists_joined(current_app), sort=sort),
     )
 
 
@@ -171,8 +176,8 @@ def artists() -> str:
         "artists.html",
         artist_counts=get_artist_counts(
             current_app,
-            get_mediascan_files(current_app),
-            get_mediascan_artists(current_app),
+            get_mediascan_db_files_artists_joined(current_app),
+            get_mediascan_db_artists(current_app),
             get_request_args(request),
         ),
     )
@@ -184,7 +189,7 @@ def artist_country_codes() -> str:
         "artist_geo_codes.html",
         code_type="Country",
         artist_code_counts=get_artist_country_code_counts(
-            current_app, get_mediascan_artists(current_app), get_request_args(request)
+            current_app, get_mediascan_db_artists(current_app), get_request_args(request)
         ),
         code_name_map=get_country_code_name_map(current_app),
     )
@@ -196,7 +201,7 @@ def artist_region_codes() -> str:
         "artist_geo_codes.html",
         code_type="Region",
         artist_code_counts=get_artist_region_code_counts(
-            current_app, get_mediascan_artists(current_app), get_request_args(request)
+            current_app, get_mediascan_db_artists(current_app), get_request_args(request)
         ),
         code_name_map=get_region_code_name_map(current_app),
     )
@@ -208,7 +213,7 @@ def artist_cities() -> str:
         "artist_geo_codes.html",
         code_type="City",
         artist_code_counts=get_artist_city_counts(
-            current_app, get_mediascan_artists(current_app), get_request_args(request)
+            current_app, get_mediascan_db_artists(current_app), get_request_args(request)
         ),
         code_name_map=None,
     )
@@ -227,8 +232,8 @@ def albums() -> str:
             album.to_tuple()
             for album in get_albums(
                 current_app,
-                get_mediascan_files(current_app),
-                get_mediascan_artists(current_app),
+                get_mediascan_db_files_artists_joined(current_app),
+                get_mediascan_db_artists(current_app),
                 get_request_args(request),
             )
         ],
@@ -244,7 +249,7 @@ def albums_index() -> str:
 def genres_cloud() -> str:
     return render_template(
         "word-cloud.html",
-        word_cloud_data=get_word_cloud_data_genres(get_mediascan_files(current_app)),
+        word_cloud_data=get_word_cloud_data_genres(get_mediascan_db_files_artists_joined(current_app)),
         word_cloud_type="genre",
     )
 
@@ -254,7 +259,10 @@ def artists_cloud() -> str:
     return render_template(
         "word-cloud.html",
         word_cloud_data=get_word_cloud_data_artists(
-            current_app, get_mediascan_files(current_app), get_mediascan_artists(current_app), get_request_args(request)
+            current_app,
+            get_mediascan_db_files_artists_joined(current_app),
+            get_mediascan_db_artists(current_app),
+            get_request_args(request),
         ),
         word_cloud_type="artist",
     )
@@ -266,8 +274,8 @@ def api_track():
     config = get_config(current_app)
     args = get_request_args(request)
     current_app.logger.debug("api/track args=%s", args_dict_to_str(args))
-    files_list: List[MediaFile] = filter_files(
-        current_app, get_mediascan_files(current_app), get_mediascan_artists(current_app), args
+    files_list: List[MediaFile] = get_files_list(
+        current_app, get_mediascan_db_files_artists_joined(current_app), get_mediascan_db_artists(current_app), args
     )
     if not len(files_list):
         abort(404)
