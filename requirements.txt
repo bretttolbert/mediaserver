@@ -11,5 +11,6 @@ pandas==3.0.0
 peppercorn==0.6
 pyaml==25.7.0
 PyYAML==6.0.3
+SQLAlchemy==2.0.46
 typing_extensions==4.15.0
 Werkzeug==3.1.4
