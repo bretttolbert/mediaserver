@@ -15,18 +15,12 @@
             <table class="w-100">
                 <tr>
                     <th>Count</th>
-                    <th>{{ code_type }}</th>
-                    {% if code_type != "City" %}
-                    <th>{{ code_type }} Code</th>
-                    {% endif %}
+                    <th>{{ geo_type }}</th>
                 </tr>
-            {% for code in artist_code_counts %}
+            {% for geo_info in artist_geo_counts %}
                 <tr>
-                    <td>{{ artist_code_counts[code] }}</td>
-                    {% if code_type != "City" %}
-                    <td>{{ code_name_map[code] }}</td>
-                    {% endif %}
-                    <td>{{ code }}</td>
+                    <td>{{ geo_info.count }}</td>
+                    <td><a href="{{ geo_info.url }}">{{ geo_info.name }}</a></td>
                 </tr>
             {% endfor %}
             </table>

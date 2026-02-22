@@ -187,11 +187,10 @@ def artists() -> str:
 def artist_country_codes() -> str:
     return render_template(
         "artist_geo_codes.html",
-        code_type="Country",
-        artist_code_counts=get_artist_country_code_counts(
+        geo_type="Country",
+        artist_geo_counts=get_artist_country_code_counts(
             current_app, get_mediascan_db_artists(current_app), get_request_args(request)
         ),
-        code_name_map=get_country_code_name_map(current_app),
     )
 
 
@@ -199,11 +198,10 @@ def artist_country_codes() -> str:
 def artist_region_codes() -> str:
     return render_template(
         "artist_geo_codes.html",
-        code_type="Region",
-        artist_code_counts=get_artist_region_code_counts(
+        geo_type="Region",
+        artist_geo_counts=get_artist_region_code_counts(
             current_app, get_mediascan_db_artists(current_app), get_request_args(request)
         ),
-        code_name_map=get_region_code_name_map(current_app),
     )
 
 
@@ -211,8 +209,8 @@ def artist_region_codes() -> str:
 def artist_cities() -> str:
     return render_template(
         "artist_geo_codes.html",
-        code_type="City",
-        artist_code_counts=get_artist_city_counts(
+        geo_type="City",
+        artist_geo_counts=get_artist_city_counts(
             current_app, get_mediascan_db_artists(current_app), get_request_args(request)
         ),
         code_name_map=None,

@@ -1,14 +1,14 @@
 import json
 import os
 import random
-from typing import cast, Dict, List, Set
+from typing import cast, Dict, List, Set, Tuple
 from urllib.parse import quote_plus  # type: ignore
 from pathlib import Path
 import pandas as pd
 import sys
 from flask.json import jsonify
 
-from flask import Flask
+from flask import Flask, url_for
 
 from mediascan import Artists, MediaFiles, MediaFile
 
@@ -25,6 +25,10 @@ from app.types.arg_types import (
 from app.types.album_info import AlbumInfo
 from app.utils.string_utils import str_in_list_ignore_case
 from app.utils.app_utils import get_config
+
+
+NameAndUrl = Tuple[str, str]
+ArtistGeoCounts = Dict[NameAndUrl, int]
 
 
 def row_to_mediafile(row):
@@ -252,42 +256,72 @@ def get_region_code_name_map(app: Flask) -> Dict[str, str]:
     return get_static_json_data(app, "region_code_name_map.json")
 
 
-def get_artist_country_code_counts(app: Flask, artists: pd.DataFrame, args: ArgsDict) -> Dict[str, int]:
-    ret: Dict[str, int] = {}
+class ArtistGeoCountInfo:
+    def __init__(self, name, url, count):
+        self.name = name
+        self.url = url
+        self.count = count
+
+
+def get_artist_country_code_counts(app: Flask, artists: pd.DataFrame, args: ArgsDict) -> List[ArtistGeoCountInfo]:
+    country_code_name_map = get_country_code_name_map(app)
+
+    counts: ArtistGeoCounts = {}
     for artist in artists.itertuples():
-        val = str(artist.countrycode)
-        if val in ret:
-            ret[val] += 1
+        code = str(artist.countrycode)
+        if code not in country_code_name_map:
+            app.logger.error("Failed to find name for countrycode=%s artist=%s", code, artist)
         else:
-            ret[val] = 1
+            name = country_code_name_map[code]
+            url = url_for("main.artists", sort="count", countryCode=code)
+            uniq_key = (name, url)
+            if uniq_key in counts:
+                counts[uniq_key] += 1
+            else:
+                counts[uniq_key] = 1
 
     # default sort: by count
-    items = sorted(ret.items(), key=lambda item: item[1], reverse=True)
-    ret = dict(items)
+    items = sorted(counts.items(), key=lambda item: item[1], reverse=True)
+    counts = dict(items)
 
+    ret: List[ArtistGeoCountInfo] = []
+    for k, v in counts.items():
+        ret.append(ArtistGeoCountInfo(name=k[0], url=k[1], count=v))
     return ret
 
 
-def get_artist_region_code_counts(app: Flask, artists: pd.DataFrame, args: ArgsDict) -> Dict[str, int]:
-    ret: Dict[str, int] = {}
+def get_artist_region_code_counts(app: Flask, artists: pd.DataFrame, args: ArgsDict) -> List[ArtistGeoCountInfo]:
+    region_code_name_map = get_region_code_name_map(app)
+
+    counts: ArtistGeoCounts = {}
     for artist in artists.itertuples():
-        val = str(artist.regioncode)
-        if val in ret:
-            ret[val] += 1
+        code = str(artist.regioncode)
+        if code not in region_code_name_map:
+            app.logger.error("Failed to find name for regioncode=%s artist=%s", code, artist)
         else:
-            ret[val] = 1
+            name = region_code_name_map[code]
+            url = url_for("main.artists", sort="count", regionCode=code)
+            uniq_key = (name, url)
+            if uniq_key in counts:
+                counts[uniq_key] += 1
+            else:
+                counts[uniq_key] = 1
 
     # default sort: by count
-    items = sorted(ret.items(), key=lambda item: item[1], reverse=True)
-    ret = dict(items)
+    items = sorted(counts.items(), key=lambda item: item[1], reverse=True)
+    counts = dict(items)
 
+    ret: List[ArtistGeoCountInfo] = []
+    for k, v in counts.items():
+        ret.append(ArtistGeoCountInfo(name=k[0], url=k[1], count=v))
     return ret
 
 
-def get_artist_city_counts(app: Flask, artists: pd.DataFrame, args: ArgsDict) -> Dict[str, int]:
+def get_artist_city_counts(app: Flask, artists: pd.DataFrame, args: ArgsDict) -> List[ArtistGeoCountInfo]:
     country_code_name_map = get_country_code_name_map(app)
     region_code_name_map = get_region_code_name_map(app)
-    ret: Dict[str, int] = {}
+
+    counts: ArtistGeoCounts = {}
     for artist in artists.itertuples():
         city_qualifiers = []
         cc = str(artist.countrycode)
@@ -298,18 +332,25 @@ def get_artist_city_counts(app: Flask, artists: pd.DataFrame, args: ArgsDict) ->
         if cc in country_code_name_map:
             country_name = country_code_name_map[cc]
             city_qualifiers.append(country_name)
-        city_uniq = str(artist.city)
+        city = str(artist.city)
+        city_uniq = city
         if len(city_qualifiers):
             city_uniq = f"{city_uniq} ({', '.join(city_qualifiers)})"
-        if city_uniq in ret:
-            ret[city_uniq] += 1
+        name = city_uniq
+        url = url_for("main.artists", sort="count", city=city, regionCode=rc, countryCode=cc)
+        uniq_key = (name, url)
+        if uniq_key in counts:
+            counts[uniq_key] += 1
         else:
-            ret[city_uniq] = 1
+            counts[uniq_key] = 1
 
     # default sort: by count
-    items = sorted(ret.items(), key=lambda item: item[1], reverse=True)
-    ret = dict(items)
+    items = sorted(counts.items(), key=lambda item: item[1], reverse=True)
+    counts = dict(items)
 
+    ret: List[ArtistGeoCountInfo] = []
+    for k, v in counts.items():
+        ret.append(ArtistGeoCountInfo(name=k[0], url=k[1], count=v))
     return ret
 
 
