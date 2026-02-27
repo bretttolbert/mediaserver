@@ -305,4 +305,5 @@ def api_track():
         "countryCode": file.countryCode,
         "regionCode": file.regionCode,
         "city": file.city,
+        "languageCode": file.languageCode,
     }
