@@ -116,7 +116,7 @@
                 $("#linkCountry").prop("href", Flask.url_for("main.artists", {countryCode: track.countryCode}));
                 $("#linkCover").prop("href", Flask.url_for("main.tracks", {artist: track.artist, album: track.album}));
                 $("#linkGenre").html(track.genre);
-                $("#linkGenre").prop("href", Flask.url_for("main.artists", {genre: track.genre}));
+                $("#linkGenre").prop("href", Flask.url_for("main.genre", {genre: track.genre}));
                 $("#linkRegion").html(track.regionCode);
                 $("#linkRegion").prop("href", Flask.url_for("main.artists", {regionCode: track.regionCode}));
                 $("#linkTitle").html(track.title);
