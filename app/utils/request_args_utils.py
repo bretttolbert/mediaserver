@@ -21,6 +21,7 @@ REQUEST_ARG_TYPES: List[ArgType] = [
     ArgTypes.List.Str.CountryCode,
     ArgTypes.List.Str.RegionCode,
     ArgTypes.List.Str.City,
+    ArgTypes.List.Str.LanguageCode,
     ArgTypes.Scalar.Int.MinYear,
     ArgTypes.Scalar.Int.MaxYear,
     ArgTypes.Scalar.Enum.Sort,

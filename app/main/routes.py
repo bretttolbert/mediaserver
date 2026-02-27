@@ -25,13 +25,12 @@ from app.utils.media_files_utils import (
     get_artist_counts,
     get_artist_country_code_counts,
     get_artist_region_code_counts,
+    get_artist_language_code_counts,
     get_artist_city_counts,
     get_artist,
     get_genre_counts,
     get_tracks,
     get_word_cloud_data_artists,
-    get_country_code_name_map,
-    get_region_code_name_map,
     MediaFile,
 )
 
@@ -202,8 +201,7 @@ def artist() -> str:
 def artist_country_codes() -> str:
     return render_template(
         "artist_geo_codes.html",
-        geo_type="Country",
-        artist_geo_counts=get_artist_country_code_counts(
+        artist_query_count_info=get_artist_country_code_counts(
             current_app, get_mediascan_db_artists(current_app), get_request_args(request)
         ),
     )
@@ -213,8 +211,7 @@ def artist_country_codes() -> str:
 def artist_region_codes() -> str:
     return render_template(
         "artist_geo_codes.html",
-        geo_type="Region",
-        artist_geo_counts=get_artist_region_code_counts(
+        artist_query_count_info=get_artist_region_code_counts(
             current_app, get_mediascan_db_artists(current_app), get_request_args(request)
         ),
     )
@@ -224,11 +221,19 @@ def artist_region_codes() -> str:
 def artist_cities() -> str:
     return render_template(
         "artist_geo_codes.html",
-        geo_type="City",
-        artist_geo_counts=get_artist_city_counts(
+        artist_query_count_info=get_artist_city_counts(
             current_app, get_mediascan_db_artists(current_app), get_request_args(request)
         ),
-        code_name_map=None,
+    )
+
+
+@bp.route("/artist-languages")
+def artist_languages() -> str:
+    return render_template(
+        "artist_geo_codes.html",
+        artist_query_count_info=get_artist_language_code_counts(
+            current_app, get_mediascan_db_artists(current_app), get_request_args(request)
+        ),
     )
 
 

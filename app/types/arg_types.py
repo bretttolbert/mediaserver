@@ -29,8 +29,8 @@ class ArgTypeListStr(ArgType):
     Year = "year"
     CountryCode = "countryCode"
     RegionCode = "regionCode"
-    LanguageCode = "languageCode"
     City = "city"
+    LanguageCode = "languageCode"
 
 
 class ArgTypeList:

@@ -17,10 +17,10 @@
                     <th>Count</th>
                     <th>{{ geo_type }}</th>
                 </tr>
-            {% for geo_info in artist_geo_counts %}
+            {% for query_info in artist_query_count_info %}
                 <tr>
-                    <td>{{ geo_info.count }}</td>
-                    <td><a href="{{ geo_info.url }}">{{ geo_info.name }}</a></td>
+                    <td>{{ query_info.count }}</td>
+                    <td><a href="{{ query_info.url }}">{{ query_info.value }}</a></td>
                 </tr>
             {% endfor %}
             </table>
