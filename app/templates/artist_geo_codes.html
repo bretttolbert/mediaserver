@@ -9,7 +9,7 @@
     {% include 'header.html' %}
     <main>
         <div class="results-info">
-        {{ artist_query_count_info|result_or_results }}:
+        {{ artist_query_count_info|result_or_results }} <a class="button-link" href="{{ url_for('main.player', **request.args) }}">shuffle</a>:
         </div>
         <div id="trackList">
             <table class="w-100">

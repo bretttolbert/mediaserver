@@ -9,8 +9,7 @@
     {% include 'header.html' %}
     <main>
         <div>
-        <a href="{{ url_for('main.player', artist=request.args.getlist('artist'), genre=request.args.getlist('genre'), year=request.args.get('year'), minYear=request.args.get('minYear'), maxYear=request.args.get('maxYear')) }}">Shuffle 
-        
+
         <i>
         {% if request.args.getlist('artist')|length > 0 %}
         {{ request.args.getlist('artist') | join(', ') }} 
@@ -40,7 +39,7 @@
 
 
         <div class="results-info">
-        {{ albums|result_or_results_album_covers }}:
+        {{ albums|result_or_results_album_covers }} <a class="button-link" href="{{ url_for('main.player', **request.args) }}">shuffle</a>:
         </div>
         <div id="trackList">
         {% for album in albums %}

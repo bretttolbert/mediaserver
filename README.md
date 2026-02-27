@@ -48,10 +48,11 @@ Uses my other project [mediascan](https://github.com/bretttolbert/mediascan) for
 - Doesn't work with some `.m4a` files
     - Error: html5 audio element can't decode
 - Requires that your music library (or libraries) be scanned with [mediascan](https://github.com/bretttolbert/mediascan)
-    - `mediascan` scans your music library (or libraries) and outputs the [files.yaml](https://github.com/bretttolbert/mediascan/blob/main/out/files.yaml) file
+    - `mediascan` scans your music library (or libraries) and outputs the [mediascan.db](https://github.com/bretttolbert/mediascan/blob/main/out/mediascan.db) file
     - This must be repeated to update the music library (e.g. add new files)
-    - Alternatively you can use my [files.yaml](https://github.com/bretttolbert/mediascan/blob/main/out/files.yaml) file, in _YouTube-only_ mode
-    - I cannot share my music files, of course, as they are copyrighted, but I can share my files.yaml with over 20,000+ tracks, allowing you to browse my extensive and painstakenly organized music library (with accurate tags, genre and year) and _play_ any track by opening a YouTube search for it. 
+    - Alternatively you can use my [mediascan.db](https://github.com/bretttolbert/mediascan/blob/main/out/mediascan.db) file, in _YouTube-only_ mode (album cover artwork not included)
+    - Album art may be extracted (and converted to .webp) using the mediascan copy covers script
+    - I cannot share my music files, of course, as they are copyrighted, but I can share my mediascan database with over 20,000+ tracks, allowing you to browse my extensive and painstakingly organized music library (with accurate tags, genre and year) and _play_ any track by opening a YouTube search for it. 
 - Requires that music files be organized in the way that `mediascan` expects i.e. artist folders containing album folders with `cover.jpg` files
     - You can verify this by testing your music library with [mediatest](https://github.com/bretttolbert/mediatest)
 - Requires that music filenames do not contain prohibited characters such as `+`
@@ -66,7 +67,7 @@ Uses my other project [mediascan](https://github.com/bretttolbert/mediascan) for
 
 ## Dependencies
 
-- [mediascan](https://github.com/bretttolbert/mediascan) A simple and fast Go (golang) command-line utility to recursively scan a directory for media files, extract metadata (including ID3v2 tags from both MP3 and M4A files), and save the output in a simple YAML format e.g. [files.yaml](https://github.com/bretttolbert/mediascan/blob/main/out/files.yaml), and a Python library with data classes for working with the YAML files output by `mediascan.go`.
+- [mediascan](https://github.com/bretttolbert/mediascan) A simple and fast Go (golang) command-line utility to recursively scan a directory for media files, extract metadata (including ID3v2 tags from both MP3 and M4A files), and save the output in an sqlite3 database e.g. [mediascan.db](https://github.com/bretttolbert/mediascan/blob/main/out/mediascan.db), and a Python library with data classes for working with the database and/or yaml files output by `mediascan.go`.
 - [Flask-JSGlue](https://github.com/bretttolbert/Flask-JSGlue) This project depends on my fork of `Flask-JSGlue`, and it has not been published to pypi, so you'll have to clone the repo and install it from source (see below).
 
 
@@ -94,7 +95,7 @@ python -m pip install .
 - Run mediascan.go (requires [go](https://go.dev/doc/install))
 ```bash
 cd ~/Git/mediascan
-go run mediascan/src/mediascan.go conf/conf.yaml out/files.yaml
+go run cmd/scantodb/main.go conf/conf.yaml out/mediascan.db
 ```
 
 #### Install bretttolbert/mediaserver from GitHub source 

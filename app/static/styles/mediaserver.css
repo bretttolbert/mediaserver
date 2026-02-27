@@ -186,3 +186,21 @@ input[type=checkbox]
   float: none;
   display: inline;
 }
+
+.button-link {
+  background-color: #333;
+  border: none; /* Remove border */
+  color: white; /* White text */
+  padding: 5px 28px; /* Add some padding */
+  text-align: center; /* Center the text */
+  text-decoration: none; /* Remove underline from link */
+  display: inline-block; /* Make it block-level for padding/margin */
+  font-size: 1em; /* Increase font size */
+  margin: 4px 2px; /* Add some margin */
+  cursor: pointer; /* Change cursor to pointer */
+  border-radius: 8px; /* Rounded corners */
+}
+
+.button-link:hover {
+  background-color: #444;
+}

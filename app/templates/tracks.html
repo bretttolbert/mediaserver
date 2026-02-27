@@ -9,7 +9,7 @@
     {% include 'header_without_years.html' %}
     <main>
         <div class="results-info">
-        {{ files|result_or_results }}:
+        {{ files|result_or_results }} <a class="button-link" href="{{ url_for('main.player', **request.args) }}">shuffle</a>:
         </div>
         {% if request.args.getlist('album')|length > 0 and cover_path|length > 0 %}
         <div>
@@ -29,14 +29,15 @@
         {% endif %}
         <div id="trackList">
             <table class="w-100">
-                <tr><th>Title</th><th>Artist</th><th>Album</th><th>Year</th><th>Genre</th><th>Playback Options</th></tr>
+                <tr><th>Title</th><th>Artist</th><th>Album</th><th>Year</th><th>Genre</th><!--<th>Playback Options</th>--></tr>
                 {% for file in files %}
                 <tr>
-                    <td>{{ file.title }}</td>
+                    <td><a href="{{ url_for('main.player', track=file.title, artist=file.artist, album=file.album) }}">{{ file.title }}</a></td>
                     <td><a href="{{ url_for('main.albums', artist=file.artist) }}">{{ file.artist }}</a></td>
                     <td><a href="{{ url_for('main.tracks', artist=file.artist, album=file.album) }}">{{ file.album }}</a></td>
                     <td><a href="{{ url_for('main.albums', year=file.year) }}">{{ file.year }}</a></td>
                     <td><a href="{{ url_for('main.artists', genre=file.genre) }}">{{ file.genre }}</a></td>
+                    <!--
                     <td>
                         <table class="no-border">
                             
@@ -55,6 +56,7 @@
 
                         </table>
                     </td>
+                    -->
                 </tr>
                 {% endfor %}
             </table>
