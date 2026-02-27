@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Artist: {{ artist.name }}</title>
+    {% include 'css.html' %}
+</head>
+<body>
+    {% include 'header.html' %}
+    <main>
+        <div class="artist">
+            <table class="artist">
+                <tr><th>{{ artist.name }}</th></tr>
+                <tr><td><a href="{{ url_for('main.albums', artist=artist.name) }}">albums</a> </td></tr>
+                <tr><td><a href="{{ url_for('main.tracks', artist=artist.name) }}">tracks</a> </td></tr>
+                <tr><td><a href="{{ url_for('main.player', artist=artist.name) }}">shuffle</a> </td></tr>
+            </table>
+        </div>
+    </main>
+    {% include 'footer.html' %}
+</body>
+</html>

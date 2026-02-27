@@ -35,6 +35,7 @@ class MediaFile:
     duration: int
     countryCode: str
     regionCode: str
+    languageCode: str
     city: str
 
 
@@ -72,6 +73,7 @@ def row_to_mediafile(row) -> MediaFile:
         countryCode=str(row.countrycode),
         regionCode=str(row.regioncode),
         city=str(row.city),
+        languageCode=str(row.languagecode),
     )
     return mf
 
@@ -112,7 +114,6 @@ ARGS_REQUIRING_ARTIST = [ArgTypes.List.Str.CountryCode, ArgTypes.List.Str.Region
 
 def filter_files(app: Flask, files: pd.DataFrame, artists: pd.DataFrame, args: ArgsDict) -> pd.DataFrame:
     app.logger.info("filter_files args=%s", args_dict_to_str(args))
-
     results = []
     for row in files.itertuples():
         # ArgTypeScalarInt:
@@ -141,13 +142,14 @@ def filter_files(app: Flask, files: pd.DataFrame, artists: pd.DataFrame, args: A
                 app.logger.info("filter_files args=%s", args_dict_to_str(args))
                 continue
         # ArgTypeListStr:
-        skip_file = False
+        skip = False
         country_code = ""
         region_code = ""
         city = ""
         country_code = str(row.countrycode)
         region_code = str(row.regioncode)
         city = str(row.city)
+        language_code = str(row.languagecode)
         arg_type_list_file_value_map: Dict[ArgType, str] = {
             ArgTypes.List.Str.Artist: str(row.artist),
             ArgTypes.List.Str.AlbumArtist: str(row.albumartist),
@@ -158,6 +160,7 @@ def filter_files(app: Flask, files: pd.DataFrame, artists: pd.DataFrame, args: A
             ArgTypes.List.Str.CountryCode: country_code,
             ArgTypes.List.Str.RegionCode: region_code,
             ArgTypes.List.Str.City: str(city),
+            ArgTypes.List.Str.LanguageCode: str(language_code),
         }
         for arg_type, file_value in arg_type_list_file_value_map.items():
             if arg_type in args:
@@ -171,11 +174,50 @@ def filter_files(app: Flask, files: pd.DataFrame, artists: pd.DataFrame, args: A
                         arg_value_list,
                     )
                     app.logger.info("filter_files args=%s", args_dict_to_str(args))
-                    skip_file = True
+                    skip = True
                     break
-        if not skip_file:
+        if not skip:
             # app.logger.info("appending file %s", f)
             # app.logger.info("filter_files args=%s", args_dict_to_str(args))
+            results.append(row)
+    return pd.DataFrame(results)
+
+
+def filter_artists(app: Flask, artists: pd.DataFrame, args: ArgsDict) -> pd.DataFrame:
+    app.logger.info("filter_artists args=%s", args_dict_to_str(args))
+    results = []
+    for row in artists.itertuples():
+        # ArgTypeListStr:
+        skip = False
+        name = str(row.name)
+        country_code = str(row.countrycode)
+        region_code = str(row.regioncode)
+        city = str(row.city)
+        language_code = str(row.languagecode)
+        arg_type_list_file_value_map: Dict[ArgType, str] = {
+            ArgTypes.List.Str.Artist: name,
+            ArgTypes.List.Str.CountryCode: country_code,
+            ArgTypes.List.Str.RegionCode: region_code,
+            ArgTypes.List.Str.City: city,
+            ArgTypes.List.Str.LanguageCode: language_code,
+        }
+        for arg_type, file_value in arg_type_list_file_value_map.items():
+            if arg_type in args:
+                arg_value_list = cast(ArgValueListStr, args[arg_type])
+                app.logger.info("filtering artist based on %s[] arg = [%s]", arg_type, arg_value_list)
+                if len(arg_value_list) and not str_in_list_ignore_case(file_value, arg_value_list):
+                    app.logger.info(
+                        "skipping artist (value=%s) based on %s[] arg = [%s]",
+                        file_value,
+                        arg_type,
+                        arg_value_list,
+                    )
+                    app.logger.info("filter_artists args=%s", args_dict_to_str(args))
+                    skip = True
+                    break
+        if not skip:
+            # app.logger.info("appending artist %s", f)
+            # app.logger.info("filter_artists args=%s", args_dict_to_str(args))
             results.append(row)
     return pd.DataFrame(results)
 
@@ -383,6 +425,15 @@ def get_artist_city_counts(app: Flask, artists: pd.DataFrame, args: ArgsDict) ->
     return ret
 
 
+def get_artist(app: Flask, files: pd.DataFrame, artists: pd.DataFrame, args: ArgsDict):
+    """
+    Similar to get_artists but only gets a single artists and displays links (album, tracks, shuffle)
+    """
+    artists_filtered = filter_artists(app, artists, args)
+    artist = next(artists_filtered.itertuples(name="Artist", index=False))
+    return artist
+
+
 def get_word_cloud_data_genres(files: pd.DataFrame) -> List[Dict[str, str]]:
     ret: List[Dict[str, str]] = []
     genres = get_genres(df_to_mediafile_list(files))
@@ -392,6 +443,9 @@ def get_word_cloud_data_genres(files: pd.DataFrame) -> List[Dict[str, str]]:
 
 
 def get_artists(app: Flask, files: pd.DataFrame, artists: pd.DataFrame, args: ArgsDict) -> List[str]:
+    """
+    TODO: Rewrite this function to use filter_artists. Benefit: efficiency
+    """
     ret: Set[str] = set()  # type: ignore
     files_filtered = filter_files(app, files, artists, args)
     for f in files_filtered.itertuples():

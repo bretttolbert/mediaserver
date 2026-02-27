@@ -26,6 +26,7 @@ from app.utils.media_files_utils import (
     get_artist_country_code_counts,
     get_artist_region_code_counts,
     get_artist_city_counts,
+    get_artist,
     get_genre_counts,
     get_tracks,
     get_word_cloud_data_artists,
@@ -176,6 +177,19 @@ def artists() -> str:
     return render_template(
         "artists.html",
         artist_counts=get_artist_counts(
+            current_app,
+            get_mediascan_db_files_artists_joined(current_app),
+            get_mediascan_db_artists(current_app),
+            get_request_args(request),
+        ),
+    )
+
+
+@bp.route("/artist")
+def artist() -> str:
+    return render_template(
+        "artist.html",
+        artist=get_artist(
             current_app,
             get_mediascan_db_files_artists_joined(current_app),
             get_mediascan_db_artists(current_app),
