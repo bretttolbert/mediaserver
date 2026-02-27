@@ -166,6 +166,13 @@ def genres() -> str:
     )
 
 
+@bp.route("/genre")
+def genre() -> str:
+    return render_template(
+        "genre.html",
+    )
+
+
 @bp.route("/genres/index")
 def genres_index() -> str:
     return render_template("genres_index.html", index_type="genres")

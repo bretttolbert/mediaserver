@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Genre: {{ request.args.getlist('genre')|join(',') }}</title>
+    {% include 'css.html' %}
+</head>
+<body>
+    {% include 'header.html' %}
+    <main>
+        <div class="genre">
+            <table class="genre">
+                <tr><th>{{ request.args.getlist('genre')|join(',') }}</th></tr>
+                <tr><td><a class="button-link" href="{{ url_for('main.albums', **request.args) }}">albums</a></td></tr>
+                <tr><td><a class="button-link" href="{{ url_for('main.artists', **request.args) }}">artists</a></td></tr>
+                <tr><td><a class="button-link" href="{{ url_for('main.tracks', **request.args) }}">tracks</a></td></tr>
+                <tr><td><a class="button-link" href="{{ url_for('main.player', **request.args) }}">shuffle</a></td></tr> 
+            </table>
+        </div>
+    </main>
+    {% include 'footer.html' %}
+</body>
+</html>

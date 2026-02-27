@@ -16,17 +16,10 @@
             <tr>
                 <th><a href="{{ url_for('main.genres', sort='count') }}">Count</a></th>
                 <th><a href="{{ url_for('main.genres', sort='name') }}">Genre</a></th>
-                <th></th>
         {% for genre in genre_counts %}
             <tr>
                 <td>{{ genre_counts[genre] }}</td>
-                <td>{{ genre }}</td>
-                <td>
-                    <a href="{{ url_for('main.albums', genre=genre) }}">albums</a> 
-                    <a href="{{ url_for('main.artists', genre=genre) }}">artists</a> 
-                    <a href="{{ url_for('main.tracks', genre=genre) }}">tracks</a> 
-                    <a href="{{ url_for('main.player', genre=genre) }}">shuffle</a> 
-                </td>
+                <td><a href="{{ url_for('main.genre', genre=genre) }}">{{ genre }}</a></td>
             </tr>
         {% endfor %}
         </table>
