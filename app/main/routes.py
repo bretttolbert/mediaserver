@@ -12,7 +12,7 @@ from flask import (
     Response,
 )
 
-from mediascan import MediaFile
+# from mediascan import MediaFile
 
 from app.main import bp
 from app.types.arg_types import args_dict_to_str
@@ -31,6 +31,7 @@ from app.utils.media_files_utils import (
     get_word_cloud_data_artists,
     get_country_code_name_map,
     get_region_code_name_map,
+    MediaFile,
 )
 
 # from app.utils.app_utils import get_config, get_mediascan_files, get_mediascan_artists
@@ -287,4 +288,7 @@ def api_track():
         "title": file.title,
         "genre": file.genre,
         "year": file.year,
+        "countryCode": file.countryCode,
+        "regionCode": file.regionCode,
+        "city": file.city,
     }

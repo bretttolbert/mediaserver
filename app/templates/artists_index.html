@@ -33,17 +33,20 @@
                 <tr><td><a href="{{ url_for('main.artists', sort='count', regionCode='GB-LND') }}">London</a></td></tr>
                 <tr><td><a href="{{ url_for('main.artists', sort='count', regionCode='US-TX') }}">Texas</a></td></tr>
                 <tr><td><a href="{{ url_for('main.artists', sort='count', regionCode='US-GA') }}">Georgia</a></td></tr>
+                <tr><td><a href="{{ url_for('main.artists', sort='count', regionCode='US-AL') }}">Alabama</a></td></tr>
+                <tr><td><a href="{{ url_for('main.artists', sort='count', regionCode='CA-QC') }}">Québec</a></td></tr>
                 <tr><td><a href="{{ url_for('main.artist_region_codes') }}">[Show All Regions]</a></td></tr>
             </table>
             <table class="w-100">
                 <tr><th>Artists by City</th></tr>
                 <tr><td><a href="{{ url_for('main.artists', sort='count', city='London') }}">London (London, United Kingdom)</a></td></tr>
-                <tr><td><a href="{{ url_for('main.artists', sort='count', city='New York') }}">New York City (New York, United States)</a></td></tr>
+                <tr><td><a href="{{ url_for('main.artists', sort='count', city='New York City') }}">New York City (New York, United States)</a></td></tr>
                 <tr><td><a href="{{ url_for('main.artists', sort='count', city='Los Angeles') }}">Los Angeles (California, United States)</a></td></tr>
                 <tr><td><a href="{{ url_for('main.artists', sort='count', city='Chicago') }}">Chicago (Illinois, United States)</a></td></tr>
                 <tr><td><a href="{{ url_for('main.artists', sort='count', city='San Francisco') }}">San Francisco (California, United States)</a></td></tr>
                 <tr><td><a href="{{ url_for('main.artists', sort='count', city='Paris') }}">Paris (Île-de-France, France)</a></td></tr>
                 <tr><td><a href="{{ url_for('main.artists', sort='count', city='Atlanta') }}">Atlanta (Georgia, United States)</a></td></tr>
+                <tr><td><a href="{{ url_for('main.artists', sort='count', city='Huntsville') }}">Huntsville (Alabama, United States)</a></td></tr>
                 <tr><td><a href="{{ url_for('main.artist_cities') }}">[Show All Cities]</a></td></tr>
             </table>
             <table class="w-100">

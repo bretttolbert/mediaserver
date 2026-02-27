@@ -10,7 +10,33 @@ from flask.json import jsonify
 
 from flask import Flask, url_for
 
-from mediascan import Artists, MediaFiles, MediaFile
+from dataclasses import dataclass
+
+
+@dataclass
+class MediaFile:
+    """
+    MediaFile dataclass
+    (Like mediascan.MediaFile but with the addition of the artist geo data from mediascan.ArtistData)
+
+    This is a convenient way for player to show the artist geo links.
+
+    """
+
+    path: str
+    size: int
+    format: str
+    title: str
+    artist: str
+    albumartist: str
+    album: str
+    genre: str
+    year: int
+    duration: int
+    countryCode: str
+    regionCode: str
+    city: str
+
 
 from app.types.config.mediaserver_config import MediaServerConfig
 from app.types.arg_types import (
@@ -31,18 +57,21 @@ NameAndUrl = Tuple[str, str]
 ArtistGeoCounts = Dict[NameAndUrl, int]
 
 
-def row_to_mediafile(row):
+def row_to_mediafile(row) -> MediaFile:
     mf = MediaFile(
-        str(row.path),
-        0,
-        "mp3",
-        str(row.title),
-        str(row.artist),
-        str(row.albumartist),
-        str(row.album),
-        str(row.genre),
-        int(str(row.year)),
-        0,
+        path=str(row.path),
+        size=0,
+        format="mp3",
+        title=str(row.title),
+        artist=str(row.artist),
+        albumartist=str(row.albumartist),
+        album=str(row.album),
+        genre=str(row.genre),
+        year=int(str(row.year)),
+        duration=0,
+        countryCode=str(row.countrycode),
+        regionCode=str(row.regioncode),
+        city=str(row.city),
     )
     return mf
 

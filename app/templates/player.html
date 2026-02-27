@@ -103,18 +103,24 @@
             console.log("requestParams=" + JSON.stringify(requestParams));
             $.getJSON("api/track", requestParams, function(track) {
                 console.log(track);
-                $("#linkYear").html(track.year);
-                $("#linkGenre").html(track.genre);
-                $("#linkArtist").html(track.artist);
-                $("#linkAlbum").html(track.album);
-                $("#linkTitle").html(track.title);
                 $("#coverImg").prop("src", Flask.url_for("main.getfile", {path: track.cover_path}));
-                $("#linkYear").prop("href", Flask.url_for("main.albums", {year: track.year}));
-                $("#linkGenre").prop("href", Flask.url_for("main.artists", {genre: track.genre}));
-                $("#linkArtist").prop("href", Flask.url_for("main.albums", {artist: track.artist}));
+                $("#linkAlbum").html(track.album);
                 $("#linkAlbum").prop("href", Flask.url_for("main.tracks", {artist: track.artist, album: track.album}));
+                $("#linkArtist").html(track.artist);
+                $("#linkArtist").prop("href", Flask.url_for("main.albums", {artist: track.artist}));
+                $("#linkCity").html(track.city);
+                $("#linkCity").prop("href", Flask.url_for("main.artists", {cityCode: track.city, countryCode: track.countryCode}));
+                $("#linkCountry").html(track.countryCode);
+                $("#linkCountry").prop("href", Flask.url_for("main.artists", {countryCode: track.countryCode}));
                 $("#linkCover").prop("href", Flask.url_for("main.tracks", {artist: track.artist, album: track.album}));
-                
+                $("#linkGenre").html(track.genre);
+                $("#linkGenre").prop("href", Flask.url_for("main.artists", {genre: track.genre}));
+                $("#linkRegion").html(track.regionCode);
+                $("#linkRegion").prop("href", Flask.url_for("main.artists", {regionCode: track.regionCode}));
+                $("#linkTitle").html(track.title);
+                $("#linkYear").html(track.year);
+                $("#linkYear").prop("href", Flask.url_for("main.albums", {year: track.year}));
+
                 if (PLAYBACK_METHOD_LOCAL_ENABLED) {
                     let media_file_path = Flask.url_for("main.getfile", {path: track.path});
                     console.log("media_file_path: " + media_file_path);
@@ -197,6 +203,9 @@
                 <tr><th>Album:</th><td><a id="linkAlbum" href="#">ALBUM</a> </td></tr>
                 <tr><th>Genre:</th><td><a id="linkGenre" href="#">GENRE</a></td></tr>
                 <tr><th>Year:</th><td><a id="linkYear" href="#">YEAR</a> </td></tr>
+                <tr><th>Country:</th><td><a id="linkCountry" href="#">COUNTRY</a> </td></tr>
+                <tr><th>Region:</th><td><a id="linkRegion" href="#">REGION</a> </td></tr>
+                <tr><th>City:</th><td><a id="linkCity" href="#">CITY</a> </td></tr>
             </table>
         </div>
 
