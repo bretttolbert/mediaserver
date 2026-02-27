@@ -15,6 +15,12 @@
                 <tr><td><a href="{{ url_for('main.tracks', artist=artist.name) }}">tracks</a> </td></tr>
                 <tr><td><a href="{{ url_for('main.player', artist=artist.name) }}">shuffle</a> </td></tr>
             </table>
+            <table class="artist-info">
+                <tr><td>Country</td><td><a href="{{ url_for('main.artists', countryCode=artist.countrycode) }}">{{ artist.countrycode }}</a></td></tr>
+                <tr><td>Region</td><td><a href="{{ url_for('main.artists', regionCode=artist.regioncode) }}">{{ artist.regioncode }}</a></td></tr>
+                <tr><td>City</td><td><a href="{{ url_for('main.artists', city=artist.city) }}">{{ artist.city }}</a></td></tr>
+                <tr><td>Language</td><td><a href="{{ url_for('main.artists', languageCode=artist.languagecode) }}">{{ artist.languagecode }}</a></td></tr>
+            </table>
         </div>
     </main>
     {% include 'footer.html' %}
