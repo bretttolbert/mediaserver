@@ -109,7 +109,7 @@
                 $("#linkArtist").html(track.artist);
                 $("#linkArtist").prop("href", Flask.url_for("main.albums", {artist: track.artist}));
                 $("#linkCity").html(track.city);
-                $("#linkCity").prop("href", Flask.url_for("main.artists", {cityCode: track.city, countryCode: track.countryCode}));
+                $("#linkCity").prop("href", Flask.url_for("main.artists", {city: track.city, countryCode: track.countryCode}));
                 $("#linkLanguage").html(track.languageCode);
                 $("#linkLanguage").prop("href", Flask.url_for("main.artists", {languageCode: track.languageCode}));
                 $("#linkCountry").html(track.countryCode);

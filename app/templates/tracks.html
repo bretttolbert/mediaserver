@@ -20,7 +20,7 @@
         {% if request.args.getlist('album')|length > 0 %}
         <div>
             {% if request.args.getlist('albumartist')|length > 0 %}
-            <a class="navLink" href="{{ url_for('main.player', artist=request.args.get('albumartist'), album=request.args.get('album')) }}">Shuffle Album <i>{{ request.args.get('album') }}</i></a>
+            <a class="navLink" href="{{ url_for('main.player', albumartist=request.args.get('albumartist'), album=request.args.get('album')) }}">Shuffle Album <i>{{ request.args.get('album') }}</i></a>
             {% elif request.args.getlist('artist')|length > 0 %}
             <a class="navLink" href="{{ url_for('main.player', artist=request.args.get('artist'), album=request.args.get('album')) }}">Shuffle Album <i>{{ request.args.get('album') }}</i></a>
             {% endif %}

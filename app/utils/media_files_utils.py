@@ -286,7 +286,7 @@ def get_artist_counts(app: Flask, files: pd.DataFrame, artists: pd.DataFrame, ar
 
     files_filtered = filter_files(app, files, args)
     for f in files_filtered.itertuples():
-        name = str(f.artist)
+        name = str(f.albumartist)  # alternatively could use f.name (artist name from artist.yaml data)
         if name in ret:
             ret[name] += 1
         else:

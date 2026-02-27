@@ -11,9 +11,9 @@
         <div class="artist">
             <table class="artist">
                 <tr><th>{{ artist.name }}</th></tr>
-                <tr><td><a class="button-link" href="{{ url_for('main.albums', artist=artist.name) }}">albums</a> </td></tr>
-                <tr><td><a class="button-link" href="{{ url_for('main.tracks', artist=artist.name) }}">tracks</a> </td></tr>
-                <tr><td><a class="button-link" href="{{ url_for('main.player', artist=artist.name) }}">shuffle</a> </td></tr>
+                <tr><td><a class="button-link" href="{{ url_for('main.albums', albumartist=artist.name) }}">albums</a> </td></tr>
+                <tr><td><a class="button-link" href="{{ url_for('main.tracks', albumartist=artist.name) }}">tracks</a> </td></tr>
+                <tr><td><a class="button-link" href="{{ url_for('main.player', albumartist=artist.name) }}">shuffle</a> </td></tr>
             </table>
             <table class="artist-info">
                 <tr><td>Country</td><td><a href="{{ url_for('main.artists', countryCode=artist.countrycode) }}">{{ artist.countrycode }}</a></td></tr>
